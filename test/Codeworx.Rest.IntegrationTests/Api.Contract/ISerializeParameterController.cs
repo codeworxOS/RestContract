@@ -10,44 +10,44 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
     {
         [RestGet("string")]
         Task<string> GetStringQueryParameter(string parameter);
-        [RestGet("string")]
+        [RestGet("string/{parameter}")]
         Task<string> GetStringUrlParameter(string parameter);
-        [RestGet("string")]
-        Task<string> GetStringBodyParameter(string parameter);
+        [RestPut("string")]
+        Task<string> GetStringBodyParameter([BodyMember]string parameter);
 
         [RestGet("date")]
         Task<DateTime> GetDateTimeQueryParameter(DateTime parameter);
-        [RestGet("date")]
+        [RestGet("date/{parameter}")]
         Task<DateTime> GetDateTimeUrlParameter(DateTime parameter);
-        [RestGet("date")]
-        Task<DateTime> GetDateTimeBodyParameter(DateTime parameter);
+        [RestPut("date")]
+        Task<DateTime> GetDateTimeBodyParameter([BodyMember]DateTime parameter);
 
         [RestGet("guid")]
         Task<Guid> GetGuidQueryParameter(Guid parameter);
-        [RestGet("guid")]
+        [RestGet("guid/{parameter}")]
         Task<Guid> GetGuidUrlParameter(Guid parameter);
-        [RestGet("guid")]
-        Task<Guid> GetGuidBodyParameter(Guid parameter);
+        [RestPut("guid")]
+        Task<Guid> GetGuidBodyParameter([BodyMember]Guid parameter);
 
         [RestGet("int")]
         Task<int> GetIntQueryParameter(int parameter);
-        [RestGet("int")]
+        [RestGet("int/{parameter}")]
         Task<int> GetIntUrlParameter(int parameter);
-        [RestGet("int")]
-        Task<int> GetIntBodyParameter(int parameter);
+        [RestPut("int")]
+        Task<int> GetIntBodyParameter([BodyMember]int parameter);
 
         [RestGet("guid/list")]
         Task<List<Guid>> GetGuidListQueryParameter(List<Guid> parameter);
-        [RestGet("guid/list")]
+        [RestGet("guid/list/{parameter}")]
         Task<List<Guid>> GetGuidListUrlParameter(List<Guid> parameter);
-        [RestGet("guid/list")]
-        Task<List<Guid>> GetGuidListBodyParameter(List<Guid> parameter);
+        [RestPut("guid/list")]
+        Task<List<Guid>> GetGuidListBodyParameter([BodyMember]List<Guid> parameter);
 
-        [RestGet("item")]
-        Task<Item> GetItemBodyParameter(Item parameter);
-        [RestGet("item")]
+        [RestPut("item")]
+        Task<Item> GetItemBodyParameter([BodyMember]Item parameter);
+        [RestPut("item")]
         Task<Item> GetItemBodyParameterWithNoAttribute(Item parameter);
-        [RestGet("item")]
-        Task<Item> GetItemBodyParameterAsLastParameter(Guid id, string name, Item parameter);
+        [RestPut("item")]
+        Task<Item> GetItemBodyParameterAsLastParameter(Guid id, string name, [BodyMember] Item parameter);
     }
 }

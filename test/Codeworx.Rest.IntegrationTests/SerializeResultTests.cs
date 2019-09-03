@@ -8,7 +8,6 @@ namespace Codeworx.Rest.UnitTests
 {
     public class SerializeResultTests: TestServerTestsBase
     {
-
         private readonly ISerializeResultController _controller;
 
         public SerializeResultTests()
