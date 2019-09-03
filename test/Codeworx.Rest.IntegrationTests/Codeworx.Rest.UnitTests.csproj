@@ -17,7 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Codeworx.Rest.AspNetCore\Codeworx.Rest.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\Codeworx.Rest.Client\Codeworx.Rest.Client.csproj" />
-    <ProjectReference Include="..\..\src\Codeworx.Rest.Primitives\Codeworx.Rest.Primitives.csproj" />
+    <ProjectReference Include="..\Codeworx.Rest.UnitTests.Api.Contract\Codeworx.Rest.UnitTests.Api.Contract.csproj" />
   </ItemGroup>
 
 </Project>
