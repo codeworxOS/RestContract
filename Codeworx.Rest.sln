@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Client", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.UnitTests", "test\Codeworx.Rest.IntegrationTests\Codeworx.Rest.UnitTests.csproj", "{013A4191-4B77-4AAC-8913-FB74480F01E0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Tool", "src\Codeworx.Rest.Tool\Codeworx.Rest.Tool.csproj", "{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{013A4191-4B77-4AAC-8913-FB74480F01E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{013A4191-4B77-4AAC-8913-FB74480F01E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{013A4191-4B77-4AAC-8913-FB74480F01E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{C4C82746-F4E2-4C48-955F-46D8C5AC3463} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 		{FFFD7D1C-2D1C-4862-9AEB-9A33EFFDE5C1} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 		{013A4191-4B77-4AAC-8913-FB74480F01E0} = {D3241CC1-F92F-4306-8017-E590EB4B51D5}
+		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A42E45F-3828-47D7-81E3-9C107D7980F3}
