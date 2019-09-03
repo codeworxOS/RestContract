@@ -10,9 +10,9 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(true).ConfigureAwait(false);
         }
 
-        public async Task<bool> MethodWithNoInterface()
-        {
-            return await Task.FromResult(true).ConfigureAwait(false);
-        }
+        //public async Task<bool> MethodWithNoInterface()
+        //{
+        //    return await Task.FromResult(true).ConfigureAwait(false);
+        //}
     }
 }

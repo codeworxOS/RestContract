@@ -31,9 +31,9 @@ namespace Codeworx.Rest.UnitTests
             var expectedItem = await ItemsGenerator.GenerateItem();
             Assert.Equal(expectedItem, item);
 
-            var itemId = Guid.NewGuid();
-            var itemWithId = await _controller.MethodWithSameName(itemId);
-            Assert.Equal(itemId, itemWithId.Id);
+            var resultItemName = "ResultItemName";
+            var resultItem = await _controller.MethodWithSameName(resultItemName);
+            Assert.Equal(resultItemName, resultItem.Name);
         }
     }
 }

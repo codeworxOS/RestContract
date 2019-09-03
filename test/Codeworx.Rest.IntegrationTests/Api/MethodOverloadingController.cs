@@ -14,10 +14,10 @@ namespace Codeworx.Rest.UnitTests.Api
             return item;
         }
 
-        public async Task<Item> MethodWithSameName(Guid id)
+        public async Task<Item> MethodWithSameName(string resultItemName)
         {
             var item = await ItemsGenerator.GenerateItem().ConfigureAwait(false);
-            item.Id = id;
+            item.Name = resultItemName;
             return item;
         }
 

@@ -8,46 +8,46 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
     [RestRoute("api/SerializeParameter")]
     public interface ISerializeParameterController
     {
-        [RestGet("string")]
+        [RestGet("string/query")]
         Task<string> GetStringQueryParameter(string parameter);
-        [RestGet("string/{parameter}")]
+        [RestGet("string/url/{parameter}")]
         Task<string> GetStringUrlParameter(string parameter);
-        [RestPut("string")]
+        [RestPut("string/body")]
         Task<string> GetStringBodyParameter([BodyMember]string parameter);
 
-        [RestGet("date")]
-        Task<DateTime> GetDateTimeQueryParameter(DateTime parameter);
-        [RestGet("date/{parameter}")]
-        Task<DateTime> GetDateTimeUrlParameter(DateTime parameter);
-        [RestPut("date")]
-        Task<DateTime> GetDateTimeBodyParameter([BodyMember]DateTime parameter);
+        [RestGet("date/query")]
+        Task<DateTime?> GetDateTimeQueryParameter(DateTime? parameter);
+        [RestGet("date/url/{parameter}")]
+        Task<DateTime?> GetDateTimeUrlParameter(DateTime? parameter);
+        [RestPut("date/body")]
+        Task<DateTime?> GetDateTimeBodyParameter([BodyMember]DateTime? parameter);
 
-        [RestGet("guid")]
-        Task<Guid> GetGuidQueryParameter(Guid parameter);
-        [RestGet("guid/{parameter}")]
-        Task<Guid> GetGuidUrlParameter(Guid parameter);
-        [RestPut("guid")]
-        Task<Guid> GetGuidBodyParameter([BodyMember]Guid parameter);
+        [RestGet("guid/query")]
+        Task<Guid?> GetGuidQueryParameter(Guid? parameter);
+        [RestGet("guid/url/{parameter}")]
+        Task<Guid?> GetGuidUrlParameter(Guid? parameter);
+        [RestPut("guid/body")]
+        Task<Guid?> GetGuidBodyParameter([BodyMember]Guid? parameter);
 
-        [RestGet("int")]
-        Task<int> GetIntQueryParameter(int parameter);
-        [RestGet("int/{parameter}")]
-        Task<int> GetIntUrlParameter(int parameter);
-        [RestPut("int")]
-        Task<int> GetIntBodyParameter([BodyMember]int parameter);
+        [RestGet("int/query")]
+        Task<int?> GetIntQueryParameter(int? parameter);
+        [RestGet("int/url/{parameter}")]
+        Task<int?> GetIntUrlParameter(int? parameter);
+        [RestPut("int/body")]
+        Task<int?> GetIntBodyParameter([BodyMember]int? parameter);
 
-        [RestGet("guid/list")]
+        [RestGet("guid/list/query")]
         Task<List<Guid>> GetGuidListQueryParameter(List<Guid> parameter);
-        [RestGet("guid/list/{parameter}")]
+        [RestGet("guid/list/url/{parameter}")]
         Task<List<Guid>> GetGuidListUrlParameter(List<Guid> parameter);
-        [RestPut("guid/list")]
+        [RestPut("guid/list/body")]
         Task<List<Guid>> GetGuidListBodyParameter([BodyMember]List<Guid> parameter);
 
-        [RestPut("item")]
+        [RestPut("item/body")]
         Task<Item> GetItemBodyParameter([BodyMember]Item parameter);
-        [RestPut("item")]
+        [RestPut("item/body/noAttribute")]
         Task<Item> GetItemBodyParameterWithNoAttribute(Item parameter);
-        [RestPut("item")]
+        [RestPut("item/body/lastParameter")]
         Task<Item> GetItemBodyParameterAsLastParameter(Guid id, string name, [BodyMember] Item parameter);
     }
 }
