@@ -12,7 +12,7 @@ namespace Codeworx.Rest.Client
 
         public string BaseUrl { get; }
 
-        public HttpClient GetHttpClient()
+        public virtual HttpClient GetHttpClient()
         {
             return new HttpClient { BaseAddress = new Uri(BaseUrl) };
         }
