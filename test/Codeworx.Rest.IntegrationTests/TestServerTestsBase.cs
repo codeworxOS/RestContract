@@ -28,7 +28,7 @@ namespace Codeworx.Rest.UnitTests
         protected RestOptions RestOptions { get; }
 
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _httpClient?.Dispose();
             _testServer?.Dispose();

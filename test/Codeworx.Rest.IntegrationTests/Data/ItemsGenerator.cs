@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Model;
 
@@ -11,6 +12,26 @@ namespace Codeworx.Rest.UnitTests.Data
         public static DateTime TestDate = new DateTime(2019, 03, 09, 12, 21, 03);
         public static Guid TestGuid = Guid.Parse("4f73dca4-86a6-4bfd-9a03-6f0e3ac254d1");
         public static int TestInt = 1;
+        public static string TestFileContent = "This is a test";
+
+        public static string CreateTestFilename()
+        {
+            return $"{Guid.NewGuid()}.txt";
+        }
+
+        public static async Task CreateTestFile(string path)
+        {
+            await Task.CompletedTask;
+            File.WriteAllText(path, TestFileContent);
+        }
+
+        public static void DeleteFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
 
         public static async Task<Item> GenerateItem()
         {
