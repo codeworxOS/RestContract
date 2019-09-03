@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>dotnet-restcontract</ToolCommandName>
+    <PackageOutputPath>../../dist</PackageOutputPath>
+  </PropertyGroup>
+
+  <Import Project="..\..\.global\GlobalInfo.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.2.6" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.3.0-beta2-final" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.3.0-beta2-final" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.3.0-beta2-final" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Codeworx.Rest.Primitives\Codeworx.Rest.Primitives.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Samples\ITestController.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Samples\SampleType.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+</Project>
