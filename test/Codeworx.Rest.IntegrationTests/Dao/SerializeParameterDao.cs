@@ -30,47 +30,47 @@ namespace Codeworx.Rest.UnitTests.Dao
             return CallAsync(c => c.GetStringBodyParameter(parameter));
         }
 
-        public Task<DateTime> GetDateTimeQueryParameter(DateTime parameter)
+        public Task<DateTime?> GetDateTimeQueryParameter(DateTime? parameter)
         {
             return CallAsync(c => c.GetDateTimeQueryParameter(parameter));
         }
 
-        public Task<DateTime> GetDateTimeUrlParameter(DateTime parameter)
+        public Task<DateTime?> GetDateTimeUrlParameter(DateTime? parameter)
         {
             return CallAsync(c => c.GetDateTimeUrlParameter(parameter));
         }
 
-        public Task<DateTime> GetDateTimeBodyParameter(DateTime parameter)
+        public Task<DateTime?> GetDateTimeBodyParameter(DateTime? parameter)
         {
             return CallAsync(c => c.GetDateTimeBodyParameter(parameter));
         }
 
-        public Task<Guid> GetGuidQueryParameter(Guid parameter)
+        public Task<Guid?> GetGuidQueryParameter(Guid? parameter)
         {
             return CallAsync(c => c.GetGuidQueryParameter(parameter));
         }
 
-        public Task<Guid> GetGuidUrlParameter(Guid parameter)
+        public Task<Guid?> GetGuidUrlParameter(Guid? parameter)
         {
             return CallAsync(c => c.GetGuidUrlParameter(parameter));
         }
 
-        public Task<Guid> GetGuidBodyParameter(Guid parameter)
+        public Task<Guid?> GetGuidBodyParameter(Guid? parameter)
         {
             return CallAsync(c => c.GetGuidBodyParameter(parameter));
         }
 
-        public Task<int> GetIntQueryParameter(int parameter)
+        public Task<int?> GetIntQueryParameter(int? parameter)
         {
             return CallAsync(c => c.GetIntQueryParameter(parameter));
         }
 
-        public Task<int> GetIntUrlParameter(int parameter)
+        public Task<int?> GetIntUrlParameter(int? parameter)
         {
             return CallAsync(c => c.GetIntUrlParameter(parameter));
         }
 
-        public Task<int> GetIntBodyParameter(int parameter)
+        public Task<int?> GetIntBodyParameter(int? parameter)
         {
             return CallAsync(c => c.GetIntBodyParameter(parameter));
         }

@@ -18,9 +18,9 @@ namespace Codeworx.Rest.UnitTests.Dao
             return CallAsync(c => c.MethodWithSameName());
         }
 
-        public Task<Item> MethodWithSameName(Guid id)
+        public Task<Item> MethodWithSameName(string resultItemName)
         {
-            return CallAsync(c => c.MethodWithSameName(id));
+            return CallAsync(c => c.MethodWithSameName(resultItemName));
         }
 
         public Task<Item> MethodWithSameUrl1()

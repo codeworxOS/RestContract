@@ -17,6 +17,6 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         Task<Item> MethodWithSameName();
 
         [RestGet("SameMethodName2")]
-        Task<Item> MethodWithSameName(Guid id);
+        Task<Item> MethodWithSameName(string resultItemName);
     }
 }

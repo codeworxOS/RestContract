@@ -24,48 +24,48 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(parameter);
         }
 
-        public async Task<DateTime> GetDateTimeQueryParameter(DateTime parameter)
+        public async Task<DateTime?> GetDateTimeQueryParameter(DateTime? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
-        public async Task<DateTime> GetDateTimeUrlParameter(DateTime parameter)
+        public async Task<DateTime?> GetDateTimeUrlParameter(DateTime? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
-        public async Task<DateTime> GetDateTimeBodyParameter(DateTime parameter)
+        public async Task<DateTime?> GetDateTimeBodyParameter(DateTime? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
-        public async Task<Guid> GetGuidQueryParameter(Guid parameter)
+        public async Task<Guid?> GetGuidQueryParameter(Guid? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
-        public async Task<Guid> GetGuidUrlParameter(Guid parameter)
+        public async Task<Guid?> GetGuidUrlParameter(Guid? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
-        public async Task<Guid> GetGuidBodyParameter(Guid parameter)
+        public async Task<Guid?> GetGuidBodyParameter(Guid? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
 
-        public async Task<int> GetIntQueryParameter(int parameter)
+        public async Task<int?> GetIntQueryParameter(int? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
-        public async Task<int> GetIntUrlParameter(int parameter)
+        public async Task<int?> GetIntUrlParameter(int? parameter)
         {
             return await Task.FromResult(parameter);
         }
 
-        public async Task<int> GetIntBodyParameter(int parameter)
+        public async Task<int?> GetIntBodyParameter(int? parameter)
         {
             return await Task.FromResult(parameter);
         }

@@ -17,160 +17,158 @@ namespace Codeworx.Rest.UnitTests
             _controller = new SerializeParameterDao(RestOptions);
         }
 
-        [Fact]
-        public async Task TestStringQueryParameter()
+        public static  IEnumerable<object[]> StringParameters = new List<object[]>
         {
-            var expectedParameter = ItemsGenerator.TestString;
+            new object[] {ItemsGenerator.TestString},
+            new object[] {null},
+        };
+
+        public static IEnumerable<object[]> DateParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestDate},
+            new object[] {null},
+        };
+
+        public static IEnumerable<object[]> GuidParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestGuid},
+            new object[] {null},
+        };
+
+        public static IEnumerable<object[]> IntParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestInt},
+            new object[] {null},
+        };
+
+        private static List<Guid> _guidList = new List<Guid>
+        {
+            ItemsGenerator.TestGuid,
+            Guid.NewGuid()
+        };
+
+        public static IEnumerable<object[]> GuidListParameters = new List<object[]>
+        {
+            new object[] {_guidList},
+            new object[] {null},
+        };
+
+        [Theory]
+        [MemberData(nameof(StringParameters))]
+        public async Task TestStringQueryParameter(string expectedParameter)
+        {
             var actualParameter = await _controller.GetStringQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestStringUrlParameter()
+        [Theory]
+        [MemberData(nameof(StringParameters))]
+        public async Task TestStringUrlParameter(string expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestString;
             var actualParameter = await _controller.GetStringUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-
-        [Fact]
-        public async Task TestStringBodyParameter()
+        [Theory]
+        [MemberData(nameof(StringParameters))]
+        public async Task TestStringBodyParameter(string expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestString;
             var actualParameter = await _controller.GetStringBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestNullStringQueryParameter()
+        [Theory]
+        [MemberData(nameof(DateParameters))]
+        public async Task TestDateTimeQueryParameter(DateTime? expectedParameter)
         {
-            var actualParameter = await _controller.GetStringQueryParameter(null);
-            Assert.Null(actualParameter);
-        }
-
-        [Fact]
-        public async Task TestNullStringUrlParameter()
-        {
-            var actualParameter = await _controller.GetStringUrlParameter(null);
-            Assert.Null(actualParameter);
-        }
-
-
-        [Fact]
-        public async Task TestNullStringBodyParameter()
-        {
-            var actualParameter = await _controller.GetStringBodyParameter(null);
-            Assert.Null(actualParameter);
-        }
-
-
-
-        [Fact]
-        public async Task TestDateTimeQueryParameter()
-        {
-            var expectedParameter = ItemsGenerator.TestDate;
             var actualParameter = await _controller.GetDateTimeQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestDateTimeUrlParameter()
+        [Theory]
+        [MemberData(nameof(DateParameters))]
+        public async Task TestDateTimeUrlParameter(DateTime? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestDate;
             var actualParameter = await _controller.GetDateTimeUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-
-        [Fact]
-        public async Task TestDateTimeBodyParameter()
+        [Theory]
+        [MemberData(nameof(DateParameters))]
+        public async Task TestDateTimeBodyParameter(DateTime? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestDate;
             var actualParameter = await _controller.GetDateTimeBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestGuidQueryParameter()
+        [Theory]
+        [MemberData(nameof(GuidParameters))]
+        public async Task TestGuidQueryParameter(Guid? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestGuid;
             var actualParameter = await _controller.GetGuidQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestGuidUrlParameter()
+        [Theory]
+        [MemberData(nameof(GuidParameters))]
+        public async Task TestGuidUrlParameter(Guid? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestGuid;
             var actualParameter = await _controller.GetGuidUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestGuidBodyParameter()
+        [Theory]
+        [MemberData(nameof(GuidParameters))]
+        public async Task TestGuidBodyParameter(Guid? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestGuid;
             var actualParameter = await _controller.GetGuidBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestIntQueryParameter()
+        [Theory]
+        [MemberData(nameof(IntParameters))]
+        public async Task TestIntQueryParameter(int? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestInt;
             var actualParameter = await _controller.GetIntQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestIntUrlParameter()
+        [Theory]
+        [MemberData(nameof(IntParameters))]
+        public async Task TestIntUrlParameter(int? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestInt;
             var actualParameter = await _controller.GetIntUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestIntBodyParameter()
+        [Theory]
+        [MemberData(nameof(IntParameters))]
+        public async Task TestIntBodyParameter(int? expectedParameter)
         {
-            var expectedParameter = ItemsGenerator.TestInt;
             var actualParameter = await _controller.GetIntBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestGuidListQueryParameter()
+        [Theory]
+        [MemberData(nameof(GuidListParameters))]
+        public async Task TestGuidListQueryParameter(List<Guid> expectedParameter)
         {
-            var expectedParameter = new List<Guid>
-            {
-                ItemsGenerator.TestGuid,
-                Guid.NewGuid()
-            };
             var actualParameter = await _controller.GetGuidListQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestGuidListUrlParameter()
+        [Theory]
+        [MemberData(nameof(GuidListParameters))]
+        public async Task TestGuidListUrlParameter(List<Guid> expectedParameter)
         {
-            var expectedParameter = new List<Guid>
-            {
-                ItemsGenerator.TestGuid,
-                Guid.NewGuid()
-            };
             var actualParameter = await _controller.GetGuidListUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestGuidListBodyParameter()
+        [Theory]
+        [MemberData(nameof(GuidListParameters))]
+        public async Task TestGuidListBodyParameter(List<Guid> expectedParameter)
         {
-            var expectedParameter = new List<Guid>
-            {
-                ItemsGenerator.TestGuid,
-                Guid.NewGuid()
-            };
             var actualParameter = await _controller.GetGuidListBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
@@ -197,7 +195,7 @@ namespace Codeworx.Rest.UnitTests
         {
             var expectedItem = await ItemsGenerator.GenerateItem();
             var actualItem = await _controller.GetItemBodyParameterWithNoAttribute(expectedItem);
-            Assert.Equal(expectedItem, actualItem);
+            Assert.NotEqual(expectedItem, actualItem);
         }
 
         [Fact]
