@@ -8,18 +8,18 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
     [RestRoute("api/HttpOperations")]
     public interface IHttpOperationsController
     {
+        [RestDelete]
+        Task<string> Delete();
+
         [RestGet]
         Task<string> Get();
 
-        [RestPut]
-        Task<string> Put();
+        Task<string> MissingOperation();
 
         [RestPost]
         Task<string> Post();
 
-        [RestDelete]
-        Task<string> Delete();
-
-        Task<string> MissingOperation();
+        [RestPut]
+        Task<string> Put();
     }
 }

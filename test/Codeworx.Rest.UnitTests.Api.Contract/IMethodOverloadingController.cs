@@ -4,19 +4,19 @@ using Codeworx.Rest.UnitTests.Model;
 
 namespace Codeworx.Rest.UnitTests.Api.Contract
 {
-    [RestRoute("api/MethodOverloading")]
+    [Codeworx.Rest.RestRoute("api/MethodOverloading")]
     public interface IMethodOverloadingController
     {
-        [RestGet("SameUrl")]
-        Task<Item> MethodWithSameUrl1();
-
-        [RestGet("SameUrl")]
-        Task<Item> MethodWithSameUrl2();
-
         [RestGet("SameMethodName1")]
         Task<Item> MethodWithSameName();
 
         [RestGet("SameMethodName2")]
         Task<Item> MethodWithSameName(Guid id);
+
+        [RestGet("SameUrl")]
+        Task<Item> MethodWithSameUrl1();
+
+        [RestGet("SameUrl")]
+        Task<Item> MethodWithSameUrl2();
     }
 }

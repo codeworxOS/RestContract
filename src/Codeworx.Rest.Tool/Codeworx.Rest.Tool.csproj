@@ -23,13 +23,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Codeworx.Rest.Primitives\Codeworx.Rest.Primitives.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Samples\ITestController.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Samples\SampleType.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
 </Project>
