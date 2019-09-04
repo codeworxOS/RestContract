@@ -12,6 +12,9 @@ namespace Codeworx.Rest.UnitTests.Data
         public static DateTime TestDate = new DateTime(2019, 03, 09, 12, 21, 03);
         public static Guid TestGuid = Guid.Parse("4f73dca4-86a6-4bfd-9a03-6f0e3ac254d1");
         public static int TestInt = 1;
+        public static decimal TestDecimal = 5.789m;
+        public static double TestDouble = 5.789d;
+        public static float TestFloat = 5.789f;
         public static string TestFileContent = "This is a test";
 
         public static string CreateTestFilename()

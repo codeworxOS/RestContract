@@ -77,6 +77,51 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetIntBodyParameter(parameter));
         }
 
+        public Task<decimal?> GetDecimalQueryParameter(decimal? parameter)
+        {
+            return CallAsync(c => c.GetDecimalQueryParameter(parameter));
+        }
+
+        public Task<decimal?> GetDecimalUrlParameter(decimal? parameter)
+        {
+            return CallAsync(c => c.GetDecimalUrlParameter(parameter));
+        }
+
+        public Task<decimal?> GetDecimalBodyParameter(decimal? parameter)
+        {
+            return CallAsync(c => c.GetDecimalBodyParameter(parameter));
+        }
+
+        public Task<double?> GetDoubleQueryParameter(double? parameter)
+        {
+            return CallAsync(c => c.GetDoubleQueryParameter(parameter));
+        }
+
+        public Task<double?> GetDoubleUrlParameter(double? parameter)
+        {
+            return CallAsync(c => c.GetDoubleUrlParameter(parameter));
+        }
+
+        public Task<double?> GetDoubleBodyParameter(double? parameter)
+        {
+            return CallAsync(c => c.GetDoubleBodyParameter(parameter));
+        }
+
+        public Task<float?> GetFloatQueryParameter(float? parameter)
+        {
+            return CallAsync(c => c.GetFloatQueryParameter(parameter));
+        }
+
+        public Task<float?> GetFloatUrlParameter(float? parameter)
+        {
+            return CallAsync(c => c.GetFloatUrlParameter(parameter));
+        }
+
+        public Task<float?> GetFloatBodyParameter(float? parameter)
+        {
+            return CallAsync(c => c.GetFloatBodyParameter(parameter));
+        }
+
         public Task<List<Guid>> GetGuidListQueryParameter(List<Guid> parameter)
         {
             return CallAsync(c => c.GetGuidListQueryParameter(parameter));

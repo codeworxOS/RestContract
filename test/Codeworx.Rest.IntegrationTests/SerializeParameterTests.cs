@@ -41,6 +41,24 @@ namespace Codeworx.Rest.UnitTests
             new object[] {null},
         };
 
+        public static IEnumerable<object[]> DecimalParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestDecimal},
+            null
+        };
+
+        public static IEnumerable<object[]> DoubleParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestDouble},
+            null
+        };
+
+        public static IEnumerable<object[]> FloatParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestFloat},
+            null
+        };
+
         private static List<Guid> _guidList = new List<Guid>
         {
             ItemsGenerator.TestGuid,
@@ -146,6 +164,78 @@ namespace Codeworx.Rest.UnitTests
         public async Task TestIntBodyParameter(int? expectedParameter)
         {
             var actualParameter = await _controller.GetIntBodyParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DecimalParameters))]
+        public async Task TestDecimalQueryParameter(decimal? expectedParameter)
+        {
+            var actualParameter = await _controller.GetDecimalQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DecimalParameters))]
+        public async Task TestDecimalUrlParameter(decimal? expectedParameter)
+        {
+            var actualParameter = await _controller.GetDecimalUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DecimalParameters))]
+        public async Task TestDecimalBodyParameter(decimal? expectedParameter)
+        {
+            var actualParameter = await _controller.GetDecimalBodyParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DoubleParameters))]
+        public async Task TestDoubleQueryParameter(double? expectedParameter)
+        {
+            var actualParameter = await _controller.GetDoubleQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DoubleParameters))]
+        public async Task TestDoubleUrlParameter(double? expectedParameter)
+        {
+            var actualParameter = await _controller.GetDoubleUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DoubleParameters))]
+        public async Task TestDoubleBodyParameter(double? expectedParameter)
+        {
+            var actualParameter = await _controller.GetDoubleBodyParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(FloatParameters))]
+        public async Task TestFloatQueryParameter(float? expectedParameter)
+        {
+            var actualParameter = await _controller.GetFloatQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(FloatParameters))]
+        public async Task TestFloatUrlParameter(float? expectedParameter)
+        {
+            var actualParameter = await _controller.GetFloatUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(FloatParameters))]
+        public async Task TestFloatBodyParameter(float? expectedParameter)
+        {
+            var actualParameter = await _controller.GetFloatBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 

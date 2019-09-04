@@ -48,6 +48,46 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.NullableGuidResult());
         }
 
+        public Task<int> IntResult()
+        {
+            return CallAsync(c => c.IntResult());
+        }
+
+        public Task<int?> NullableIntResult()
+        {
+            return CallAsync(c => c.NullableIntResult());
+        }
+
+        public Task<double> DoubleResult()
+        {
+            return CallAsync(c => c.DoubleResult());
+        }
+
+        public Task<double?> NullableDoubleResult()
+        {
+            return CallAsync(c => c.NullableDoubleResult());
+        }
+
+        public Task<decimal> DecimalResult()
+        {
+            return CallAsync(c => c.DecimalResult());
+        }
+
+        public Task<decimal?> NullableDecimalResult()
+        {
+            return CallAsync(c => c.NullableDecimalResult());
+        }
+
+        public Task<float> FloatResult()
+        {
+            return CallAsync(c => c.FloatResult());
+        }
+
+        public Task<float?> NullableFloatResult()
+        {
+            return CallAsync(c => c.NullableFloatResult());
+        }
+
         public Task<Item> ItemResult()
         {
             return CallAsync(c => c.ItemResult());

@@ -70,6 +70,51 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(parameter);
         }
 
+        public async Task<decimal?> GetDecimalQueryParameter(decimal? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<decimal?> GetDecimalUrlParameter(decimal? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<decimal?> GetDecimalBodyParameter(decimal? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<double?> GetDoubleQueryParameter(double? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<double?> GetDoubleUrlParameter(double? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<double?> GetDoubleBodyParameter(double? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<float?> GetFloatQueryParameter(float? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<float?> GetFloatUrlParameter(float? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<float?> GetFloatBodyParameter(float? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
         public async Task<List<Guid>> GetGuidListQueryParameter(List<Guid> parameter)
         {
             return await Task.FromResult(parameter);

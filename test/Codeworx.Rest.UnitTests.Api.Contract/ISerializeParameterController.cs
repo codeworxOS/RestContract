@@ -36,6 +36,27 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestPut("int/body")]
         Task<int?> GetIntBodyParameter([BodyMember]int? parameter);
 
+        [RestGet("decimal/query")]
+        Task<decimal?> GetDecimalQueryParameter(decimal? parameter);
+        [RestGet("decimal/url/{parameter}")]
+        Task<decimal?> GetDecimalUrlParameter(decimal? parameter);
+        [RestPut("decimal/body")]
+        Task<decimal?> GetDecimalBodyParameter([BodyMember]decimal? parameter);
+
+        [RestGet("double/query")]
+        Task<double?> GetDoubleQueryParameter(double? parameter);
+        [RestGet("double/url/{parameter}")]
+        Task<double?> GetDoubleUrlParameter(double? parameter);
+        [RestPut("double/body")]
+        Task<double?> GetDoubleBodyParameter([BodyMember]double? parameter);
+
+        [RestGet("float/query")]
+        Task<float?> GetFloatQueryParameter(float? parameter);
+        [RestGet("float/url/{parameter}")]
+        Task<float?> GetFloatUrlParameter(float? parameter);
+        [RestPut("float/body")]
+        Task<float?> GetFloatBodyParameter([BodyMember]float? parameter);
+
         [RestGet("guid/list/query")]
         Task<List<Guid>> GetGuidListQueryParameter(List<Guid> parameter);
         [RestGet("guid/list/url/{parameter}")]
