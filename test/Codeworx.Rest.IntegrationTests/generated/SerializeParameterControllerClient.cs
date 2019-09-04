@@ -1,17 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Codeworx.Rest.Client;
-using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Model;
+using Codeworx.Rest.UnitTests.Api.Contract;
+using Codeworx.Rest.Client;
 
-namespace Codeworx.Rest.UnitTests.Dao
+namespace Codeworx.Rest.UnitTests.Generated
 {
-    public class SerializeParameterDao : RestClient<ISerializeParameterController>, ISerializeParameterController
+    public class SerializeParameterControllerClient : RestClient<ISerializeParameterController>, ISerializeParameterController
     {
-        public SerializeParameterDao(RestOptions options)
-            : base(options)
+        public SerializeParameterControllerClient(RestOptions<ISerializeParameterController> options): base(options)
+        {
+        }
+
+        public SerializeParameterControllerClient(RestOptions options): base(options)
         {
         }
 

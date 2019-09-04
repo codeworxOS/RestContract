@@ -1,17 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Codeworx.Rest.Client;
-using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Model;
+using Codeworx.Rest.UnitTests.Api.Contract;
+using Codeworx.Rest.Client;
 
-namespace Codeworx.Rest.UnitTests.Dao
+namespace Codeworx.Rest.UnitTests.Generated
 {
-    public class SerializeResultDao : RestClient<ISerializeResultController>, ISerializeResultController
+    public class SerializeResultControllerClient : RestClient<ISerializeResultController>, ISerializeResultController
     {
-        public SerializeResultDao(RestOptions options)
-            : base(options)
+        public SerializeResultControllerClient(RestOptions<ISerializeResultController> options): base(options)
+        {
+        }
+
+        public SerializeResultControllerClient(RestOptions options): base(options)
         {
         }
 

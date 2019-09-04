@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Dao;
+using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -12,8 +12,8 @@ namespace Codeworx.Rest.UnitTests
         private readonly IPublicMethodsWithNoInterfaceController _publicMethodsWithNoInterfaceController;
         public HttpOperationsTest()
         {
-            _controller = new HttpOperationsDao(RestOptions);
-            _publicMethodsWithNoInterfaceController = new PublicMethodsWithNoInterfaceDao(RestOptions);
+            _controller = new HttpOperationsControllerClient(RestOptions);
+            _publicMethodsWithNoInterfaceController = new PublicMethodsWithNoInterfaceControllerClient(RestOptions);
         }
 
         [Fact]

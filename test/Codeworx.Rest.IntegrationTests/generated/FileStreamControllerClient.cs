@@ -1,19 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Codeworx.Rest.Client;
-using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
-using Codeworx.Rest.UnitTests.Model;
+using Codeworx.Rest.UnitTests.Api.Contract;
+using Codeworx.Rest.Client;
 
-namespace Codeworx.Rest.UnitTests.Dao
+namespace Codeworx.Rest.UnitTests.Generated
 {
-    public class FileStreamDao : RestClient<IFileStreamController>, IFileStreamController
+    public class FileStreamControllerClient : RestClient<IFileStreamController>, IFileStreamController
     {
-        public FileStreamDao(RestOptions options)
-            : base(options)
+        public FileStreamControllerClient(RestOptions<IFileStreamController> options): base(options)
+        {
+        }
+
+        public FileStreamControllerClient(RestOptions options): base(options)
         {
         }
 

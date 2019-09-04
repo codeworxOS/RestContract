@@ -1,16 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Codeworx.Rest.Client;
 using Codeworx.Rest.UnitTests.Api.Contract;
+using Codeworx.Rest.Client;
 
-namespace Codeworx.Rest.UnitTests.Dao
+namespace Codeworx.Rest.UnitTests.Generated
 {
-    public class StatusCodeDao : RestClient<IStatusCodeController>, IStatusCodeController
+    public class StatusCodeControllerClient : RestClient<IStatusCodeController>, IStatusCodeController
     {
-        public StatusCodeDao(RestOptions options)
-            : base(options)
+        public StatusCodeControllerClient(RestOptions<IStatusCodeController> options): base(options)
+        {
+        }
+
+        public StatusCodeControllerClient(RestOptions options): base(options)
         {
         }
 

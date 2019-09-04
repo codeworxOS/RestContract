@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Dao;
 using Codeworx.Rest.UnitTests.Data;
+using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -12,7 +12,7 @@ namespace Codeworx.Rest.UnitTests
 
         public SerializeResultTests()
         {
-            _controller = new SerializeResultDao(RestOptions);
+            _controller = new SerializeResultControllerClient(RestOptions);
         }
 
         [Fact]
