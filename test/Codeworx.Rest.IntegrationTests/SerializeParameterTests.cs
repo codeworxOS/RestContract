@@ -8,25 +8,36 @@ using Xunit;
 
 namespace Codeworx.Rest.UnitTests
 {
-    public class SerializeParameterTests: TestServerTestsBase
+    public class SerializeParameterTests : TestServerTestsBase
     {
-        private readonly ISerializeParameterController _controller;
-
-        public SerializeParameterTests()
-        {
-            _controller = new SerializeParameterControllerClient(RestOptions);
-        }
-
-        public static  IEnumerable<object[]> StringParameters = new List<object[]>
-        {
-            new object[] {ItemsGenerator.TestString},
-            new object[] {null},
-        };
-
         public static IEnumerable<object[]> DateParameters = new List<object[]>
         {
             new object[] {ItemsGenerator.TestDate},
             new object[] {null},
+        };
+
+        public static IEnumerable<object[]> DecimalParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestDecimal },
+            new object[] { null }
+        };
+
+        public static IEnumerable<object[]> DoubleParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestDouble},
+            new object[] { null }
+        };
+
+        public static IEnumerable<object[]> FloatParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestFloat},
+            new object[] { null }
+        };
+
+        public static IEnumerable<object[]> GuidListParameters = new List<object[]>
+        {
+            new object[] {_guidList},
+            new object[] { null },
         };
 
         public static IEnumerable<object[]> GuidParameters = new List<object[]>
@@ -41,22 +52,10 @@ namespace Codeworx.Rest.UnitTests
             new object[] {null},
         };
 
-        public static IEnumerable<object[]> DecimalParameters = new List<object[]>
+        public static IEnumerable<object[]> StringParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestDecimal},
-            null
-        };
-
-        public static IEnumerable<object[]> DoubleParameters = new List<object[]>
-        {
-            new object[] {ItemsGenerator.TestDouble},
-            null
-        };
-
-        public static IEnumerable<object[]> FloatParameters = new List<object[]>
-        {
-            new object[] {ItemsGenerator.TestFloat},
-            null
+            new object[] {ItemsGenerator.TestString},
+            new object[] {null},
         };
 
         private static List<Guid> _guidList = new List<Guid>
@@ -65,33 +64,34 @@ namespace Codeworx.Rest.UnitTests
             Guid.NewGuid()
         };
 
-        public static IEnumerable<object[]> GuidListParameters = new List<object[]>
-        {
-            new object[] {_guidList},
-            new object[] {null},
-        };
+        private readonly ISerializeParameterController _controller;
 
-        [Theory]
-        [MemberData(nameof(StringParameters))]
-        public async Task TestStringQueryParameter(string expectedParameter)
+        public SerializeParameterTests()
         {
-            var actualParameter = await _controller.GetStringQueryParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
+            _controller = new SerializeParameterControllerClient(RestOptions);
+        }
+
+        [Fact]
+        public async Task TestBodyParameterAsLastParameter()
+        {
+            var expectedItem = await ItemsGenerator.GenerateItem();
+            var actualItem = await _controller.GetItemBodyParameterAsLastParameter(ItemsGenerator.TestGuid, "Test", expectedItem);
+            Assert.Equal(expectedItem, actualItem);
+        }
+
+        [Fact]
+        public async Task TestBodyParameterWithNoAttribute()
+        {
+            var expectedItem = await ItemsGenerator.GenerateItem();
+            var actualItem = await _controller.GetItemBodyParameterWithNoAttribute(expectedItem);
+            Assert.NotEqual(expectedItem, actualItem);
         }
 
         [Theory]
-        [MemberData(nameof(StringParameters))]
-        public async Task TestStringUrlParameter(string expectedParameter)
+        [MemberData(nameof(DateParameters))]
+        public async Task TestDateTimeBodyParameter(DateTime? expectedParameter)
         {
-            var actualParameter = await _controller.GetStringUrlParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(StringParameters))]
-        public async Task TestStringBodyParameter(string expectedParameter)
-        {
-            var actualParameter = await _controller.GetStringBodyParameter(expectedParameter);
+            var actualParameter = await _controller.GetDateTimeBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -112,58 +112,10 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(DateParameters))]
-        public async Task TestDateTimeBodyParameter(DateTime? expectedParameter)
+        [MemberData(nameof(DecimalParameters))]
+        public async Task TestDecimalBodyParameter(decimal? expectedParameter)
         {
-            var actualParameter = await _controller.GetDateTimeBodyParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(GuidParameters))]
-        public async Task TestGuidQueryParameter(Guid? expectedParameter)
-        {
-            var actualParameter = await _controller.GetGuidQueryParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(GuidParameters))]
-        public async Task TestGuidUrlParameter(Guid? expectedParameter)
-        {
-            var actualParameter = await _controller.GetGuidUrlParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(GuidParameters))]
-        public async Task TestGuidBodyParameter(Guid? expectedParameter)
-        {
-            var actualParameter = await _controller.GetGuidBodyParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(IntParameters))]
-        public async Task TestIntQueryParameter(int? expectedParameter)
-        {
-            var actualParameter = await _controller.GetIntQueryParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(IntParameters))]
-        public async Task TestIntUrlParameter(int? expectedParameter)
-        {
-            var actualParameter = await _controller.GetIntUrlParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(IntParameters))]
-        public async Task TestIntBodyParameter(int? expectedParameter)
-        {
-            var actualParameter = await _controller.GetIntBodyParameter(expectedParameter);
+            var actualParameter = await _controller.GetDecimalBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -184,10 +136,10 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(DecimalParameters))]
-        public async Task TestDecimalBodyParameter(decimal? expectedParameter)
+        [MemberData(nameof(DoubleParameters))]
+        public async Task TestDoubleBodyParameter(double? expectedParameter)
         {
-            var actualParameter = await _controller.GetDecimalBodyParameter(expectedParameter);
+            var actualParameter = await _controller.GetDoubleBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -208,10 +160,10 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(DoubleParameters))]
-        public async Task TestDoubleBodyParameter(double? expectedParameter)
+        [MemberData(nameof(FloatParameters))]
+        public async Task TestFloatBodyParameter(float? expectedParameter)
         {
-            var actualParameter = await _controller.GetDoubleBodyParameter(expectedParameter);
+            var actualParameter = await _controller.GetFloatBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -232,26 +184,10 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(FloatParameters))]
-        public async Task TestFloatBodyParameter(float? expectedParameter)
+        [MemberData(nameof(GuidParameters))]
+        public async Task TestGuidBodyParameter(Guid? expectedParameter)
         {
-            var actualParameter = await _controller.GetFloatBodyParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListQueryParameter(List<Guid> expectedParameter)
-        {
-            var actualParameter = await _controller.GetGuidListQueryParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
-        }
-
-        [Theory]
-        [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListUrlParameter(List<Guid> expectedParameter)
-        {
-            var actualParameter = await _controller.GetGuidListUrlParameter(expectedParameter);
+            var actualParameter = await _controller.GetGuidBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -263,6 +199,62 @@ namespace Codeworx.Rest.UnitTests
             Assert.Equal(expectedParameter, actualParameter);
         }
 
+        [Theory(Skip = "Future feature -> custom model binders")]
+        [MemberData(nameof(GuidListParameters))]
+        public async Task TestGuidListQueryParameter(List<Guid> expectedParameter)
+        {
+            var actualParameter = await _controller.GetGuidListQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory(Skip = "Future feature -> custom model binders")]
+        [MemberData(nameof(GuidListParameters))]
+        public async Task TestGuidListUrlParameter(List<Guid> expectedParameter)
+        {
+            var actualParameter = await _controller.GetGuidListUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(GuidParameters))]
+        public async Task TestGuidQueryParameter(Guid? expectedParameter)
+        {
+            var actualParameter = await _controller.GetGuidQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(GuidParameters))]
+        public async Task TestGuidUrlParameter(Guid? expectedParameter)
+        {
+            var actualParameter = await _controller.GetGuidUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntParameters))]
+        public async Task TestIntBodyParameter(int? expectedParameter)
+        {
+            var actualParameter = await _controller.GetIntBodyParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntParameters))]
+        public async Task TestIntQueryParameter(int? expectedParameter)
+        {
+            var actualParameter = await _controller.GetIntQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntParameters))]
+        public async Task TestIntUrlParameter(int? expectedParameter)
+        {
+            var actualParameter = await _controller.GetIntUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
         [Fact]
         public async Task TestItemBodyParameter()
         {
@@ -271,7 +263,6 @@ namespace Codeworx.Rest.UnitTests
             Assert.Equal(expectedItem, actualItem);
         }
 
-
         [Fact]
         public async Task TestNullItemBodyParameter()
         {
@@ -279,21 +270,28 @@ namespace Codeworx.Rest.UnitTests
             Assert.Null(actualItem);
         }
 
-
-        [Fact]
-        public async Task TestBodyParameterWithNoAttribute()
+        [Theory]
+        [MemberData(nameof(StringParameters))]
+        public async Task TestStringBodyParameter(string expectedParameter)
         {
-            var expectedItem = await ItemsGenerator.GenerateItem();
-            var actualItem = await _controller.GetItemBodyParameterWithNoAttribute(expectedItem);
-            Assert.NotEqual(expectedItem, actualItem);
+            var actualParameter = await _controller.GetStringBodyParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestBodyParameterAsLastParameter()
+        [Theory]
+        [MemberData(nameof(StringParameters))]
+        public async Task TestStringQueryParameter(string expectedParameter)
         {
-            var expectedItem = await ItemsGenerator.GenerateItem();
-            var actualItem = await _controller.GetItemBodyParameterAsLastParameter(ItemsGenerator.TestGuid, "Test", expectedItem);
-            Assert.Equal(expectedItem, actualItem);
+            var actualParameter = await _controller.GetStringQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(StringParameters))]
+        public async Task TestStringUrlParameter(string expectedParameter)
+        {
+            var actualParameter = await _controller.GetStringUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
         }
     }
 }
