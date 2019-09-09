@@ -39,6 +39,46 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(ItemsGenerator.TestGuid);
         }
 
+        public async Task<int> IntResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestInt);
+        }
+
+        public async Task<int?> NullableIntResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestInt);
+        }
+
+        public async Task<decimal> DecimalResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestDecimal);
+        }
+
+        public async Task<decimal?> NullableDecimalResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestDecimal);
+        }
+
+        public async Task<double> DoubleResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestDouble);
+        }
+
+        public async Task<double?> NullableDoubleResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestDouble);
+        }
+
+        public async Task<float> FloatResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestFloat);
+        }
+
+        public async Task<float?> NullableFloatResult()
+        {
+            return await Task.FromResult(ItemsGenerator.TestFloat);
+        }
+
         public async Task<Item> ItemResult()
         {
             var item = await ItemsGenerator.GenerateItem();

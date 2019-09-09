@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Dao;
+using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -14,7 +12,7 @@ namespace Codeworx.Rest.UnitTests
 
         public StatusCodeTests()
         {
-            _controller = new StatusCodeDao(RestOptions);
+            _controller = new StatusCodeControllerClient(RestOptions);
         }
 
         [Fact]

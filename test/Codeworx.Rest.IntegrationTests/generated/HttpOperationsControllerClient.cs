@@ -1,13 +1,19 @@
-﻿using System.Threading.Tasks;
-using Codeworx.Rest.Client;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
+using Codeworx.Rest.Client;
 
-namespace Codeworx.Rest.UnitTests.Dao
+namespace Codeworx.Rest.UnitTests.Generated
 {
-    class HttpOperationsDao : RestClient<IHttpOperationsController>, IHttpOperationsController
+    public class HttpOperationsControllerClient : RestClient<IHttpOperationsController>, IHttpOperationsController
     {
-        public HttpOperationsDao(RestOptions options)
-            : base(options)
+        public HttpOperationsControllerClient(RestOptions<IHttpOperationsController> options): base(options)
+        {
+        }
+
+        public HttpOperationsControllerClient(RestOptions options): base(options)
         {
         }
 

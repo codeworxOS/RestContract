@@ -1,17 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Codeworx.Rest.Client;
-using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Model;
+using Codeworx.Rest.UnitTests.Api.Contract;
+using Codeworx.Rest.Client;
 
-namespace Codeworx.Rest.UnitTests.Dao
+namespace Codeworx.Rest.UnitTests.Generated
 {
-    public class SerializeParameterDao : RestClient<ISerializeParameterController>, ISerializeParameterController
+    public class SerializeParameterControllerClient : RestClient<ISerializeParameterController>, ISerializeParameterController
     {
-        public SerializeParameterDao(RestOptions options)
-            : base(options)
+        public SerializeParameterControllerClient(RestOptions<ISerializeParameterController> options): base(options)
+        {
+        }
+
+        public SerializeParameterControllerClient(RestOptions options): base(options)
         {
         }
 
@@ -73,6 +75,51 @@ namespace Codeworx.Rest.UnitTests.Dao
         public Task<int?> GetIntBodyParameter(int? parameter)
         {
             return CallAsync(c => c.GetIntBodyParameter(parameter));
+        }
+
+        public Task<decimal?> GetDecimalQueryParameter(decimal? parameter)
+        {
+            return CallAsync(c => c.GetDecimalQueryParameter(parameter));
+        }
+
+        public Task<decimal?> GetDecimalUrlParameter(decimal? parameter)
+        {
+            return CallAsync(c => c.GetDecimalUrlParameter(parameter));
+        }
+
+        public Task<decimal?> GetDecimalBodyParameter(decimal? parameter)
+        {
+            return CallAsync(c => c.GetDecimalBodyParameter(parameter));
+        }
+
+        public Task<double?> GetDoubleQueryParameter(double? parameter)
+        {
+            return CallAsync(c => c.GetDoubleQueryParameter(parameter));
+        }
+
+        public Task<double?> GetDoubleUrlParameter(double? parameter)
+        {
+            return CallAsync(c => c.GetDoubleUrlParameter(parameter));
+        }
+
+        public Task<double?> GetDoubleBodyParameter(double? parameter)
+        {
+            return CallAsync(c => c.GetDoubleBodyParameter(parameter));
+        }
+
+        public Task<float?> GetFloatQueryParameter(float? parameter)
+        {
+            return CallAsync(c => c.GetFloatQueryParameter(parameter));
+        }
+
+        public Task<float?> GetFloatUrlParameter(float? parameter)
+        {
+            return CallAsync(c => c.GetFloatUrlParameter(parameter));
+        }
+
+        public Task<float?> GetFloatBodyParameter(float? parameter)
+        {
+            return CallAsync(c => c.GetFloatBodyParameter(parameter));
         }
 
         public Task<List<Guid>> GetGuidListQueryParameter(List<Guid> parameter)

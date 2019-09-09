@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Dao;
 using Codeworx.Rest.UnitTests.Data;
+using Codeworx.Rest.UnitTests.Generated;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Xunit;
 
@@ -14,7 +13,7 @@ namespace Codeworx.Rest.UnitTests
 
         public MethodOverloadingTests()
         {
-            _controller = new MethodOverloadingDao(RestOptions);
+            _controller = new MethodOverloadingControllerClient(RestOptions);
         }
 
         [Fact]

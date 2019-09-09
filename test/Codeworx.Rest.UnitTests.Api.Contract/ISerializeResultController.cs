@@ -27,6 +27,30 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestGet("guid/nullable")]
         Task<Guid?> NullableGuidResult();
 
+        [RestGet("int")]
+        Task<int> IntResult();
+
+        [RestGet("int/nullable")]
+        Task<int?> NullableIntResult();
+
+        [RestGet("double")]
+        Task<double> DoubleResult();
+
+        [RestGet("double/nullable")]
+        Task<double?> NullableDoubleResult();
+
+        [RestGet("decimal")]
+        Task<decimal> DecimalResult();
+
+        [RestGet("decimal/nullable")]
+        Task<decimal?> NullableDecimalResult();
+
+        [RestGet("float")]
+        Task<float> FloatResult();
+
+        [RestGet("float/nullable")]
+        Task<float?> NullableFloatResult();
+
         [RestGet("item")]
         Task<Item> ItemResult();
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Dao;
 using Codeworx.Rest.UnitTests.Data;
+using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -12,7 +12,7 @@ namespace Codeworx.Rest.UnitTests
 
         public SerializeResultTests()
         {
-            _controller = new SerializeResultDao(RestOptions);
+            _controller = new SerializeResultControllerClient(RestOptions);
         }
 
         [Fact]
@@ -54,6 +54,62 @@ namespace Codeworx.Rest.UnitTests
         {
             var result = await _controller.NullableGuidResult();
             Assert.Equal(ItemsGenerator.TestGuid, result);
+        }
+
+        [Fact]
+        public async Task TestIntResult()
+        {
+            var result = await _controller.IntResult();
+            Assert.Equal(ItemsGenerator.TestInt, result);
+        }
+
+        [Fact]
+        public async Task TestNullableIntResult()
+        {
+            var result = await _controller.NullableIntResult();
+            Assert.Equal(ItemsGenerator.TestInt, result);
+        }
+
+        [Fact]
+        public async Task TestDoubleResult()
+        {
+            var result = await _controller.DoubleResult();
+            Assert.Equal(ItemsGenerator.TestDouble, result);
+        }
+
+        [Fact]
+        public async Task TestNullableDoubleResult()
+        {
+            var result = await _controller.NullableDoubleResult();
+            Assert.Equal(ItemsGenerator.TestDouble, result);
+        }
+
+        [Fact]
+        public async Task TestDecimalResult()
+        {
+            var result = await _controller.DecimalResult();
+            Assert.Equal(ItemsGenerator.TestDecimal, result);
+        }
+
+        [Fact]
+        public async Task TestNullableDecimalResult()
+        {
+            var result = await _controller.NullableDecimalResult();
+            Assert.Equal(ItemsGenerator.TestDecimal, result);
+        }
+
+        [Fact]
+        public async Task TestFloatResult()
+        {
+            var result = await _controller.FloatResult();
+            Assert.Equal(ItemsGenerator.TestFloat, result);
+        }
+
+        [Fact]
+        public async Task TestNullableFloatResult()
+        {
+            var result = await _controller.NullableFloatResult();
+            Assert.Equal(ItemsGenerator.TestFloat, result);
         }
 
         [Fact]

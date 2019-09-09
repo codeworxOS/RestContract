@@ -130,11 +130,16 @@ namespace Codeworx.Rest.Tool
 
             var contractNamespace = item.FindFirstParent<NamespaceDeclarationSyntax>();
 
+            var constructors = GenerateConstructors(item, className);
+            var methods = GenerateMethods(item);
+
             var classDeclaration = SyntaxFactory.ClassDeclaration(className)
                                         .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                                         .AddBaseListTypes(
                                             SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName($"RestClient<{item.Identifier.Text}>")),
-                                            SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName(item.Identifier.Text)));
+                                            SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName(item.Identifier.Text)))
+                                        .AddMembers(constructors)
+                                        .AddMembers(methods);
 
             var namespaceSyntax = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(targetNamespace))
                                         .AddMembers(classDeclaration)
@@ -154,6 +159,72 @@ namespace Codeworx.Rest.Tool
                 .AddMembers(namespaceSyntax);
 
             return result.NormalizeWhitespace();
+        }
+
+        private MemberDeclarationSyntax[] GenerateMethods(InterfaceDeclarationSyntax item)
+        {
+            var memberDeclarations = new List<MemberDeclarationSyntax>();
+
+            var methods = item.Members.OfType<MethodDeclarationSyntax>();
+            foreach (var method in methods)
+            {
+                var arguments = method.ParameterList.Parameters.Select(
+                    parameter => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Identifier)));
+                var callMethodLambda = SyntaxFactory.Argument(
+                    SyntaxFactory.SimpleLambdaExpression(
+                        SyntaxFactory.Parameter(SyntaxFactory.Identifier("c")),
+                        SyntaxFactory.InvocationExpression(
+                                SyntaxFactory.MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    SyntaxFactory.IdentifierName("c"),
+                                    SyntaxFactory.IdentifierName(method.Identifier)))
+                            .AddArgumentListArguments(arguments.ToArray())));
+
+                var callAsync = SyntaxFactory.InvocationExpression(SyntaxFactory.IdentifierName("CallAsync"))
+                    .AddArgumentListArguments(callMethodLambda);
+                var returnStatement = SyntaxFactory.ReturnStatement(callAsync);
+
+                var parameters = method.ParameterList.Parameters.Select(
+                    parameter => SyntaxFactory.Parameter(parameter.Identifier).WithType(parameter.Type));
+                var newMethod = SyntaxFactory.MethodDeclaration(method.ReturnType, method.Identifier)
+                    .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
+                    .AddParameterListParameters(parameters.ToArray())
+                    .AddBodyStatements(returnStatement)
+                    .NormalizeWhitespace();
+
+                memberDeclarations.Add(newMethod);
+            }
+
+            return memberDeclarations.ToArray();
+        }
+
+        private MemberDeclarationSyntax[] GenerateConstructors(InterfaceDeclarationSyntax item, string className)
+        {
+            var memberDeclarations = new List<MemberDeclarationSyntax>();
+
+            var typedConstructor = SyntaxFactory.ConstructorDeclaration(className)
+                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
+                .AddParameterListParameters(
+                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("options")).WithType(SyntaxFactory.ParseTypeName($"RestOptions<{item.Identifier.Text}>")))
+                .WithInitializer(
+                    SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
+                        .AddArgumentListArguments(SyntaxFactory.Argument(SyntaxFactory.IdentifierName("options"))))
+                .WithBody(SyntaxFactory.Block())
+                .NormalizeWhitespace();
+            memberDeclarations.Add(typedConstructor);
+
+            var untypedConstructor = SyntaxFactory.ConstructorDeclaration(className)
+                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
+                .AddParameterListParameters(
+                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("options")).WithType(SyntaxFactory.ParseTypeName($"RestOptions")))
+                .WithInitializer(
+                    SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
+                        .AddArgumentListArguments(SyntaxFactory.Argument(SyntaxFactory.IdentifierName("options"))))
+                .WithBody(SyntaxFactory.Block())
+                .NormalizeWhitespace();
+            memberDeclarations.Add(untypedConstructor);
+
+            return memberDeclarations.ToArray();
         }
 
         private bool IsAttributeName(NameSyntax nameSyntax, string attributeName)

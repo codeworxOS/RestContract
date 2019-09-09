@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Dao;
 using Codeworx.Rest.UnitTests.Data;
+using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -15,7 +12,7 @@ namespace Codeworx.Rest.UnitTests
 
         public PathTests()
         {
-            _controller = new PathDao(RestOptions);
+            _controller = new PathControllerClient(RestOptions);
         }
 
         [Fact]

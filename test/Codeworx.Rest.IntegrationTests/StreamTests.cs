@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
-using Codeworx.Rest.UnitTests.Dao;
 using Codeworx.Rest.UnitTests.Data;
-using Codeworx.Rest.UnitTests.Model;
+using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -18,7 +15,7 @@ namespace Codeworx.Rest.UnitTests
 
         public StreamTests()
         {
-            _controller = new FileStreamDao(RestOptions);
+            _controller = new FileStreamControllerClient(RestOptions);
             _testFileName = ItemsGenerator.CreateTestFilename();
         }
 
