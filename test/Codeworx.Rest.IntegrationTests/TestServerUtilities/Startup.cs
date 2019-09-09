@@ -12,8 +12,8 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
     {
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseMvc();
-
         }
 
         public void ConfigureServices(IServiceCollection services)

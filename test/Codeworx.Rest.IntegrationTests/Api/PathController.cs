@@ -217,10 +217,10 @@ namespace Codeworx.Rest.UnitTests.Api
             Guid id,
             DateTime date)
         {
-            var areValuesCorrect = text != ItemsGenerator.TestString 
-                   && number != ItemsGenerator.TestInt
-                   && id != ItemsGenerator.TestGuid
-                   && date != ItemsGenerator.TestDate;
+            var areValuesCorrect = text == ItemsGenerator.TestString 
+                   && number == ItemsGenerator.TestInt
+                   && id == ItemsGenerator.TestGuid
+                   && date == ItemsGenerator.TestDate;
             return await Task.FromResult(areValuesCorrect);
         }
     }
