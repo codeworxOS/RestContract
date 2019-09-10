@@ -1,0 +1,44 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  name: Hosted Windows 2019 with VS2019
+
+steps:
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'restcontract_signkey.snk'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: 'signkey.snk'
+    TargetFolder: './private'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: './src/tests/Codeworx.Rest.UnitTests/Codeworx.Rest.UnitTests.csproj'
+    feedsToUse: 'select'
+    versioningScheme: 'off'
+- task: PowerShell@2
+  env:
+    BUILD_PRERELEASE: '$(Build.Prerelease)'
+  inputs:
+    filePath: './tools/build.ps1'
+    workingDirectory: './tools'
+  displayName: 'Run the build script'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: './dist/nuget'
+    Contents: '*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
