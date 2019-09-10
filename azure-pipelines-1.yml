@@ -17,7 +17,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
-    Contents: 'signkey.snk'
+    Contents: 'restcontract_signkey.snk'
     TargetFolder: './private'
 - task: DotNetCoreCLI@2
   inputs:
