@@ -12,4 +12,4 @@ New-NugetPackages `
     -VersionPackage "Codeworx.Rest.Primitives" `
     -VersionFilePath "..\version.json" `
     -OutputPath "..\dist\nuget\" `
-    -MsBuildParams "SourceLinkCreate=true;SignAssembly=true;AssemblyOriginatorKeyFile=..\..\private\signkey.snk"
+    -MsBuildParams "SourceLinkCreate=true;SignAssembly=true;AssemblyOriginatorKeyFile=..\..\private\restcontract_signkey.snk"
