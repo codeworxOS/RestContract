@@ -13,7 +13,7 @@ pool:
 steps:
 - task: DownloadSecureFile@1
   inputs:
-    secureFile: 'rstcontract_signkey.snk'
+    secureFile: 'restcontract_signkey.snk'
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
