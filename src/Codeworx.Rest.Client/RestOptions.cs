@@ -1,20 +1,20 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
+using Codeworx.Rest.Client.Builder;
 
 namespace Codeworx.Rest.Client
 {
     public class RestOptions
     {
-        public RestOptions(string baseUrl)
-        {
-            BaseUrl = baseUrl;
-        }
+        private readonly HttpClientFactory _clientFactory;
 
-        public string BaseUrl { get; }
+        public RestOptions(HttpClientFactory clientFactory)
+        {
+            _clientFactory = clientFactory;
+        }
 
         public virtual HttpClient GetHttpClient()
         {
-            return new HttpClient { BaseAddress = new Uri(BaseUrl) };
+            return _clientFactory();
         }
     }
 }

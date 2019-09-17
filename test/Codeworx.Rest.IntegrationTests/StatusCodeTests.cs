@@ -13,7 +13,7 @@ namespace Codeworx.Rest.UnitTests
 
         public StatusCodeTests()
         {
-            _controller = new StatusCodeControllerClient(RestOptions);
+            _controller = Client<IStatusCodeController>();
         }
 
         [Fact]

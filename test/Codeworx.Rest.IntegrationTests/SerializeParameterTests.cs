@@ -68,7 +68,7 @@ namespace Codeworx.Rest.UnitTests
 
         public SerializeParameterTests()
         {
-            _controller = new SerializeParameterControllerClient(RestOptions);
+            _controller = Client<ISerializeParameterController>();
         }
 
         [Fact]

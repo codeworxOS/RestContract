@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using Codeworx.Rest.Client;
+using Codeworx.Rest.UnitTests.Generated;
 using Codeworx.Rest.UnitTests.TestServerUtilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Codeworx.Rest.UnitTests
 {
@@ -16,6 +18,7 @@ namespace Codeworx.Rest.UnitTests
     public abstract class TestServerTestsBase<TStartup> : IDisposable
         where TStartup : class
     {
+        private ServiceProvider _clientProvider;
         private HttpClient _httpClient;
         private TestServer _testServer;
 
@@ -26,15 +29,22 @@ namespace Codeworx.Rest.UnitTests
             _testServer = new TestServer(builder);
 
             _httpClient = _testServer.CreateClient();
-            RestOptions = new TestServerRestOptions(_httpClient);
-        }
 
-        protected RestOptions RestOptions { get; }
+            var services = new ServiceCollection();
+            services.AddRestClient()
+                .WithHttpClient(p => _httpClient)
+                .AddRestProxies(typeof(FileStreamControllerClient).Assembly);
+
+            _clientProvider = services.BuildServiceProvider();
+        }
 
         public virtual void Dispose()
         {
+            _clientProvider.Dispose();
             _httpClient?.Dispose();
             _testServer?.Dispose();
         }
+
+        protected TContract Client<TContract>() => _clientProvider.GetRequiredService<TContract>();
     }
 }

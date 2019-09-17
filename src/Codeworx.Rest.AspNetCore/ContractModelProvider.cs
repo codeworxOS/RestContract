@@ -41,7 +41,7 @@ namespace Codeworx.Rest.AspNetCore
                     if (methodAtt == null)
                     {
                         method = serviceInterface?.GetTypeInfo().GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
-                        methodAtt = method.GetCustomAttributes().OfType<RestOperationAttribute>().FirstOrDefault();
+                        methodAtt = method?.GetCustomAttributes().OfType<RestOperationAttribute>().FirstOrDefault();
                     }
 
                     if (methodAtt != null)

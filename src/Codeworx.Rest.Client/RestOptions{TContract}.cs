@@ -1,9 +1,12 @@
-﻿namespace Codeworx.Rest.Client
+﻿using Codeworx.Rest.Client.Builder;
+
+namespace Codeworx.Rest.Client
 {
     public class RestOptions<TContract> : RestOptions
+        where TContract : class
     {
-        public RestOptions(string baseUrl)
-            : base(baseUrl)
+        public RestOptions(HttpClientFactory<TContract> clientFactory)
+            : base(() => clientFactory())
         {
         }
     }

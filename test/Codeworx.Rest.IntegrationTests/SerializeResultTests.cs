@@ -6,26 +6,20 @@ using Xunit;
 
 namespace Codeworx.Rest.UnitTests
 {
-    public class SerializeResultTests: TestServerTestsBase
+    public class SerializeResultTests : TestServerTestsBase
     {
         private readonly ISerializeResultController _controller;
 
         public SerializeResultTests()
         {
-            _controller = new SerializeResultControllerClient(RestOptions);
+            _controller = Client<ISerializeResultController>();
         }
 
         [Fact]
-        public async Task TestNoResult()
+        public async Task TestDateTimeListResult()
         {
-            await _controller.NoResult();
-        }
-
-        [Fact]
-        public async Task TestStringResult()
-        {
-            var result = await _controller.StringResult();
-            Assert.Equal(ItemsGenerator.TestString, result);
+            var result = await _controller.DateTimeListResult();
+            Assert.Contains(ItemsGenerator.TestDate, result);
         }
 
         [Fact]
@@ -36,23 +30,37 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Fact]
-        public async Task TestNullableDateTimeResult()
+        public async Task TestDecimalResult()
         {
-            var result = await _controller.NullableDateTimeResult();
-            Assert.Equal(ItemsGenerator.TestDate, result);
+            var result = await _controller.DecimalResult();
+            Assert.Equal(ItemsGenerator.TestDecimal, result);
+        }
+
+        [Fact]
+        public async Task TestDoubleResult()
+        {
+            var result = await _controller.DoubleResult();
+            Assert.Equal(ItemsGenerator.TestDouble, result);
+        }
+
+        [Fact]
+        public async Task TestFloatResult()
+        {
+            var result = await _controller.FloatResult();
+            Assert.Equal(ItemsGenerator.TestFloat, result);
+        }
+
+        [Fact]
+        public async Task TestGuidListResult()
+        {
+            var result = await _controller.GuidListResult();
+            Assert.Contains(ItemsGenerator.TestGuid, result);
         }
 
         [Fact]
         public async Task TestGuidResult()
         {
             var result = await _controller.GuidResult();
-            Assert.Equal(ItemsGenerator.TestGuid, result);
-        }
-
-        [Fact]
-        public async Task TestNullableGuidResult()
-        {
-            var result = await _controller.NullableGuidResult();
             Assert.Equal(ItemsGenerator.TestGuid, result);
         }
 
@@ -64,52 +72,19 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Fact]
-        public async Task TestNullableIntResult()
+        public async Task TestItemListResult()
         {
-            var result = await _controller.NullableIntResult();
-            Assert.Equal(ItemsGenerator.TestInt, result);
+            var result = await _controller.ItemListResult();
+
+            var expectedItems = await ItemsGenerator.GenerateItems();
+            Assert.Equal(expectedItems, result);
         }
 
         [Fact]
-        public async Task TestDoubleResult()
+        public async Task TestItemNullResult()
         {
-            var result = await _controller.DoubleResult();
-            Assert.Equal(ItemsGenerator.TestDouble, result);
-        }
-
-        [Fact]
-        public async Task TestNullableDoubleResult()
-        {
-            var result = await _controller.NullableDoubleResult();
-            Assert.Equal(ItemsGenerator.TestDouble, result);
-        }
-
-        [Fact]
-        public async Task TestDecimalResult()
-        {
-            var result = await _controller.DecimalResult();
-            Assert.Equal(ItemsGenerator.TestDecimal, result);
-        }
-
-        [Fact]
-        public async Task TestNullableDecimalResult()
-        {
-            var result = await _controller.NullableDecimalResult();
-            Assert.Equal(ItemsGenerator.TestDecimal, result);
-        }
-
-        [Fact]
-        public async Task TestFloatResult()
-        {
-            var result = await _controller.FloatResult();
-            Assert.Equal(ItemsGenerator.TestFloat, result);
-        }
-
-        [Fact]
-        public async Task TestNullableFloatResult()
-        {
-            var result = await _controller.NullableFloatResult();
-            Assert.Equal(ItemsGenerator.TestFloat, result);
+            var result = await _controller.ItemNullResult();
+            Assert.Null(result);
         }
 
         [Fact]
@@ -122,10 +97,51 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Fact]
-        public async Task TestItemNullResult()
+        public async Task TestNoResult()
         {
-            var result = await _controller.ItemNullResult();
-            Assert.Null(result);
+            await _controller.NoResult();
+        }
+
+        [Fact]
+        public async Task TestNullableDateTimeResult()
+        {
+            var result = await _controller.NullableDateTimeResult();
+            Assert.Equal(ItemsGenerator.TestDate, result);
+        }
+
+        [Fact]
+        public async Task TestNullableDecimalResult()
+        {
+            var result = await _controller.NullableDecimalResult();
+            Assert.Equal(ItemsGenerator.TestDecimal, result);
+        }
+
+        [Fact]
+        public async Task TestNullableDoubleResult()
+        {
+            var result = await _controller.NullableDoubleResult();
+            Assert.Equal(ItemsGenerator.TestDouble, result);
+        }
+
+        [Fact]
+        public async Task TestNullableFloatResult()
+        {
+            var result = await _controller.NullableFloatResult();
+            Assert.Equal(ItemsGenerator.TestFloat, result);
+        }
+
+        [Fact]
+        public async Task TestNullableGuidResult()
+        {
+            var result = await _controller.NullableGuidResult();
+            Assert.Equal(ItemsGenerator.TestGuid, result);
+        }
+
+        [Fact]
+        public async Task TestNullableIntResult()
+        {
+            var result = await _controller.NullableIntResult();
+            Assert.Equal(ItemsGenerator.TestInt, result);
         }
 
         [Fact]
@@ -136,27 +152,10 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Fact]
-        public async Task TestDateTimeListResult()
+        public async Task TestStringResult()
         {
-            var result = await _controller.DateTimeListResult();
-            Assert.Contains(ItemsGenerator.TestDate, result);
-        }
-
-        [Fact]
-        public async Task TestGuidListResult()
-        {
-            var result = await _controller.GuidListResult();
-            Assert.Contains(ItemsGenerator.TestGuid, result);
-
-        }
-
-        [Fact]
-        public async Task TestItemListResult()
-        {
-            var result = await _controller.ItemListResult();
-
-            var expectedItems = await ItemsGenerator.GenerateItems();
-            Assert.Equal(expectedItems, result);
+            var result = await _controller.StringResult();
+            Assert.Equal(ItemsGenerator.TestString, result);
         }
     }
 }

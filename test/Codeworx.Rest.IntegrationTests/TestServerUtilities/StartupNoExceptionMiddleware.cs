@@ -17,8 +17,8 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IApplicationModelProvider, ContractModelProvider>();
             services.AddMvcCore()
+                .AddRestContract()
                 .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
         }
     }

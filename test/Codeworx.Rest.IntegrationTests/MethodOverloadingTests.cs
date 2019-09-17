@@ -14,7 +14,7 @@ namespace Codeworx.Rest.UnitTests
 
         public MethodOverloadingTests()
         {
-            _controller = new MethodOverloadingControllerClient(RestOptions);
+            _controller = Client<IMethodOverloadingController>();
         }
 
         [Fact]

@@ -17,6 +17,7 @@ using Newtonsoft.Json.Serialization;
 namespace Codeworx.Rest.Client
 {
     public class RestClient<TContract>
+        where TContract : class
     {
         private static readonly Regex _parameterRegex;
         private readonly RestOptions _options;

@@ -10,10 +10,20 @@ namespace Codeworx.Rest.UnitTests
     {
         private readonly IHttpOperationsController _controller;
         private readonly IPublicMethodsWithNoInterfaceController _publicMethodsWithNoInterfaceController;
+
         public HttpOperationsTest()
         {
-            _controller = new HttpOperationsControllerClient(RestOptions);
-            _publicMethodsWithNoInterfaceController = new PublicMethodsWithNoInterfaceControllerClient(RestOptions);
+            _controller = Client<IHttpOperationsController>();
+            _publicMethodsWithNoInterfaceController = Client<IPublicMethodsWithNoInterfaceController>();
+        }
+
+        [Fact]
+        public async Task TestHttpDelete()
+        {
+            var result = await _controller.Delete();
+
+            var methodName = nameof(IHttpOperationsController.Delete);
+            Assert.Equal(methodName, result);
         }
 
         [Fact]
@@ -22,15 +32,6 @@ namespace Codeworx.Rest.UnitTests
             var result = await _controller.Get();
 
             var methodName = nameof(IHttpOperationsController.Get);
-            Assert.Equal(methodName, result);
-        }
-
-        [Fact]
-        public async Task TestHttpPut()
-        {
-            var result = await _controller.Put();
-
-            var methodName = nameof(IHttpOperationsController.Put);
             Assert.Equal(methodName, result);
         }
 
@@ -44,18 +45,18 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Fact]
-        public async Task TestHttpDelete()
+        public async Task TestHttpPut()
         {
-            var result = await _controller.Delete();
+            var result = await _controller.Put();
 
-            var methodName = nameof(IHttpOperationsController.Delete);
+            var methodName = nameof(IHttpOperationsController.Put);
             Assert.Equal(methodName, result);
         }
 
         [Fact]
         public async Task TestMissingHttpAttribute()
         {
-            await Assert.ThrowsAsync<NotSupportedException>(async () =>  await _controller.MissingOperation());
+            await Assert.ThrowsAsync<NotSupportedException>(async () => await _controller.MissingOperation());
         }
 
         [Fact]
