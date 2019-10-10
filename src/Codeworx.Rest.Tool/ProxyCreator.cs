@@ -65,21 +65,30 @@ namespace Codeworx.Rest.Tool
                 }
 
                 var projects = projectsBuilder.ToImmutable();
-                var builder = ImmutableList.CreateBuilder<InterfaceDeclarationSyntax>();
+                var interfacesPerProjectBuilder =
+                    ImmutableDictionary.CreateBuilder<Project, ImmutableList<InterfaceDeclarationSyntax>>();
 
-                foreach (var document in projects.SelectMany(p => p.Documents))
+                foreach (var project in projects)
                 {
-                    var root = await document.GetSyntaxRootAsync();
+                    var interfacesBuilder = ImmutableList.CreateBuilder<InterfaceDeclarationSyntax>();
+                    foreach (var document in project.Documents)
+                    {
+                        var root = await document.GetSyntaxRootAsync();
 
-                    var interfaces = root.DescendantNodes()
-                        .OfType<InterfaceDeclarationSyntax>()
-                        .Where(p => IsRestContract(p))
-                        .ToImmutableList();
+                        var interfaces = root.DescendantNodes()
+                            .OfType<InterfaceDeclarationSyntax>()
+                            .Where(p => IsRestContract(p))
+                            .ToImmutableList();
 
-                    builder.AddRange(interfaces);
+                        interfacesBuilder.AddRange(interfaces);
+                    }
+
+                    var allInterfacesPerProject = interfacesBuilder.ToImmutable();
+                    interfacesPerProjectBuilder.Add(project, allInterfacesPerProject);
                 }
 
-                var foundInterfaces = builder.ToImmutable();
+                var interfacesPerProject = interfacesPerProjectBuilder.ToImmutable();
+                var foundInterfaces = interfacesPerProject.SelectMany(pair => pair.Value).ToImmutableList();
 
                 Console.WriteLine($"Found {foundInterfaces.Count} matching interfaces.");
 
@@ -91,9 +100,21 @@ namespace Codeworx.Rest.Tool
                     }
                 }
 
-                foreach (var item in foundInterfaces)
+                foreach (var projectInterfacesPair in interfacesPerProject)
                 {
-                    await WriteTargetProxyClassAsync(item);
+                    var project = projectInterfacesPair.Key;
+                    var interfaces = projectInterfacesPair.Value;
+
+                    var compilation = await project.GetCompilationAsync();
+
+                    foreach (var item in interfaces)
+                    {
+                        var syntaxTree = item.SyntaxTree;
+                        var semanticModel = compilation.GetSemanticModel(syntaxTree);
+                        var interfaceSymbol = semanticModel.GetDeclaredSymbol(item);
+
+                        await WriteTargetProxyClassAsync(interfaceSymbol);
+                    }
                 }
             }
 
@@ -120,7 +141,7 @@ namespace Codeworx.Rest.Tool
             Console.ResetColor();
         }
 
-        private SyntaxNode CreateProxyClassSyntax(InterfaceDeclarationSyntax item, string className, IEnumerable<string> folders)
+        private SyntaxNode CreateProxyClassSyntax(INamedTypeSymbol currentInterface, string className, IEnumerable<string> folders)
         {
             var targetNamespace = _project.DefaultNamespace;
             if (folders.Any())
@@ -128,16 +149,14 @@ namespace Codeworx.Rest.Tool
                 targetNamespace = $"{targetNamespace}.{string.Join(".", folders.Select(x => $"{x.Substring(0, 1).ToUpper()}{x.Substring(1)}"))}";
             }
 
-            var contractNamespace = item.FindFirstParent<NamespaceDeclarationSyntax>();
-
-            var constructors = GenerateConstructors(item, className);
-            var methods = GenerateMethods(item);
+            var constructors = GenerateConstructors(currentInterface, className);
+            var methods = GenerateMethods(currentInterface);
 
             var classDeclaration = SyntaxFactory.ClassDeclaration(className)
                                         .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                                         .AddBaseListTypes(
-                                            SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName($"RestClient<{item.Identifier.Text}>")),
-                                            SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName(item.Identifier.Text)))
+                                            SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName($"Codeworx.Rest.Client.RestClient<{currentInterface.AssemblyQualifiedName()}>")),
+                                            SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName(currentInterface.AssemblyQualifiedName())))
                                         .AddMembers(constructors)
                                         .AddMembers(methods);
 
@@ -145,21 +164,7 @@ namespace Codeworx.Rest.Tool
                                         .AddMembers(classDeclaration)
                                         .NormalizeWhitespace();
 
-            var originalUsings = item.FindFirstParent<CompilationUnitSyntax>()
-                                    .DescendantNodes()
-                                    .OfType<UsingDirectiveSyntax>()
-                                    .Select((p, i) =>
-                                            i == 0 ?
-                                                p.WithLeadingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.SingleLineCommentTrivia, "// <auto-generated />")) :
-                                                p)
-                                    .ToImmutableList();
-
             var result = SyntaxFactory.CompilationUnit()
-                .AddUsings(originalUsings.Concat(new[]
-                                    {
-                                        SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(contractNamespace.Name.ToString())),
-                                        SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Codeworx.Rest.Client"))
-                                    }).ToArray())
                 .AddAttributeLists(
                     SyntaxFactory.AttributeList()
                         .WithTarget(SyntaxFactory.AttributeTargetSpecifier(SyntaxFactory.Identifier("assembly")))
@@ -167,22 +172,24 @@ namespace Codeworx.Rest.Tool
                             SyntaxFactory.Attribute(SyntaxFactory.ParseName("Codeworx.Rest.RestProxy"))
                                 .AddArgumentListArguments(
                                     SyntaxFactory.AttributeArgument(
-                                        SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName(item.Identifier.Text))),
+                                        SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName(currentInterface.AssemblyQualifiedName()))),
                                     SyntaxFactory.AttributeArgument(
                                         SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName($"{targetNamespace}.{classDeclaration.Identifier.Text}"))))))
+                .WithLeadingTrivia(
+                    SyntaxFactory.SyntaxTrivia(SyntaxKind.SingleLineCommentTrivia, "// <auto-generated />"))
                 .AddMembers(namespaceSyntax);
 
             return result.NormalizeWhitespace();
         }
 
-        private MemberDeclarationSyntax[] GenerateConstructors(InterfaceDeclarationSyntax item, string className)
+        private MemberDeclarationSyntax[] GenerateConstructors(INamedTypeSymbol currentInterface, string className)
         {
             var memberDeclarations = new List<MemberDeclarationSyntax>();
 
             var typedConstructor = SyntaxFactory.ConstructorDeclaration(className)
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                 .AddParameterListParameters(
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("options")).WithType(SyntaxFactory.ParseTypeName($"RestOptions<{item.Identifier.Text}>")))
+                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("options")).WithType(SyntaxFactory.ParseTypeName($"Codeworx.Rest.Client.RestOptions<{currentInterface.AssemblyQualifiedName()}>")))
                 .WithInitializer(
                     SyntaxFactory.ConstructorInitializer(SyntaxKind.BaseConstructorInitializer)
                         .AddArgumentListArguments(SyntaxFactory.Argument(SyntaxFactory.IdentifierName("options"))))
@@ -210,15 +217,18 @@ namespace Codeworx.Rest.Tool
             return memberDeclarations.ToArray();
         }
 
-        private MemberDeclarationSyntax[] GenerateMethods(InterfaceDeclarationSyntax item)
+        private MemberDeclarationSyntax[] GenerateMethods(INamedTypeSymbol currentInterface)
         {
             var memberDeclarations = new List<MemberDeclarationSyntax>();
 
-            var methods = item.Members.OfType<MethodDeclarationSyntax>();
+            var allInterfaces = currentInterface.AllInterfaces;
+            allInterfaces = allInterfaces.Add(currentInterface);
+
+            var methods = allInterfaces.SelectMany(interfaceSymbol => interfaceSymbol.GetMembers().OfType<IMethodSymbol>()).ToImmutableList();
             foreach (var method in methods)
             {
-                var arguments = method.ParameterList.Parameters.Select(
-                    parameter => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Identifier)));
+                var arguments = method.Parameters.Select(
+                    parameter => SyntaxFactory.Argument(SyntaxFactory.IdentifierName(parameter.Name)));
                 var callMethodLambda = SyntaxFactory.Argument(
                     SyntaxFactory.SimpleLambdaExpression(
                         SyntaxFactory.Parameter(SyntaxFactory.Identifier("c")),
@@ -226,16 +236,16 @@ namespace Codeworx.Rest.Tool
                                 SyntaxFactory.MemberAccessExpression(
                                     SyntaxKind.SimpleMemberAccessExpression,
                                     SyntaxFactory.IdentifierName("c"),
-                                    SyntaxFactory.IdentifierName(method.Identifier)))
+                                    SyntaxFactory.IdentifierName(method.Name)))
                             .AddArgumentListArguments(arguments.ToArray())));
 
                 var callAsync = SyntaxFactory.InvocationExpression(SyntaxFactory.IdentifierName("CallAsync"))
                     .AddArgumentListArguments(callMethodLambda);
                 var returnStatement = SyntaxFactory.ReturnStatement(callAsync);
 
-                var parameters = method.ParameterList.Parameters.Select(
-                    parameter => SyntaxFactory.Parameter(parameter.Identifier).WithType(parameter.Type));
-                var newMethod = SyntaxFactory.MethodDeclaration(method.ReturnType, method.Identifier)
+                var parameters = method.Parameters.Select(
+                    parameter => SyntaxFactory.Parameter(SyntaxFactory.Identifier(parameter.Name)).WithType(SyntaxFactory.ParseTypeName(parameter.Type.AssemblyQualifiedName())));
+                var newMethod = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName(method.ReturnType.AssemblyQualifiedName()), method.Name)
                     .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                     .AddParameterListParameters(parameters.ToArray())
                     .AddBodyStatements(returnStatement)
@@ -266,11 +276,11 @@ namespace Codeworx.Rest.Tool
             return interfaceDeclaration.AttributeLists.Any(p => p.Attributes.Any(x => IsAttributeName(x.Name, "RestRoute")));
         }
 
-        private async Task WriteTargetProxyClassAsync(InterfaceDeclarationSyntax item)
+        private async Task WriteTargetProxyClassAsync(INamedTypeSymbol currentInterface)
         {
             await Task.Yield();
 
-            var className = $"{item.Identifier.Text.Substring(1)}Client";
+            var className = $"{currentInterface.Name.Substring(1)}Client";
             var fileName = $"{className}.cs";
             var folders = _options.OutputDir.Split('\\', '/');
             var filePath = Path.Combine(
@@ -280,7 +290,7 @@ namespace Codeworx.Rest.Tool
 
             WriteVerboseInfo($"Creating {className} in target file {filePath}.");
 
-            var clientSyntax = CreateProxyClassSyntax(item, className, folders);
+            var clientSyntax = CreateProxyClassSyntax(currentInterface, className, folders);
 
             Directory.CreateDirectory(new FileInfo(filePath).DirectoryName);
             using (var stream = File.Create(filePath))
