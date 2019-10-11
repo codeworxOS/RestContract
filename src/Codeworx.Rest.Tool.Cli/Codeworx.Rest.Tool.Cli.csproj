@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>dotnet-restcontract</ToolCommandName>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Codeworx.Rest.Tool\Codeworx.Rest.Tool.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Codeworx.Rest.Tool\bin\$(Configuration)\net472\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
