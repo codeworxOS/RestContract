@@ -10,7 +10,7 @@ namespace Codeworx.Rest.UnitTests
 
         public InheritanceTest()
         {
-            _controller = Client<IDerivedController>();
+            _controller = Client<IDerivedController>(FormatterSelection.Json);
         }
 
         [Fact]

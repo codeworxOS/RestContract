@@ -22,7 +22,8 @@ namespace Codeworx.Rest.AspNetCore
         {
             foreach (var controller in context.Result.Controllers)
             {
-                var serviceInterface = controller.ControllerType.GetInterfaces().FirstOrDefault(p => p.GetTypeInfo().GetCustomAttribute<RestRouteAttribute>() != null);
+                var serviceInterfaces = controller.ControllerType.GetInterfaces();
+                var serviceInterface = serviceInterfaces.FirstOrDefault(p => p.GetCustomAttribute<RestRouteAttribute>() != null);
 
                 var att = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
                 att = att ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
@@ -40,7 +41,10 @@ namespace Codeworx.Rest.AspNetCore
 
                     if (methodAtt == null)
                     {
-                        method = serviceInterface?.GetTypeInfo().GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
+                        method = serviceInterfaces
+                                    .Select(p => p.GetTypeInfo().GetMethod(method.Name, method.GetParameters().Select(x => x.ParameterType).ToArray()))
+                                    .FirstOrDefault(p => p != null);
+
                         methodAtt = method?.GetCustomAttributes().OfType<RestOperationAttribute>().FirstOrDefault();
                     }
 
