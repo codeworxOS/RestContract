@@ -14,7 +14,7 @@ namespace Codeworx.Rest.UnitTests
 
         public MethodOverloadingTests()
         {
-            _controller = Client<IMethodOverloadingController>();
+            _controller = Client<IMethodOverloadingController>(FormatterSelection.Json);
         }
 
         [Fact]

@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace Codeworx.Rest.Client.Builder
+namespace Codeworx.Rest
 {
     public delegate HttpClient HttpClientFactory<TContract>()
         where TContract : class;

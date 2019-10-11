@@ -12,7 +12,7 @@ namespace Codeworx.Rest.UnitTests
 
         public SerializeResultTests()
         {
-            _controller = Client<ISerializeResultController>();
+            _controller = Client<ISerializeResultController>(FormatterSelection.Json);
         }
 
         [Fact]

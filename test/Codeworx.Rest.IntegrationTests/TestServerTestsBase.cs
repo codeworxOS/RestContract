@@ -18,33 +18,52 @@ namespace Codeworx.Rest.UnitTests
     public abstract class TestServerTestsBase<TStartup> : IDisposable
         where TStartup : class
     {
-        private ServiceProvider _clientProvider;
+        private HashSet<IDisposable> _clientProviders;
         private HttpClient _httpClient;
         private TestServer _testServer;
 
         public TestServerTestsBase()
         {
+            _clientProviders = new HashSet<IDisposable>();
             var builder = new WebHostBuilder()
                 .UseStartup<TStartup>();
             _testServer = new TestServer(builder);
 
             _httpClient = _testServer.CreateClient();
-
-            var services = new ServiceCollection();
-            services.AddRestClient()
-                .WithHttpClient(p => _httpClient)
-                .AddRestProxies(typeof(FileStreamControllerClient).Assembly);
-
-            _clientProvider = services.BuildServiceProvider();
         }
 
         public virtual void Dispose()
         {
-            _clientProvider.Dispose();
+            foreach (var disp in _clientProviders)
+            {
+                disp.Dispose();
+            }
+
             _httpClient?.Dispose();
             _testServer?.Dispose();
         }
 
-        protected TContract Client<TContract>() => _clientProvider.GetRequiredService<TContract>();
+        protected TContract Client<TContract>(FormatterSelection selection)
+        {
+            var provider = GetClientProvider(selection);
+            _clientProviders.Add(provider);
+
+            return provider.GetRequiredService<TContract>();
+        }
+
+        private ServiceProvider GetClientProvider(FormatterSelection selection)
+        {
+            var services = new ServiceCollection();
+            var builder = services.AddRestClient()
+                .WithHttpClient(p => _httpClient)
+                .AddRestProxies(typeof(FileStreamControllerClient).Assembly);
+
+            if (selection == FormatterSelection.Protobuf)
+            {
+                builder = builder.AddProtobufFormatter(makeDefault: true);
+            }
+
+            return services.BuildServiceProvider();
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace Codeworx.Rest.UnitTests
 
         public PathTests()
         {
-            _service = Client<IPathService>();
+            _service = Client<IPathService>(FormatterSelection.Json);
         }
 
         [Fact]
