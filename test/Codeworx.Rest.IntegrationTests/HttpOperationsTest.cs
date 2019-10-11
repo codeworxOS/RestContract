@@ -13,8 +13,8 @@ namespace Codeworx.Rest.UnitTests
 
         public HttpOperationsTest()
         {
-            _controller = Client<IHttpOperationsController>();
-            _publicMethodsWithNoInterfaceController = Client<IPublicMethodsWithNoInterfaceController>();
+            _controller = Client<IHttpOperationsController>(FormatterSelection.Json);
+            _publicMethodsWithNoInterfaceController = Client<IPublicMethodsWithNoInterfaceController>(FormatterSelection.Json);
         }
 
         [Fact]

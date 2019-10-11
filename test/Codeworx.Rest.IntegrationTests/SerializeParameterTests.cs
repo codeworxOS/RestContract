@@ -12,50 +12,72 @@ namespace Codeworx.Rest.UnitTests
     {
         public static IEnumerable<object[]> DateParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestDate},
-            new object[] {null},
+            new object[] {ItemsGenerator.TestDate, FormatterSelection.Json},
+            new object[] {null, FormatterSelection.Json},
+            new object[] {ItemsGenerator.TestDate, FormatterSelection.Protobuf},
+            new object[] {null, FormatterSelection.Protobuf},
         };
 
         public static IEnumerable<object[]> DecimalParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestDecimal },
-            new object[] { null }
+            new object[] {ItemsGenerator.TestDecimal, FormatterSelection.Json },
+            new object[] { null, FormatterSelection.Json },
+            new object[] {ItemsGenerator.TestDecimal, FormatterSelection.Protobuf },
+            new object[] { null, FormatterSelection.Protobuf },
         };
 
         public static IEnumerable<object[]> DoubleParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestDouble},
-            new object[] { null }
+            new object[] {ItemsGenerator.TestDouble, FormatterSelection.Json},
+            new object[] { null, FormatterSelection.Json },
+            new object[] {ItemsGenerator.TestDouble, FormatterSelection.Protobuf},
+            new object[] { null, FormatterSelection.Protobuf }
         };
 
         public static IEnumerable<object[]> FloatParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestFloat},
-            new object[] { null }
+            new object[] {ItemsGenerator.TestFloat, FormatterSelection.Json},
+            new object[] { null, FormatterSelection.Json },
+            new object[] {ItemsGenerator.TestFloat, FormatterSelection.Protobuf},
+            new object[] { null, FormatterSelection.Protobuf }
+        };
+
+        public static IEnumerable<object[]> FormatterParameters = new List<object[]>
+        {
+           new object[] {FormatterSelection.Json },
+           new object[] {FormatterSelection.Protobuf },
         };
 
         public static IEnumerable<object[]> GuidListParameters = new List<object[]>
         {
-            new object[] {_guidList},
-            new object[] { null },
+            new object[] {_guidList, FormatterSelection.Json},
+            new object[] { null, FormatterSelection.Json },
+            new object[] {_guidList, FormatterSelection.Protobuf},
+            new object[] { null, FormatterSelection.Protobuf },
         };
 
         public static IEnumerable<object[]> GuidParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestGuid},
-            new object[] {null},
+            new object[] {ItemsGenerator.TestGuid, FormatterSelection.Json},
+            new object[] {null, FormatterSelection.Json},
+            new object[] {ItemsGenerator.TestGuid, FormatterSelection.Protobuf},
+            new object[] {null, FormatterSelection.Protobuf},
         };
 
         public static IEnumerable<object[]> IntParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestInt},
-            new object[] {null},
+            new object[] {ItemsGenerator.TestInt, FormatterSelection.Json},
+            new object[] {null, FormatterSelection.Json},
+            new object[] {ItemsGenerator.TestInt, FormatterSelection.Protobuf},
+            new object[] {null, FormatterSelection.Protobuf},
         };
 
         public static IEnumerable<object[]> StringParameters = new List<object[]>
         {
-            new object[] {ItemsGenerator.TestString},
-            new object[] {null},
+            new object[] {ItemsGenerator.TestString, FormatterSelection.Json},
+            new object[] {null, FormatterSelection.Json},
+            new object[] {ItemsGenerator.TestString, FormatterSelection.Protobuf},
+            new object[] {null, FormatterSelection.Protobuf},
         };
 
         private static List<Guid> _guidList = new List<Guid>
@@ -64,233 +86,258 @@ namespace Codeworx.Rest.UnitTests
             Guid.NewGuid()
         };
 
-        private readonly ISerializeParameterController _controller;
-
-        public SerializeParameterTests()
+        [Theory]
+        [MemberData(nameof(FormatterParameters))]
+        public async Task TestBodyParameterAsLastParameter(FormatterSelection formatter)
         {
-            _controller = Client<ISerializeParameterController>();
-        }
-
-        [Fact]
-        public async Task TestBodyParameterAsLastParameter()
-        {
+            var client = Client<ISerializeParameterController>(formatter);
             var expectedItem = await ItemsGenerator.GenerateItem();
-            var actualItem = await _controller.GetItemBodyParameterAsLastParameter(ItemsGenerator.TestGuid, "Test", expectedItem);
+            var actualItem = await client.GetItemBodyParameterAsLastParameter(ItemsGenerator.TestGuid, "Test", expectedItem);
             Assert.Equal(expectedItem, actualItem);
         }
 
-        [Fact]
-        public async Task TestBodyParameterWithNoAttribute()
+        [Theory]
+        [MemberData(nameof(FormatterParameters))]
+        public async Task TestBodyParameterWithNoAttribute(FormatterSelection formatter)
         {
+            var client = Client<ISerializeParameterController>(formatter);
             var expectedItem = await ItemsGenerator.GenerateItem();
-            var actualItem = await _controller.GetItemBodyParameterWithNoAttribute(expectedItem);
+            var actualItem = await client.GetItemBodyParameterWithNoAttribute(expectedItem);
             Assert.NotEqual(expectedItem, actualItem);
         }
 
         [Theory]
         [MemberData(nameof(DateParameters))]
-        public async Task TestDateTimeBodyParameter(DateTime? expectedParameter)
+        public async Task TestDateTimeBodyParameter(DateTime? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDateTimeBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DateParameters))]
-        public async Task TestDateTimeQueryParameter(DateTime? expectedParameter)
+        public async Task TestDateTimeQueryParameter(DateTime? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDateTimeQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DateParameters))]
-        public async Task TestDateTimeUrlParameter(DateTime? expectedParameter)
+        public async Task TestDateTimeUrlParameter(DateTime? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDateTimeUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DecimalParameters))]
-        public async Task TestDecimalBodyParameter(decimal? expectedParameter)
+        public async Task TestDecimalBodyParameter(decimal? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDecimalBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDecimalBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DecimalParameters))]
-        public async Task TestDecimalQueryParameter(decimal? expectedParameter)
+        public async Task TestDecimalQueryParameter(decimal? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDecimalQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDecimalQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DecimalParameters))]
-        public async Task TestDecimalUrlParameter(decimal? expectedParameter)
+        public async Task TestDecimalUrlParameter(decimal? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDecimalUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDecimalUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DoubleParameters))]
-        public async Task TestDoubleBodyParameter(double? expectedParameter)
+        public async Task TestDoubleBodyParameter(double? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDoubleBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDoubleBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DoubleParameters))]
-        public async Task TestDoubleQueryParameter(double? expectedParameter)
+        public async Task TestDoubleQueryParameter(double? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDoubleQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDoubleQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(DoubleParameters))]
-        public async Task TestDoubleUrlParameter(double? expectedParameter)
+        public async Task TestDoubleUrlParameter(double? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetDoubleUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDoubleUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(FloatParameters))]
-        public async Task TestFloatBodyParameter(float? expectedParameter)
+        public async Task TestFloatBodyParameter(float? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetFloatBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetFloatBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(FloatParameters))]
-        public async Task TestFloatQueryParameter(float? expectedParameter)
+        public async Task TestFloatQueryParameter(float? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetFloatQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetFloatQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(FloatParameters))]
-        public async Task TestFloatUrlParameter(float? expectedParameter)
+        public async Task TestFloatUrlParameter(float? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetFloatUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetFloatUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(GuidParameters))]
-        public async Task TestGuidBodyParameter(Guid? expectedParameter)
+        public async Task TestGuidBodyParameter(Guid? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetGuidBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListBodyParameter(List<Guid> expectedParameter)
+        public async Task TestGuidListBodyParameter(List<Guid> expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetGuidListBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidListBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory(Skip = "Future feature -> custom model binders")]
         [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListQueryParameter(List<Guid> expectedParameter)
+        public async Task TestGuidListQueryParameter(List<Guid> expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetGuidListQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidListQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory(Skip = "Future feature -> custom model binders")]
         [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListUrlParameter(List<Guid> expectedParameter)
+        public async Task TestGuidListUrlParameter(List<Guid> expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetGuidListUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidListUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(GuidParameters))]
-        public async Task TestGuidQueryParameter(Guid? expectedParameter)
+        public async Task TestGuidQueryParameter(Guid? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetGuidQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(GuidParameters))]
-        public async Task TestGuidUrlParameter(Guid? expectedParameter)
+        public async Task TestGuidUrlParameter(Guid? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetGuidUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(IntParameters))]
-        public async Task TestIntBodyParameter(int? expectedParameter)
+        public async Task TestIntBodyParameter(int? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetIntBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetIntBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(IntParameters))]
-        public async Task TestIntQueryParameter(int? expectedParameter)
+        public async Task TestIntQueryParameter(int? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetIntQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetIntQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(IntParameters))]
-        public async Task TestIntUrlParameter(int? expectedParameter)
+        public async Task TestIntUrlParameter(int? expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetIntUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetIntUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
-        [Fact]
-        public async Task TestItemBodyParameter()
+        [Theory]
+        [MemberData(nameof(FormatterParameters))]
+        public async Task TestItemBodyParameter(FormatterSelection formatter)
         {
+            var client = Client<ISerializeParameterController>(formatter);
             var expectedItem = await ItemsGenerator.GenerateItem();
-            var actualItem = await _controller.GetItemBodyParameter(expectedItem);
+            var actualItem = await client.GetItemBodyParameter(expectedItem);
             Assert.Equal(expectedItem, actualItem);
         }
 
-        [Fact]
-        public async Task TestNullItemBodyParameter()
+        [Theory]
+        [MemberData(nameof(FormatterParameters))]
+        public async Task TestNullItemBodyParameter(FormatterSelection formatter)
         {
-            var actualItem = await _controller.GetItemBodyParameter(null);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualItem = await client.GetItemBodyParameter(null);
             Assert.Null(actualItem);
         }
 
         [Theory]
         [MemberData(nameof(StringParameters))]
-        public async Task TestStringBodyParameter(string expectedParameter)
+        public async Task TestStringBodyParameter(string expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetStringBodyParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetStringBodyParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(StringParameters))]
-        public async Task TestStringQueryParameter(string expectedParameter)
+        public async Task TestStringQueryParameter(string expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetStringQueryParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetStringQueryParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
         [Theory]
         [MemberData(nameof(StringParameters))]
-        public async Task TestStringUrlParameter(string expectedParameter)
+        public async Task TestStringUrlParameter(string expectedParameter, FormatterSelection formatter)
         {
-            var actualParameter = await _controller.GetStringUrlParameter(expectedParameter);
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetStringUrlParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
     }

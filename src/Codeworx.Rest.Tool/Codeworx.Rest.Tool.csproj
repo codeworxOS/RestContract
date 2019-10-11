@@ -4,8 +4,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <LangVersion>Latest</LangVersion>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>dotnet-restcontract</ToolCommandName>
     <PackageOutputPath>../../dist</PackageOutputPath>
   </PropertyGroup>
 

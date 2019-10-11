@@ -8,8 +8,8 @@ namespace Codeworx.Rest.Client.Builder
     {
         public RestOptionsBuilder(IServiceCollection services)
         {
-            services.AddSingleton<RestOptions<TContract>>();
-            services.AddOrReplace<HttpClientFactory<TContract>>(ServiceLifetime.Singleton, sp => () => new HttpClient());
+            services.AddScoped<RestOptions<TContract>>();
+            services.AddOrReplace<HttpClientFactory<TContract>>(ServiceLifetime.Scoped, sp => () => new HttpClient());
 
             Services = services;
         }

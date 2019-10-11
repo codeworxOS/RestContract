@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
@@ -11,8 +10,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Codeworx.Rest.Client
 {
@@ -32,7 +29,7 @@ namespace Codeworx.Rest.Client
             this._options = options;
         }
 
-        public RestClient(RestOptions options)
+        protected RestClient(RestOptions options)
         {
             this._options = options;
         }
@@ -53,24 +50,18 @@ namespace Codeworx.Rest.Client
             HttpResponseMessage response = await GetResponse(operationSelector);
             if (response.IsSuccessStatusCode)
             {
-                JsonSerializer serializer = GetSerializer();
-
-                using (var stream = await response.Content.ReadAsStreamAsync())
-                using (var streamReader = new StreamReader(stream))
-                using (var jsonReader = new JsonTextReader(streamReader))
+                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                 {
-                    var result = serializer.Deserialize<TResult>(jsonReader);
-
-                    return result;
+                    return default(TResult);
                 }
+
+                var formatter = _options.GetFormatter(response.Content?.Headers?.ContentType?.MediaType);
+
+                var result = await formatter.DeserializeAsync<TResult>(response);
+                return result;
             }
 
             throw new InvalidOperationException("Unexpected http status code.");
-        }
-
-        private static JsonSerializer GetSerializer()
-        {
-            return JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
         }
 
         private static bool IsMatch(string templateValue, string parameterName)
@@ -118,26 +109,9 @@ namespace Codeworx.Rest.Client
 
             var query = HttpUtility.ParseQueryString(uri.Query);
             var httpMethod = attribute.HttpMethod();
-            HttpContent content = null;
 
             evaluator.AddMissingQueryParameters(query);
-
-            if (evaluator.TryGetBody(out var body))
-            {
-                using (var ms = new MemoryStream())
-                {
-                    var serializer = GetSerializer();
-                    using (var streamWriter = new StreamWriter(ms))
-                    using (var jsonWriter = new JsonTextWriter(streamWriter))
-                    {
-                        serializer.Serialize(jsonWriter, body);
-                    }
-
-                    content = new ByteArrayContent(ms.ToArray());
-                }
-
-                content.Headers.ContentType = MediaTypeWithQualityHeaderValue.Parse("application/json");
-            }
+            var formatter = _options.GetFormatter();
 
             var builder = new UriBuilder();
             builder.Path = uri.AbsolutePath;
@@ -145,10 +119,11 @@ namespace Codeworx.Rest.Client
             requestUrl = builder.Uri.PathAndQuery.TrimStart('/');
 
             var request = new HttpRequestMessage(new HttpMethod(httpMethod), requestUrl);
-            request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-            if (content != null)
+            request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(formatter.MimeType));
+
+            if (evaluator.TryGetBody(out var body, out var type))
             {
-                request.Content = content;
+                await formatter.SerializeAsync(type, body, request);
             }
 
             var response = await client.SendAsync(request);
@@ -174,6 +149,7 @@ namespace Codeworx.Rest.Client
                                         p => new
                                         ParameterData
                                         {
+                                            ParameterType = p.Parameter.ParameterType,
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
                                             IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null
                                         });
@@ -208,23 +184,26 @@ namespace Codeworx.Rest.Client
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");
             }
 
-            public bool TryGetBody(out object value)
+            public bool TryGetBody(out object value, out Type valueType)
             {
                 var bodyMembers = _parameterValues.Where(p => p.Value.IsBodyMember)
-                                    .ToDictionary(p => p.Key, p => p.Value.Data);
+                                    .ToDictionary(p => p.Key, p => p.Value);
 
                 if (bodyMembers.Count == 1)
                 {
-                    value = bodyMembers.Values.First();
+                    value = bodyMembers.Values.First().Data;
+                    valueType = bodyMembers.Values.First().ParameterType;
                     return true;
                 }
                 else if (bodyMembers.Count > 1)
                 {
-                    value = bodyMembers;
+                    value = bodyMembers.ToDictionary(p => p.Key, p => p.Value.Data);
+                    valueType = typeof(Dictionary<string, object>);
                     return true;
                 }
 
                 value = null;
+                valueType = null;
                 return false;
             }
 
@@ -263,6 +242,8 @@ namespace Codeworx.Rest.Client
                 public object Data { get; set; }
 
                 public bool IsBodyMember { get; set; }
+
+                public Type ParameterType { get; set; }
             }
         }
     }

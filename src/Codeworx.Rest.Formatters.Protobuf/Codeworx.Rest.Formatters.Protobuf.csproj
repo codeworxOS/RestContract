@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+    <PackageReference Include="protobuf-net" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Codeworx.Rest.Primitives\Codeworx.Rest.Primitives.csproj" />
+    <ProjectReference Include="..\Codeworx.Rest.Client\Codeworx.Rest.Client.csproj" />
   </ItemGroup>
 </Project>

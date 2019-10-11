@@ -4,7 +4,7 @@
         where TContract : class
     {
         public DefaultRestOptions(RestOptions options)
-            : base(() => options.GetHttpClient())
+            : base(() => options.GetHttpClient(), () => options.DefaultFormatter, options.Formatters)
         {
         }
     }

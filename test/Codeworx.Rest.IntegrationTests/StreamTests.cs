@@ -15,7 +15,7 @@ namespace Codeworx.Rest.UnitTests
 
         public StreamTests()
         {
-            _controller = Client<IFileStreamController>();
+            _controller = Client<IFileStreamController>(FormatterSelection.Json);
             _testFileName = ItemsGenerator.CreateTestFilename();
         }
 
