@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Codeworx.Rest.Client;
+using Codeworx.Rest.Client.Formatters;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
 using Codeworx.Rest.UnitTests.Generated;
@@ -58,6 +59,20 @@ namespace Codeworx.Rest.UnitTests
 
             var options = provider.GetRequiredService<RestOptions<IPathService>>();
             Assert.Equal(new Uri("http://localhost:1234/testurl"), options.GetHttpClient().BaseAddress);
+        }
+
+        [Fact]
+        public void AddOrReplaceServiceTest()
+        {
+            var services = new ServiceCollection();
+            services.AddSingleton<IContentFormatter, JsonContentFormatter>(sp => null);
+            services.AddOrReplace<IContentFormatter, JsonContentFormatter>(ServiceLifetime.Singleton, sp => new JsonContentFormatter(new Newtonsoft.Json.JsonSerializerSettings()));
+
+            var provider = services.BuildServiceProvider();
+
+            var jsonFormatter = provider.GetRequiredService<IEnumerable<IContentFormatter>>();
+            Assert.Single(jsonFormatter);
+            Assert.NotNull(jsonFormatter.First());
         }
     }
 }
