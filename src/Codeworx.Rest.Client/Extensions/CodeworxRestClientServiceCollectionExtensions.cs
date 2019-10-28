@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
             where TContract : class
             where TImplementation : TContract
         {
-            var found = services.FirstOrDefault(p => p.ServiceType == typeof(TContract) && (p.ImplementationType ?? p.ImplementationFactory?.Method.ReturnType) == typeof(TImplementation) && p.Lifetime == lifetime);
+            var found = services.FirstOrDefault(p => p.ServiceType == typeof(TContract) && (p.ImplementationType ?? p.ImplementationFactory?.Method?.ReturnType) == typeof(TImplementation) && p.Lifetime == lifetime);
 
             var service = ServiceDescriptor.Describe(typeof(TContract), factory, lifetime);
 
