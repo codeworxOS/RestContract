@@ -36,6 +36,8 @@ namespace Codeworx.Rest.UnitTests
             return testServer.CreateClient();
         }
 
+        protected TestServer TestServer => _testServer;
+
         public virtual void Dispose()
         {
             foreach (var disp in _clientProviders)
@@ -59,7 +61,7 @@ namespace Codeworx.Rest.UnitTests
         {
             var services = new ServiceCollection();
             var builder = services.AddRestClient()
-                .WithHttpClient(p => _httpClient)
+                .WithTestingHttpClient(p => _httpClient)
                 .AddRestProxies(typeof(FileStreamControllerClient).Assembly);
 
             if (selection == FormatterSelection.Protobuf)

@@ -17,13 +17,13 @@ namespace Codeworx.Rest.UnitTests
     public class RestOptionsBuilderTest
     {
         [Fact]
-        public void WithHttpClientExpectsOK()
+        public void WithHttpTestingClientExpectsOK()
         {
             var client = new HttpClient();
 
             var services = new ServiceCollection();
             services.AddRestClient()
-                .WithHttpClient(p => client);
+                .WithTestingHttpClient(p => client);
 
             var provider = services.BuildServiceProvider();
 

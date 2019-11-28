@@ -1,9 +1,12 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Codeworx.Rest.Client;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
 using Codeworx.Rest.UnitTests.Data;
-using Codeworx.Rest.UnitTests.Generated;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection;
+using NSwag.Generation.AspNetCore;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -25,7 +28,7 @@ namespace Codeworx.Rest.UnitTests
             ItemsGenerator.DeleteFile(_testFileName);
         }
 
-        [Fact(Skip = "Implement")]
+        [Fact()]
         public async Task TestGetStream()
         {
             using (var stream = await _controller.GetFileStream())
@@ -39,7 +42,7 @@ namespace Codeworx.Rest.UnitTests
             Assert.Equal(ItemsGenerator.TestFileContent, text);
         }
 
-        [Fact(Skip = "Implement")]
+        [Fact(Skip = "To be implemented")]
         public async Task TestGetStreamItem()
         {
             var streamItem = await _controller.GetStreamItem();
@@ -54,7 +57,16 @@ namespace Codeworx.Rest.UnitTests
             Assert.Equal(ItemsGenerator.TestGuid, streamItem.Id);
         }
 
-        [Fact(Skip = "Implement")]
+        [Fact()]
+        public async Task TestSwaggerFile()
+        {
+            var httpClient = ((RestClient<IFileStreamController>)_controller).Options.GetHttpClient();
+            var response = await httpClient.GetAsync("swagger/v1/swagger.json");
+            var swagger = await response.Content.ReadAsStringAsync();
+            Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact()]
         public async Task TestUpdateFile()
         {
             await ItemsGenerator.CreateTestFile(_testFileName);
@@ -66,7 +78,7 @@ namespace Codeworx.Rest.UnitTests
             ItemsGenerator.DeleteFile(_testFileName);
         }
 
-        [Fact(Skip = "Implement")]
+        [Fact()]
         public async Task TestUpdateFileById()
         {
             await ItemsGenerator.CreateTestFile(_testFileName);
@@ -78,7 +90,7 @@ namespace Codeworx.Rest.UnitTests
             ItemsGenerator.DeleteFile(_testFileName);
         }
 
-        [Fact(Skip = "Implement")]
+        [Fact(Skip = "To be implemented")]
         public async Task TestUpdateStreamItem()
         {
             await ItemsGenerator.CreateTestFile(_testFileName);

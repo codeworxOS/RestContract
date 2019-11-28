@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
 using Codeworx.Rest.UnitTests.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Codeworx.Rest.UnitTests.Api
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MethodOverloadingController : IMethodOverloadingController
     {
         public async Task<Item> MethodWithSameName()

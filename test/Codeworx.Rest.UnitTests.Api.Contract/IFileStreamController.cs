@@ -13,14 +13,14 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestGet("Stream")]
         Task<Stream> GetFileStream();
 
+        [RestGet("StreamItem")]
+        Task<StreamItem> GetStreamItem();
+
         [RestPut("Stream")]
-        Task<string> UpdateFile([BodyMember]Stream fileStream);
+        Task<string> UpdateFile([BodyMember] Stream fileStream);
 
         [RestPut("Stream/{id}")]
         Task<string> UpdateFileById([BodyMember] Stream stream, Guid id);
-    
-        [RestGet("StreamItem")]
-        Task<StreamItem> GetStreamItem();
 
         [RestPut("StreamItem")]
         Task<string> UpdateStreamItem(StreamItem streamItem);

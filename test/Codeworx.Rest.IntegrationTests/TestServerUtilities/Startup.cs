@@ -1,10 +1,20 @@
-﻿using Codeworx.Rest.AspNetCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using Codeworx.Rest.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using NJsonSchema;
+using NJsonSchema.Generation.TypeMappers;
 using ProtoBuf.Meta;
 
 namespace Codeworx.Rest.UnitTests.TestServerUtilities
@@ -14,18 +24,78 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseMvc();
+            app.UseMvc()
+                .UseOpenApi();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore(options =>
+            services
+                .AddOpenApiDocument(options =>
+                {
+                    options.TypeMappers.Add(new PrimitiveTypeMapper(typeof(Stream), p =>
+                    {
+                        p.IsNullableRaw = false;
+                        p.Format = "binary";
+                        p.Type = NJsonSchema.JsonObjectType.String;
+                    }));
+                    options.OperationProcessors.Add(new StreamBodyOperationProcessor());
+                })
+                .AddMvcCore(options =>
             {
                 options.InputFormatters.Add(new ProtobufInputFormatter(RuntimeTypeModel.Default));
                 options.OutputFormatters.Add(new ProtobufOutputFormatter(RuntimeTypeModel.Default));
-            })
+                options.InputFormatters.Add(new StreamInputFormatter());
+            }).AddApiExplorer()
                 .AddRestContract()
                 .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
+        }
+
+        private class StreamInputFormatter : InputFormatter
+        {
+            public StreamInputFormatter()
+            {
+                this.SupportedMediaTypes.Add(new Microsoft.Net.Http.Headers.MediaTypeHeaderValue(MediaTypeNames.Application.Octet));
+            }
+
+            public override IReadOnlyList<string> GetSupportedContentTypes(string contentType, Type objectType)
+            {
+                if (objectType == typeof(Stream))
+                {
+                    return base.GetSupportedContentTypes(contentType, objectType);
+                }
+
+                return ImmutableList<string>.Empty;
+            }
+
+            public override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
+            {
+                return InputFormatterResult.SuccessAsync(context.HttpContext.Request.Body);
+            }
+
+            protected override bool CanReadType(Type type)
+            {
+                return type == typeof(Stream);
+            }
+        }
+
+        private class StreamOutputFormatter : OutputFormatter
+        {
+            public StreamOutputFormatter()
+            {
+                this.SupportedMediaTypes.Add(new Microsoft.Net.Http.Headers.MediaTypeHeaderValue(MediaTypeNames.Application.Octet));
+            }
+
+            public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
+            {
+                context.HttpContext.Response.Body = (Stream)context.Object;
+                return Task.CompletedTask;
+            }
+
+            protected override bool CanWriteType(Type type)
+            {
+                return type == typeof(Stream);
+            }
         }
     }
 }

@@ -56,8 +56,9 @@ namespace Codeworx.Rest.AspNetCore
                     if (methodAtt != null)
                     {
                         var targetAttribute = GetTargetAttribute(methodAtt.HttpMethod(), methodAtt.Template);
+
                         action.Selectors.Clear();
-                        action.Selectors.Add(CreateSelectorModel(targetAttribute));
+                        action.Selectors.Add(CreateSelectorModel(targetAttribute, action.ActionMethod));
 
                         for (int i = 0; i < action.Parameters.Count; i++)
                         {
@@ -71,12 +72,18 @@ namespace Codeworx.Rest.AspNetCore
             }
         }
 
-        private static SelectorModel CreateSelectorModel(IRouteTemplateProvider route)
+        private static SelectorModel CreateSelectorModel(IRouteTemplateProvider route, MethodInfo method)
         {
             var selectorModel = new SelectorModel();
             if (route != null)
             {
                 selectorModel.AttributeRouteModel = new AttributeRouteModel(route);
+            }
+
+            foreach (var item in method.GetCustomAttributes().OfType<IActionConstraintMetadata>())
+            {
+                selectorModel.ActionConstraints.Add(item);
+                selectorModel.EndpointMetadata.Add(item);
             }
 
             selectorModel.EndpointMetadata.Add(route);
@@ -115,6 +122,12 @@ namespace Codeworx.Rest.AspNetCore
 
                 case "HEAD":
                     return template == null ? new HttpHeadAttribute() : new HttpHeadAttribute(template);
+
+                case "OPTIONS":
+                    return template == null ? new HttpOptionsAttribute() : new HttpOptionsAttribute(template);
+
+                case "PATCH":
+                    return template == null ? new HttpPatchAttribute() : new HttpPatchAttribute(template);
 
                 default:
                     throw new NotSupportedException($"Http method {method} is not supported by the rest contract package!");
