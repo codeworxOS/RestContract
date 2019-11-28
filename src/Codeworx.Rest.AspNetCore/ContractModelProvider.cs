@@ -108,6 +108,9 @@ namespace Codeworx.Rest.AspNetCore
                 case "DELETE":
                     return template == null ? new HttpDeleteAttribute() : new HttpDeleteAttribute(template);
 
+                case "HEAD":
+                    return template == null ? new HttpHeadAttribute() : new HttpHeadAttribute(template);
+
                 default:
                     throw new NotSupportedException($"Http method {method} is not supported by the rest contract package!");
             }

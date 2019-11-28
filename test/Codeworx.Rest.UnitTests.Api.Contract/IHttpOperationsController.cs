@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Codeworx.Rest.UnitTests.Api.Contract
 {
@@ -21,5 +18,8 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
 
         [RestPut]
         Task<string> Put();
+
+        [RestHead]
+        Task<string> Head();
     }
 }

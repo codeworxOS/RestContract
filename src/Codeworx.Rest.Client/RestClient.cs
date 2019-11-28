@@ -50,7 +50,8 @@ namespace Codeworx.Rest.Client
             HttpResponseMessage response = await GetResponse(operationSelector);
             if (response.IsSuccessStatusCode)
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                if (response.StatusCode == System.Net.HttpStatusCode.NoContent
+                    || response.RequestMessage.Method == HttpMethod.Head)
                 {
                     return default(TResult);
                 }

@@ -30,6 +30,12 @@ namespace Codeworx.Rest.UnitTests.Api
             return methodName;
         }
 
+        public async Task<string> Head()
+        {
+            var methodName = await GetMethodName();
+            return methodName;
+        }
+
         public async Task<string> MissingOperation()
         {
             var methodName = await GetMethodName();
