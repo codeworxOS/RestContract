@@ -1,9 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Codeworx.Rest.UnitTests.Api
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HttpOperationsController : IHttpOperationsController
     {
         public async Task<string> Delete()
@@ -18,6 +20,12 @@ namespace Codeworx.Rest.UnitTests.Api
             return methodName;
         }
 
+        public async Task<string> MissingOperation()
+        {
+            var methodName = await GetMethodName();
+            return methodName;
+        }
+
         public async Task<string> Post()
         {
             var methodName = await GetMethodName();
@@ -25,12 +33,6 @@ namespace Codeworx.Rest.UnitTests.Api
         }
 
         public async Task<string> Put()
-        {
-            var methodName = await GetMethodName();
-            return methodName;
-        }
-
-        public async Task<string> MissingOperation()
         {
             var methodName = await GetMethodName();
             return methodName;

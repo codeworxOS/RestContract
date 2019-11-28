@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Codeworx.Rest.Internal;
 
 namespace Codeworx.Rest.Client
 {
@@ -34,6 +36,8 @@ namespace Codeworx.Rest.Client
             this._options = options;
         }
 
+        public RestOptions Options => _options;
+
         public async Task CallAsync(Expression<Func<TContract, Task>> operationSelector)
         {
             HttpResponseMessage response = await GetResponse(operationSelector);
@@ -53,6 +57,12 @@ namespace Codeworx.Rest.Client
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                 {
                     return default(TResult);
+                }
+
+                if (TypeKey<TResult>.Key == TypeKey<Stream>.Key)
+                {
+                    var resultStream = await response.Content.ReadAsStreamAsync();
+                    return (TResult)(object)resultStream;
                 }
 
                 var formatter = _options.GetFormatter(response.Content?.Headers?.ContentType?.MediaType);
@@ -123,7 +133,15 @@ namespace Codeworx.Rest.Client
 
             if (evaluator.TryGetBody(out var body, out var type))
             {
-                await formatter.SerializeAsync(type, body, request);
+                if (body is Stream stream)
+                {
+                    request.Content = new StreamContent(stream);
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                }
+                else
+                {
+                    await formatter.SerializeAsync(type, body, request);
+                }
             }
 
             var response = await client.SendAsync(request);

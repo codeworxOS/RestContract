@@ -8,14 +8,9 @@ namespace Codeworx.Rest.UnitTests.Generated
         {
         }
 
-        public global::System.Threading.Tasks.Task NoResult()
+        public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.DateTime>> DateTimeListResult()
         {
-            return CallAsync(c => c.NoResult());
-        }
-
-        public global::System.Threading.Tasks.Task<string> StringResult()
-        {
-            return CallAsync(c => c.StringResult());
+            return CallAsync(c => c.DateTimeListResult());
         }
 
         public global::System.Threading.Tasks.Task<global::System.DateTime> DateTimeResult()
@@ -23,29 +18,9 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.DateTimeResult());
         }
 
-        public global::System.Threading.Tasks.Task<global::System.DateTime?> NullableDateTimeResult()
+        public global::System.Threading.Tasks.Task<decimal> DecimalResult()
         {
-            return CallAsync(c => c.NullableDateTimeResult());
-        }
-
-        public global::System.Threading.Tasks.Task<global::System.Guid> GuidResult()
-        {
-            return CallAsync(c => c.GuidResult());
-        }
-
-        public global::System.Threading.Tasks.Task<global::System.Guid?> NullableGuidResult()
-        {
-            return CallAsync(c => c.NullableGuidResult());
-        }
-
-        public global::System.Threading.Tasks.Task<int> IntResult()
-        {
-            return CallAsync(c => c.IntResult());
-        }
-
-        public global::System.Threading.Tasks.Task<int?> NullableIntResult()
-        {
-            return CallAsync(c => c.NullableIntResult());
+            return CallAsync(c => c.DecimalResult());
         }
 
         public global::System.Threading.Tasks.Task<double> DoubleResult()
@@ -53,49 +28,9 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.DoubleResult());
         }
 
-        public global::System.Threading.Tasks.Task<double?> NullableDoubleResult()
-        {
-            return CallAsync(c => c.NullableDoubleResult());
-        }
-
-        public global::System.Threading.Tasks.Task<decimal> DecimalResult()
-        {
-            return CallAsync(c => c.DecimalResult());
-        }
-
-        public global::System.Threading.Tasks.Task<decimal?> NullableDecimalResult()
-        {
-            return CallAsync(c => c.NullableDecimalResult());
-        }
-
         public global::System.Threading.Tasks.Task<float> FloatResult()
         {
             return CallAsync(c => c.FloatResult());
-        }
-
-        public global::System.Threading.Tasks.Task<float?> NullableFloatResult()
-        {
-            return CallAsync(c => c.NullableFloatResult());
-        }
-
-        public global::System.Threading.Tasks.Task<global::Codeworx.Rest.UnitTests.Model.Item> ItemResult()
-        {
-            return CallAsync(c => c.ItemResult());
-        }
-
-        public global::System.Threading.Tasks.Task<global::Codeworx.Rest.UnitTests.Model.Item> ItemNullResult()
-        {
-            return CallAsync(c => c.ItemNullResult());
-        }
-
-        public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<string>> StringListResult()
-        {
-            return CallAsync(c => c.StringListResult());
-        }
-
-        public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.DateTime>> DateTimeListResult()
-        {
-            return CallAsync(c => c.DateTimeListResult());
         }
 
         public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.Guid>> GuidListResult()
@@ -103,9 +38,74 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GuidListResult());
         }
 
+        public global::System.Threading.Tasks.Task<global::System.Guid> GuidResult()
+        {
+            return CallAsync(c => c.GuidResult());
+        }
+
+        public global::System.Threading.Tasks.Task<int> IntResult()
+        {
+            return CallAsync(c => c.IntResult());
+        }
+
         public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::Codeworx.Rest.UnitTests.Model.Item>> ItemListResult()
         {
             return CallAsync(c => c.ItemListResult());
+        }
+
+        public global::System.Threading.Tasks.Task<global::Codeworx.Rest.UnitTests.Model.Item> ItemNullResult()
+        {
+            return CallAsync(c => c.ItemNullResult());
+        }
+
+        public global::System.Threading.Tasks.Task<global::Codeworx.Rest.UnitTests.Model.Item> ItemResult()
+        {
+            return CallAsync(c => c.ItemResult());
+        }
+
+        public global::System.Threading.Tasks.Task NoResult()
+        {
+            return CallAsync(c => c.NoResult());
+        }
+
+        public global::System.Threading.Tasks.Task<global::System.DateTime?> NullableDateTimeResult()
+        {
+            return CallAsync(c => c.NullableDateTimeResult());
+        }
+
+        public global::System.Threading.Tasks.Task<decimal?> NullableDecimalResult()
+        {
+            return CallAsync(c => c.NullableDecimalResult());
+        }
+
+        public global::System.Threading.Tasks.Task<double?> NullableDoubleResult()
+        {
+            return CallAsync(c => c.NullableDoubleResult());
+        }
+
+        public global::System.Threading.Tasks.Task<float?> NullableFloatResult()
+        {
+            return CallAsync(c => c.NullableFloatResult());
+        }
+
+        public global::System.Threading.Tasks.Task<global::System.Guid?> NullableGuidResult()
+        {
+            return CallAsync(c => c.NullableGuidResult());
+        }
+
+        public global::System.Threading.Tasks.Task<int?> NullableIntResult()
+        {
+            return CallAsync(c => c.NullableIntResult());
+        }
+
+        public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<string>> StringListResult()
+        {
+            return CallAsync(c => c.StringListResult());
+        }
+
+        public global::System.Threading.Tasks.Task<string> StringResult()
+        {
+            return CallAsync(c => c.StringResult());
         }
     }
 }
