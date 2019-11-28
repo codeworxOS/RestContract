@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -51,6 +50,13 @@ namespace Codeworx.Rest.UnitTests
 
             var methodName = nameof(IHttpOperationsController.Put);
             Assert.Equal(methodName, result);
+        }
+
+        [Fact]
+        public async Task TestHttpHead()
+        {
+            var result = await _controller.Head();
+            Assert.Equal(default(string), result);
         }
 
         [Fact]

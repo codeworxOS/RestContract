@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
-using Codeworx.Rest.Client;
 using Codeworx.Rest.UnitTests.Generated;
 using Codeworx.Rest.UnitTests.TestServerUtilities;
 using Microsoft.AspNetCore.Hosting;
@@ -18,18 +16,24 @@ namespace Codeworx.Rest.UnitTests
     public abstract class TestServerTestsBase<TStartup> : IDisposable
         where TStartup : class
     {
-        private HashSet<IDisposable> _clientProviders;
-        private HttpClient _httpClient;
-        private TestServer _testServer;
+        private readonly HashSet<IDisposable> _clientProviders;
+        private readonly HttpClient _httpClient;
+        private readonly TestServer _testServer;
 
-        public TestServerTestsBase()
+        protected TestServerTestsBase()
         {
             _clientProviders = new HashSet<IDisposable>();
             var builder = new WebHostBuilder()
                 .UseStartup<TStartup>();
             _testServer = new TestServer(builder);
 
-            _httpClient = _testServer.CreateClient();
+            _httpClient = CreateHttpClient(_testServer);
+            
+        }
+
+        protected virtual HttpClient CreateHttpClient(TestServer testServer)
+        {
+            return testServer.CreateClient();
         }
 
         protected TestServer TestServer => _testServer;

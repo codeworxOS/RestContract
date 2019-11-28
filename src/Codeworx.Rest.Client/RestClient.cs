@@ -46,7 +46,7 @@ namespace Codeworx.Rest.Client
                 return;
             }
 
-            throw new InvalidOperationException("Unexpected http status code.");
+            throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
         public async Task<TResult> CallAsync<TResult>(Expression<Func<TContract, Task<TResult>>> operationSelector)
@@ -54,7 +54,8 @@ namespace Codeworx.Rest.Client
             HttpResponseMessage response = await GetResponse(operationSelector);
             if (response.IsSuccessStatusCode)
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                if (response.StatusCode == System.Net.HttpStatusCode.NoContent
+                    || response.RequestMessage.Method == HttpMethod.Head)
                 {
                     return default(TResult);
                 }
@@ -71,7 +72,7 @@ namespace Codeworx.Rest.Client
                 return result;
             }
 
-            throw new InvalidOperationException("Unexpected http status code.");
+            throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
         private static bool IsMatch(string templateValue, string parameterName)
@@ -142,6 +143,10 @@ namespace Codeworx.Rest.Client
                 {
                     await formatter.SerializeAsync(type, body, request);
                 }
+            }
+            else if (request.Method == HttpMethod.Put || request.Method == HttpMethod.Post)
+            {
+                request.Content = new ByteArrayContent(new byte[0]);
             }
 
             var response = await client.SendAsync(request);

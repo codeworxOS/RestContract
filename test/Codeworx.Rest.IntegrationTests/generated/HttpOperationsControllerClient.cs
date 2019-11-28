@@ -32,5 +32,10 @@ namespace Codeworx.Rest.UnitTests.Generated
         {
             return CallAsync(c => c.Put());
         }
+
+        public global::System.Threading.Tasks.Task<string> Head()
+        {
+            return CallAsync(c => c.Head());
+        }
     }
 }

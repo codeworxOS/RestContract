@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Generated;
-using Codeworx.Rest.UnitTests.TestServerUtilities;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -19,7 +16,7 @@ namespace Codeworx.Rest.UnitTests
         [Fact]
         public async Task TestException()
         {
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await _controller.GetValueException());
+            await Assert.ThrowsAsync<UnexpectedHttpStatusCodeException>(async () => await _controller.GetValueException());
         }
 
         [Fact]
