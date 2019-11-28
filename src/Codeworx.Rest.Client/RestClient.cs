@@ -42,7 +42,7 @@ namespace Codeworx.Rest.Client
                 return;
             }
 
-            throw new InvalidOperationException("Unexpected http status code.");
+            throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
         public async Task<TResult> CallAsync<TResult>(Expression<Func<TContract, Task<TResult>>> operationSelector)
@@ -61,7 +61,7 @@ namespace Codeworx.Rest.Client
                 return result;
             }
 
-            throw new InvalidOperationException("Unexpected http status code.");
+            throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
         private static bool IsMatch(string templateValue, string parameterName)
