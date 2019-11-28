@@ -126,6 +126,10 @@ namespace Codeworx.Rest.Client
             {
                 await formatter.SerializeAsync(type, body, request);
             }
+            else if (request.Method == HttpMethod.Put || request.Method == HttpMethod.Post)
+            {
+                request.Content = new ByteArrayContent(new byte[0]);
+            }
 
             var response = await client.SendAsync(request);
             return response;
