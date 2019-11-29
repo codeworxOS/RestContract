@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,7 @@ namespace Codeworx.Rest.AspNetCore
                     controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(att.RoutePrefix));
                 }
 
+                var actionsToRemove = new List<ActionModel>();
                 foreach (var action in controller.Actions)
                 {
                     var method = action.ActionMethod;
@@ -66,6 +68,15 @@ namespace Codeworx.Rest.AspNetCore
                             }
                         }
                     }
+                    else
+                    {
+                        actionsToRemove.Add(action);
+                    }
+                }
+
+                foreach (var action in actionsToRemove)
+                {
+                    controller.Actions.Remove(action);
                 }
             }
         }
