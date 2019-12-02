@@ -29,12 +29,12 @@ namespace Codeworx.Rest.AspNetCore
                 var serviceInterfaces = controller.ControllerType.GetInterfaces();
                 var serviceInterface = serviceInterfaces.FirstOrDefault(p => p.GetCustomAttribute<RestRouteAttribute>() != null);
 
-                var att = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
-                att = att ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
+                var routeAttribute = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
+                routeAttribute = routeAttribute ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
 
-                if (att != null)
+                if (routeAttribute != null)
                 {
-                    controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(att.RoutePrefix));
+                    controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(routeAttribute.RoutePrefix));
                 }
 
                 var actionsToRemove = new List<ActionModel>();
@@ -68,7 +68,7 @@ namespace Codeworx.Rest.AspNetCore
                             }
                         }
                     }
-                    else
+                    else if (routeAttribute != null)
                     {
                         actionsToRemove.Add(action);
                     }
