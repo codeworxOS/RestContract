@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
@@ -32,14 +33,15 @@ namespace Codeworx.Rest.AspNetCore
                 var serviceInterfaces = controller.ControllerType.GetInterfaces();
                 var serviceInterface = serviceInterfaces.FirstOrDefault(p => p.GetCustomAttribute<RestRouteAttribute>() != null);
 
-                var att = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
-                att = att ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
+                var routeAttribute = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
+                routeAttribute = routeAttribute ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
 
-                if (att != null)
+                if (routeAttribute != null)
                 {
-                    controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(att.RoutePrefix));
+                    controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(routeAttribute.RoutePrefix));
                 }
 
+                var actionsToRemove = new List<ActionModel>();
                 foreach (var action in controller.Actions)
                 {
                     var method = action.ActionMethod;
@@ -70,6 +72,15 @@ namespace Codeworx.Rest.AspNetCore
                             }
                         }
                     }
+                    else if (routeAttribute != null)
+                    {
+                        actionsToRemove.Add(action);
+                    }
+                }
+
+                foreach (var action in actionsToRemove)
+                {
+                    controller.Actions.Remove(action);
                 }
             }
         }
