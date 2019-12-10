@@ -3,6 +3,7 @@ using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
 using Codeworx.Rest.UnitTests.Generated;
 using Codeworx.Rest.UnitTests.TestServerUtilities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Xunit;
 

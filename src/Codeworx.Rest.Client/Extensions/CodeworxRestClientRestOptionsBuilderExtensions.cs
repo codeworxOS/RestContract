@@ -52,27 +52,46 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IRestOptionsBuilder WithBaseUrl(this IRestOptionsBuilder builder, string baseUrl)
+        public static IRestOptionsBuilder WithBaseUrl(this IRestOptionsBuilder builder, string baseUrl, Action<IHttpClientBuilder> httpClientBuilder = null)
         {
-            builder.Services.AddOrReplace<HttpClientFactory>(ServiceLifetime.Scoped, sp => () => new HttpClient { BaseAddress = new Uri(baseUrl) });
-            return builder;
+            return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), httpClientBuilder);
         }
 
-        public static IRestOptionsBuilder<TContract> WithBaseUrl<TContract>(this IRestOptionsBuilder<TContract> builder, string baseUrl)
+        public static IRestOptionsBuilder<TContract> WithBaseUrl<TContract>(this IRestOptionsBuilder<TContract> builder, string baseUrl, Action<IHttpClientBuilder> httpClientBuilder = null)
             where TContract : class
         {
-            builder.Services.AddOrReplace<HttpClientFactory<TContract>>(ServiceLifetime.Scoped, sp => () => new HttpClient { BaseAddress = new Uri(baseUrl) });
+            return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), httpClientBuilder);
+        }
+
+        public static IRestOptionsBuilder<TContract> WithHttpClient<TContract>(this IRestOptionsBuilder<TContract> builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder = null)
+    where TContract : class
+        {
+            var clientKey = $"restclient.{typeof(TContract).FullName}";
+            var clientBuilder = builder.Services.AddHttpClient(clientKey, clientFactory);
+            httpClientBuilder?.Invoke(clientBuilder);
+
+            builder.Services.AddOrReplace<HttpClientFactory<TContract>>(ServiceLifetime.Scoped, sp => () => sp.GetRequiredService<IHttpClientFactory>().CreateClient(clientKey));
             return builder;
         }
 
-        public static IRestOptionsBuilder<TContract> WithHttpClient<TContract>(this IRestOptionsBuilder<TContract> builder, Func<IServiceProvider, HttpClient> clientFactory)
+        public static IRestOptionsBuilder WithHttpClient(this IRestOptionsBuilder builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder = null)
+        {
+            var clientBuilder = builder.Services.AddHttpClient("restclient.default", clientFactory);
+            httpClientBuilder?.Invoke(clientBuilder);
+
+            builder.Services.AddOrReplace<HttpClientFactory>(ServiceLifetime.Transient, sp => () => sp.GetRequiredService<IHttpClientFactory>().CreateClient("restclient.default"));
+
+            return builder;
+        }
+
+        public static IRestOptionsBuilder<TContract> WithTestingHttpClient<TContract>(this IRestOptionsBuilder<TContract> builder, Func<IServiceProvider, HttpClient> clientFactory)
             where TContract : class
         {
             builder.Services.AddOrReplace<HttpClientFactory<TContract>>(ServiceLifetime.Scoped, sp => () => clientFactory(sp));
             return builder;
         }
 
-        public static IRestOptionsBuilder WithHttpClient(this IRestOptionsBuilder builder, Func<IServiceProvider, HttpClient> clientFactory)
+        public static IRestOptionsBuilder WithTestingHttpClient(this IRestOptionsBuilder builder, Func<IServiceProvider, HttpClient> clientFactory)
         {
             builder.Services.AddOrReplace<HttpClientFactory>(ServiceLifetime.Scoped, sp => () => clientFactory(sp));
             return builder;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Codeworx.Rest.Internal;
 
 namespace Codeworx.Rest.Client
 {
@@ -34,6 +36,8 @@ namespace Codeworx.Rest.Client
             this._options = options;
         }
 
+        public RestOptions Options => _options;
+
         public async Task CallAsync(Expression<Func<TContract, Task>> operationSelector)
         {
             HttpResponseMessage response = await GetResponse(operationSelector);
@@ -42,7 +46,7 @@ namespace Codeworx.Rest.Client
                 return;
             }
 
-            throw new InvalidOperationException("Unexpected http status code.");
+            throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
         public async Task<TResult> CallAsync<TResult>(Expression<Func<TContract, Task<TResult>>> operationSelector)
@@ -50,9 +54,16 @@ namespace Codeworx.Rest.Client
             HttpResponseMessage response = await GetResponse(operationSelector);
             if (response.IsSuccessStatusCode)
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                if (response.StatusCode == System.Net.HttpStatusCode.NoContent
+                    || response.RequestMessage.Method == HttpMethod.Head)
                 {
                     return default(TResult);
+                }
+
+                if (TypeKey<TResult>.Key == TypeKey<Stream>.Key)
+                {
+                    var resultStream = await response.Content.ReadAsStreamAsync();
+                    return (TResult)(object)resultStream;
                 }
 
                 var formatter = _options.GetFormatter(response.Content?.Headers?.ContentType?.MediaType);
@@ -61,7 +72,7 @@ namespace Codeworx.Rest.Client
                 return result;
             }
 
-            throw new InvalidOperationException("Unexpected http status code.");
+            throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
         private static bool IsMatch(string templateValue, string parameterName)
@@ -123,7 +134,19 @@ namespace Codeworx.Rest.Client
 
             if (evaluator.TryGetBody(out var body, out var type))
             {
-                await formatter.SerializeAsync(type, body, request);
+                if (body is Stream stream)
+                {
+                    request.Content = new StreamContent(stream);
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                }
+                else
+                {
+                    await formatter.SerializeAsync(type, body, request);
+                }
+            }
+            else if (request.Method == HttpMethod.Put || request.Method == HttpMethod.Post)
+            {
+                request.Content = new ByteArrayContent(new byte[0]);
             }
 
             var response = await client.SendAsync(request);
@@ -178,7 +201,7 @@ namespace Codeworx.Rest.Client
                     }
 
                     _usedParameters.Add(parameterName);
-                    return HttpUtility.UrlEncode(GetDataStringValue(value.Data));
+                    return HttpUtility.UrlPathEncode(GetDataStringValue(value.Data));
                 }
 
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");

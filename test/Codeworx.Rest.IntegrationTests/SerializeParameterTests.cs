@@ -78,6 +78,8 @@ namespace Codeworx.Rest.UnitTests
             new object[] {null, FormatterSelection.Json},
             new object[] {ItemsGenerator.TestString, FormatterSelection.Protobuf},
             new object[] {null, FormatterSelection.Protobuf},
+            new object[] {ItemsGenerator.TestStringForEscape, FormatterSelection.Json},
+            new object[] {ItemsGenerator.TestStringForEscape, FormatterSelection.Protobuf},
         };
 
         private static List<Guid> _guidList = new List<Guid>

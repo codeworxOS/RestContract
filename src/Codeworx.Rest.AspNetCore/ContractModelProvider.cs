@@ -1,9 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+
+#if NETSTANDARD2_0
+
 using Microsoft.AspNetCore.Mvc.Internal;
+
+#endif
+
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
@@ -25,14 +33,15 @@ namespace Codeworx.Rest.AspNetCore
                 var serviceInterfaces = controller.ControllerType.GetInterfaces();
                 var serviceInterface = serviceInterfaces.FirstOrDefault(p => p.GetCustomAttribute<RestRouteAttribute>() != null);
 
-                var att = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
-                att = att ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
+                var routeAttribute = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
+                routeAttribute = routeAttribute ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
 
-                if (att != null)
+                if (routeAttribute != null)
                 {
-                    controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(att.RoutePrefix));
+                    controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(routeAttribute.RoutePrefix));
                 }
 
+                var actionsToRemove = new List<ActionModel>();
                 foreach (var action in controller.Actions)
                 {
                     var method = action.ActionMethod;
@@ -51,8 +60,9 @@ namespace Codeworx.Rest.AspNetCore
                     if (methodAtt != null)
                     {
                         var targetAttribute = GetTargetAttribute(methodAtt.HttpMethod(), methodAtt.Template);
+
                         action.Selectors.Clear();
-                        action.Selectors.Add(CreateSelectorModel(targetAttribute));
+                        action.Selectors.Add(CreateSelectorModel(targetAttribute, action.ActionMethod));
 
                         for (int i = 0; i < action.Parameters.Count; i++)
                         {
@@ -62,16 +72,31 @@ namespace Codeworx.Rest.AspNetCore
                             }
                         }
                     }
+                    else if (routeAttribute != null)
+                    {
+                        actionsToRemove.Add(action);
+                    }
+                }
+
+                foreach (var action in actionsToRemove)
+                {
+                    controller.Actions.Remove(action);
                 }
             }
         }
 
-        private static SelectorModel CreateSelectorModel(IRouteTemplateProvider route)
+        private static SelectorModel CreateSelectorModel(IRouteTemplateProvider route, MethodInfo method)
         {
             var selectorModel = new SelectorModel();
             if (route != null)
             {
                 selectorModel.AttributeRouteModel = new AttributeRouteModel(route);
+            }
+
+            foreach (var item in method.GetCustomAttributes().OfType<IActionConstraintMetadata>())
+            {
+                selectorModel.ActionConstraints.Add(item);
+                selectorModel.EndpointMetadata.Add(item);
             }
 
             selectorModel.EndpointMetadata.Add(route);
@@ -107,6 +132,15 @@ namespace Codeworx.Rest.AspNetCore
 
                 case "DELETE":
                     return template == null ? new HttpDeleteAttribute() : new HttpDeleteAttribute(template);
+
+                case "HEAD":
+                    return template == null ? new HttpHeadAttribute() : new HttpHeadAttribute(template);
+
+                case "OPTIONS":
+                    return template == null ? new HttpOptionsAttribute() : new HttpOptionsAttribute(template);
+
+                case "PATCH":
+                    return template == null ? new HttpPatchAttribute() : new HttpPatchAttribute(template);
 
                 default:
                     throw new NotSupportedException($"Http method {method} is not supported by the rest contract package!");

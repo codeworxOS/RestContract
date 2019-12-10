@@ -9,6 +9,7 @@ namespace Codeworx.Rest.UnitTests.Data
     public static class ItemsGenerator
     {
         public static string TestString = "Test";
+        public static string TestStringForEscape = "Te+st 123&=";
         public static DateTime TestDate = new DateTime(2019, 03, 09, 12, 21, 03);
         public static Guid TestGuid = Guid.Parse("4f73dca4-86a6-4bfd-9a03-6f0e3ac254d1");
         public static int TestInt = 1;
