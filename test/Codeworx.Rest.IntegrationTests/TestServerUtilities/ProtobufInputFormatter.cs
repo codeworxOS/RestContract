@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.Formatters.Protobuf;
@@ -27,7 +28,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
 
         public static string ContentType { get; }
 
-        public override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
+        public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
             var request = context.HttpContext.Request;
 
@@ -35,12 +36,18 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
             {
                 if (values[0].Equals("true", StringComparison.OrdinalIgnoreCase))
                 {
-                    return InputFormatterResult.SuccessAsync(null);
+                    return await InputFormatterResult.SuccessAsync(null);
                 }
             }
 
-            var model = _typeModel.Deserialize(request.Body, null, context.ModelType);
-            return InputFormatterResult.SuccessAsync(model);
+            using (var ms = new MemoryStream())
+            {
+                await request.Body.CopyToAsync(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var model = _typeModel.Deserialize(ms, null, context.ModelType);
+                return await InputFormatterResult.SuccessAsync(model);
+            }
         }
 
         protected override bool CanReadType(Type type)

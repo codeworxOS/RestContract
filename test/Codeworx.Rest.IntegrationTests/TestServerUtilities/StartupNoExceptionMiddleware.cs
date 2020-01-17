@@ -12,14 +12,22 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
     {
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+#if NETCOREAPP3_0
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+#else
             app.UseMvc();
+#endif
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore()
                 .AddRestContract()
-                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
+#if NETCOREAPP2_1
+                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver())
+#endif
+                ;
         }
     }
 }

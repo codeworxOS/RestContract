@@ -24,8 +24,14 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseMvc()
-                .UseOpenApi();
+#if NETCOREAPP3_0
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseOpenApi();
+#else
+            app.UseMvc();
+            app.UseOpenApi();
+#endif
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -41,14 +47,22 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                     }));
                     options.OperationProcessors.Add(new StreamBodyOperationProcessor());
                 })
+#if NETCOREAPP3_0
+                .AddControllers(options =>
+#else
                 .AddMvcCore(options =>
+#endif
             {
                 options.InputFormatters.Add(new ProtobufInputFormatter(RuntimeTypeModel.Default));
                 options.OutputFormatters.Add(new ProtobufOutputFormatter(RuntimeTypeModel.Default));
                 options.InputFormatters.Add(new StreamInputFormatter());
-            }).AddApiExplorer()
+            })
+#if NETCOREAPP2_1
+                .AddApiExplorer()
+                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver())
+#endif
                 .AddRestContract()
-                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
+                ;
         }
 
         private class StreamInputFormatter : InputFormatter

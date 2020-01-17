@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.Formatters.Protobuf;
@@ -27,11 +28,17 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
 
         public static string ContentType { get; }
 
-        public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
+        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
         {
             var response = context.HttpContext.Response;
-            _typeModel.Serialize(response.Body, context.Object);
-            return Task.CompletedTask;
+            using (var ms = new MemoryStream())
+            {
+                _typeModel.Serialize(ms, context.Object);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                await ms.CopyToAsync(response.Body);
+
+            }
         }
     }
 }

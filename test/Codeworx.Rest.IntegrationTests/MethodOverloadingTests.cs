@@ -3,8 +3,9 @@ using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
 using Codeworx.Rest.UnitTests.Generated;
 using Codeworx.Rest.UnitTests.TestServerUtilities;
-using Microsoft.AspNetCore.Mvc;
+#if NETCOREAPP2_1
 using Microsoft.AspNetCore.Mvc.Internal;
+#endif
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -31,10 +32,12 @@ namespace Codeworx.Rest.UnitTests
             Assert.Equal(resultItemName, resultItem.Name);
         }
 
+#if NETCOREAPP2_1
         [Fact]
         public async Task TestMethodsWithSameUrls()
         {
             await Assert.ThrowsAsync<AmbiguousActionException>(async () => await _controller.MethodWithSameUrl1());
         }
+#endif
     }
 }
