@@ -201,7 +201,7 @@ namespace Codeworx.Rest.Client
                     }
 
                     _usedParameters.Add(parameterName);
-                    return HttpUtility.UrlEncode(GetDataStringValue(value.Data));
+                    return HttpUtility.UrlPathEncode(GetDataStringValue(value.Data));
                 }
 
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");
