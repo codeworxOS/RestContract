@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Codeworx.Rest.Internal;
@@ -149,12 +150,14 @@ namespace Codeworx.Rest.Client
                 request.Content = new ByteArrayContent(new byte[0]);
             }
 
-            var response = await client.SendAsync(request);
+            var token = evaluator.GetCancellationToken();
+            var response = await client.SendAsync(request, token);
             return response;
         }
 
         private class ParameterMatchEvaluator
         {
+            private readonly string _cancellationTokenParameterName;
             private readonly Dictionary<string, ParameterData> _parameterValues;
             private MethodCallExpression _methodCall;
             private HashSet<string> _usedParameters;
@@ -176,6 +179,15 @@ namespace Codeworx.Rest.Client
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
                                             IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null
                                         });
+
+                var cancellationTokenParameterName = _parameterValues
+                    .SingleOrDefault(p => typeof(CancellationToken).IsAssignableFrom(p.Value.ParameterType))
+                    .Key;
+                if (!string.IsNullOrEmpty(cancellationTokenParameterName))
+                {
+                    _usedParameters.Add(cancellationTokenParameterName);
+                    _cancellationTokenParameterName = cancellationTokenParameterName;
+                }
             }
 
             public void AddMissingQueryParameters(NameValueCollection queryParameters)
@@ -228,6 +240,18 @@ namespace Codeworx.Rest.Client
                 value = null;
                 valueType = null;
                 return false;
+            }
+
+            public CancellationToken GetCancellationToken()
+            {
+                if (string.IsNullOrEmpty(_cancellationTokenParameterName))
+                {
+                    return CancellationToken.None;
+                }
+
+                var cancellationTokenParameter = _parameterValues[_cancellationTokenParameterName];
+                var cancellationToken = (CancellationToken)cancellationTokenParameter.Data;
+                return cancellationToken;
             }
 
             private string GetDataStringValue(object data)

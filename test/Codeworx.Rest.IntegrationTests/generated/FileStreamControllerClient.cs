@@ -13,6 +13,11 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetFileStream());
         }
 
+        public global::System.Threading.Tasks.Task<global::Codeworx.Rest.UnitTests.Api.Contract.Model.StreamItem> GetStreamItem()
+        {
+            return CallAsync(c => c.GetStreamItem());
+        }
+
         public global::System.Threading.Tasks.Task<string> UpdateFile(global::System.IO.Stream fileStream)
         {
             return CallAsync(c => c.UpdateFile(fileStream));
@@ -21,11 +26,6 @@ namespace Codeworx.Rest.UnitTests.Generated
         public global::System.Threading.Tasks.Task<string> UpdateFileById(global::System.IO.Stream stream, global::System.Guid id)
         {
             return CallAsync(c => c.UpdateFileById(stream, id));
-        }
-
-        public global::System.Threading.Tasks.Task<global::Codeworx.Rest.UnitTests.Api.Contract.Model.StreamItem> GetStreamItem()
-        {
-            return CallAsync(c => c.GetStreamItem());
         }
 
         public global::System.Threading.Tasks.Task<string> UpdateStreamItem(global::Codeworx.Rest.UnitTests.Api.Contract.Model.StreamItem streamItem)
