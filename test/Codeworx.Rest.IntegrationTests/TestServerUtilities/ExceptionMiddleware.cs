@@ -23,6 +23,13 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
             {
                 await this.next(httpContext);
             }
+            catch (OperationCanceledException)
+            {
+                httpContext.Response.StatusCode = 499; // client closed request
+                /* test server does not handle cancellation correctly https://github.com/dotnet/aspnetcore/issues/5938
+                 * rethrow exception to receive a OperationCanceledException on client.SendAsync(request, token) */
+                throw; 
+            }
             catch (Exception ex)
             {
                 httpContext.Response.ContentType = MediaTypeNames.Text.Plain;

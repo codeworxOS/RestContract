@@ -12,7 +12,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
     {
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 #else

@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Codeworx.Rest.Internal;
@@ -149,7 +150,17 @@ namespace Codeworx.Rest.Client
                 request.Content = new ByteArrayContent(new byte[0]);
             }
 
-            var response = await client.SendAsync(request);
+            HttpResponseMessage response = null;
+
+            if (evaluator.CancellationToken.HasValue)
+            {
+                response = await client.SendAsync(request, evaluator.CancellationToken.Value);
+            }
+            else
+            {
+                response = await client.SendAsync(request);
+            }
+
             return response;
         }
 
@@ -176,7 +187,21 @@ namespace Codeworx.Rest.Client
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
                                             IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null
                                         });
+
+                var cancellationTokenParameter = _parameterValues.Where(p => p.Value.Data is CancellationToken).ToList();
+
+                if (cancellationTokenParameter.Count > 1)
+                {
+                    throw new NotSupportedException("Only a maximum of one CancellationToken parameter is supported.");
+                }
+                else if (cancellationTokenParameter.Count == 1)
+                {
+                    _parameterValues.Remove(cancellationTokenParameter[0].Key);
+                    CancellationToken = (CancellationToken)cancellationTokenParameter[0].Value.Data;
+                }
             }
+
+            public CancellationToken? CancellationToken { get; }
 
             public void AddMissingQueryParameters(NameValueCollection queryParameters)
             {

@@ -73,9 +73,9 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetGuidBodyParameter(parameter));
         }
 
-        public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.Guid>> GetGuidListBodyParameter(global::System.Collections.Generic.List<global::System.Guid> parameter)
+        public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.Guid>> GetGuidListBodyParameter(int id, global::System.Collections.Generic.List<global::System.Guid> parameter)
         {
-            return CallAsync(c => c.GetGuidListBodyParameter(parameter));
+            return CallAsync(c => c.GetGuidListBodyParameter(id, parameter));
         }
 
         public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.Guid>> GetGuidListQueryParameter(global::System.Collections.Generic.List<global::System.Guid> parameter)

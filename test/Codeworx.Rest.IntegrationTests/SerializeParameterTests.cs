@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
 using Codeworx.Rest.UnitTests.Generated;
+using Codeworx.Rest.UnitTests.Model;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -230,7 +231,7 @@ namespace Codeworx.Rest.UnitTests
         public async Task TestGuidListBodyParameter(List<Guid> expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
-            var actualParameter = await client.GetGuidListBodyParameter(expectedParameter);
+            var actualParameter = await client.GetGuidListBodyParameter(5, expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -304,6 +305,26 @@ namespace Codeworx.Rest.UnitTests
             var client = Client<ISerializeParameterController>(formatter);
             var expectedItem = await ItemsGenerator.GenerateItem();
             var actualItem = await client.GetItemBodyParameter(expectedItem);
+            Assert.Equal(expectedItem, actualItem);
+        }
+
+        [Theory]
+        [MemberData(nameof(FormatterParameters))]
+        public async Task TestEmptyItemBodyParameter(FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var expectedItem = new Item();
+            var actualItem = await client.GetItemBodyParameter(expectedItem);
+            Assert.Equal(expectedItem, actualItem);
+        }
+
+        [Theory]
+        [MemberData(nameof(FormatterParameters))]
+        public async Task TestEmptyGuidListBodyParameter(FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var expectedItem = new List<Guid>();
+            var actualItem = await client.GetGuidListBodyParameter(5, expectedItem);
             Assert.Equal(expectedItem, actualItem);
         }
 
