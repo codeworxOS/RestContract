@@ -24,7 +24,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseMiddleware<ExceptionMiddleware>();
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseOpenApi();
@@ -47,7 +47,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                     }));
                     options.OperationProcessors.Add(new StreamBodyOperationProcessor());
                 })
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
                 .AddControllers(options =>
 #else
                 .AddMvcCore(options =>
@@ -60,6 +60,8 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
 #if NETCOREAPP2_1
                 .AddApiExplorer()
                 .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver())
+#else 
+                .AddNewtonsoftJson()
 #endif
                 .AddRestContract()
                 ;

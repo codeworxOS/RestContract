@@ -37,23 +37,33 @@ namespace Codeworx.Rest.UnitTests
 
 
         [Fact]
+        public async Task TestMultipleCancellationTokenParameters_Expects_Exception()
+        {
+            await Assert.ThrowsAsync<NotSupportedException>(async () =>
+            {
+                await _controller.GetWithMultipleCancellationToken(CancellationToken.None, CancellationToken.None);
+            });
+        }
+
+
+        [Fact]
         public async Task TestHttpPost()
         {
             var tokenSource = new CancellationTokenSource();
-            var isCancelled = await _controller.Post(tokenSource.Token);
+            var isCancelled = await _controller.Post("test", tokenSource.Token);
             Assert.False(isCancelled);
             tokenSource.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Post(tokenSource.Token));
+            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Post("test", tokenSource.Token));
         }
 
         [Fact]
         public async Task TestHttpPut()
         {
             var tokenSource = new CancellationTokenSource();
-            var isCancelled = await _controller.Put(tokenSource.Token);
+            var isCancelled = await _controller.Put(new Model.Item { Id = Guid.NewGuid() }, tokenSource.Token);
             Assert.False(isCancelled);
             tokenSource.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Put(tokenSource.Token));
+            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Put(new Model.Item { Id = Guid.NewGuid() }, tokenSource.Token));
         }
 
         [Fact]

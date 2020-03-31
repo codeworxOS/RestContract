@@ -28,7 +28,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
 
         public static string ContentType { get; }
 
-        public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
+        public override async Task<InputFormatterResult> ReadAsync(InputFormatterContext context)
         {
             var request = context.HttpContext.Request;
 
@@ -48,6 +48,11 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                 var model = _typeModel.Deserialize(ms, null, context.ModelType);
                 return await InputFormatterResult.SuccessAsync(model);
             }
+        }
+
+        public override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
+        {
+            throw new NotImplementedException();
         }
 
         protected override bool CanReadType(Type type)

@@ -16,17 +16,22 @@ namespace Codeworx.Rest.UnitTests.Api
             return HandleToken(token);
         }
 
+        public Task<bool> GetWithMultipleCancellationToken(CancellationToken token, CancellationToken token2)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Task<bool> Head(CancellationToken token)
         {
             return HandleToken(token);
         }
 
-        public Task<bool> Post(CancellationToken token)
+        public Task<bool> Post(string queryParameter, CancellationToken token)
         {
             return HandleToken(token);
         }
 
-        public Task<bool> Put(CancellationToken token)
+        public Task<bool> Put(UnitTests.Model.Item item, CancellationToken token)
         {
             return HandleToken(token);
         }

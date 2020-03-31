@@ -150,14 +150,22 @@ namespace Codeworx.Rest.Client
                 request.Content = new ByteArrayContent(new byte[0]);
             }
 
-            var token = evaluator.GetCancellationToken();
-            var response = await client.SendAsync(request, token);
+            HttpResponseMessage response = null;
+
+            if (evaluator.CancellationToken.HasValue)
+            {
+                response = await client.SendAsync(request, evaluator.CancellationToken.Value);
+            }
+            else
+            {
+                response = await client.SendAsync(request);
+            }
+
             return response;
         }
 
         private class ParameterMatchEvaluator
         {
-            private readonly string _cancellationTokenParameterName;
             private readonly Dictionary<string, ParameterData> _parameterValues;
             private MethodCallExpression _methodCall;
             private HashSet<string> _usedParameters;
@@ -180,15 +188,20 @@ namespace Codeworx.Rest.Client
                                             IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null
                                         });
 
-                var cancellationTokenParameterName = _parameterValues
-                    .SingleOrDefault(p => typeof(CancellationToken).IsAssignableFrom(p.Value.ParameterType))
-                    .Key;
-                if (!string.IsNullOrEmpty(cancellationTokenParameterName))
+                var cancellationTokenParameter = _parameterValues.Where(p => p.Value.Data is CancellationToken).ToList();
+
+                if (cancellationTokenParameter.Count > 1)
                 {
-                    _usedParameters.Add(cancellationTokenParameterName);
-                    _cancellationTokenParameterName = cancellationTokenParameterName;
+                    throw new NotSupportedException("Only a maximum of one CancellationToken parameter is supported.");
+                }
+                else if (cancellationTokenParameter.Count == 1)
+                {
+                    _parameterValues.Remove(cancellationTokenParameter[0].Key);
+                    CancellationToken = (CancellationToken)cancellationTokenParameter[0].Value.Data;
                 }
             }
+
+            public CancellationToken? CancellationToken { get; }
 
             public void AddMissingQueryParameters(NameValueCollection queryParameters)
             {
@@ -240,18 +253,6 @@ namespace Codeworx.Rest.Client
                 value = null;
                 valueType = null;
                 return false;
-            }
-
-            public CancellationToken GetCancellationToken()
-            {
-                if (string.IsNullOrEmpty(_cancellationTokenParameterName))
-                {
-                    return CancellationToken.None;
-                }
-
-                var cancellationTokenParameter = _parameterValues[_cancellationTokenParameterName];
-                var cancellationToken = (CancellationToken)cancellationTokenParameter.Data;
-                return cancellationToken;
             }
 
             private string GetDataStringValue(object data)

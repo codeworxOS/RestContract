@@ -48,7 +48,7 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         Task<Guid?> GetGuidBodyParameter([BodyMember]Guid? parameter);
 
         [RestPut("guid/list/body")]
-        Task<List<Guid>> GetGuidListBodyParameter([BodyMember]List<Guid> parameter);
+        Task<List<Guid>> GetGuidListBodyParameter(int id, [BodyMember]List<Guid> parameter);
 
         [RestGet("guid/list/query")]
         Task<List<Guid>> GetGuidListQueryParameter(List<Guid> parameter);

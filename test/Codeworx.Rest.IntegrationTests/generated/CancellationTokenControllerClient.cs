@@ -18,19 +18,24 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.Get(token));
         }
 
-        public global::System.Threading.Tasks.Task<bool> Post(global::System.Threading.CancellationToken token)
+        public global::System.Threading.Tasks.Task<bool> Post(string queryParameter, global::System.Threading.CancellationToken token)
         {
-            return CallAsync(c => c.Post(token));
+            return CallAsync(c => c.Post(queryParameter, token));
         }
 
-        public global::System.Threading.Tasks.Task<bool> Put(global::System.Threading.CancellationToken token)
+        public global::System.Threading.Tasks.Task<bool> Put(global::Codeworx.Rest.UnitTests.Model.Item item, global::System.Threading.CancellationToken token)
         {
-            return CallAsync(c => c.Put(token));
+            return CallAsync(c => c.Put(item, token));
         }
 
         public global::System.Threading.Tasks.Task<bool> Head(global::System.Threading.CancellationToken token)
         {
             return CallAsync(c => c.Head(token));
+        }
+
+        public global::System.Threading.Tasks.Task<bool> GetWithMultipleCancellationToken(global::System.Threading.CancellationToken token, global::System.Threading.CancellationToken token2)
+        {
+            return CallAsync(c => c.GetWithMultipleCancellationToken(token, token2));
         }
     }
 }

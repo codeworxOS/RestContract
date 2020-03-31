@@ -125,7 +125,7 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(parameter);
         }
 
-        public async Task<List<Guid>> GetGuidListBodyParameter(List<Guid> parameter)
+        public async Task<List<Guid>> GetGuidListBodyParameter(int id, List<Guid> parameter)
         {
             return await Task.FromResult(parameter);
         }
