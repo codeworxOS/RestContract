@@ -119,16 +119,29 @@ namespace Codeworx.Rest.Client
             var tempUrl = $"http://unknown/{requestUrl.TrimStart('/')}";
             var uri = new Uri(tempUrl, UriKind.Absolute);
 
-            var query = HttpUtility.ParseQueryString(uri.Query);
+            var parsedQuery = from q in uri.Query.TrimStart('?').Split('&')
+                              let keyValue = q.Split('=')
+                              where keyValue.Length == 2
+                              select new { Key = Uri.UnescapeDataString(keyValue[0]), Value = Uri.UnescapeDataString(keyValue[1]) };
+
+            var query = parsedQuery.GroupBy(p => p.Key)
+                            .ToDictionary(p => p.Key, p => p.Select(x => x.Value).ToList());
+
             var httpMethod = attribute.HttpMethod();
 
             evaluator.AddMissingQueryParameters(query);
             var formatter = _options.GetFormatter();
 
-            var builder = new UriBuilder();
-            builder.Path = uri.AbsolutePath;
-            builder.Query = query.ToString();
-            requestUrl = builder.Uri.PathAndQuery.TrimStart('/');
+            requestUrl = $"{uri.AbsoluteUri.TrimStart('/')}";
+            if (query.Any())
+            {
+                var data = from q in query
+                           from v in q.Value
+                           where v != null
+                           select $"{Uri.EscapeDataString(q.Key)}={Uri.EscapeDataString(v)}";
+
+                requestUrl += $"?{string.Join("&", data)}";
+            }
 
             var request = new HttpRequestMessage(new HttpMethod(httpMethod), requestUrl);
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(formatter.MimeType));
@@ -203,7 +216,7 @@ namespace Codeworx.Rest.Client
 
             public CancellationToken? CancellationToken { get; }
 
-            public void AddMissingQueryParameters(NameValueCollection queryParameters)
+            public void AddMissingQueryParameters(IDictionary<string, List<string>> queryParameters)
             {
                 var missing = _parameterValues
                     .Where(p => !p.Value.IsBodyMember && !_usedParameters.Contains(p.Key))
@@ -211,7 +224,7 @@ namespace Codeworx.Rest.Client
 
                 foreach (var param in missing)
                 {
-                    queryParameters[param.Key] = GetDataStringValue(param.Value.Data);
+                    queryParameters.Add(param.Key, new List<string> { GetDataStringValue(param.Value.Data) });
                 }
             }
 

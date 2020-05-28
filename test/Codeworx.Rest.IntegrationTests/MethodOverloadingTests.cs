@@ -18,7 +18,7 @@ namespace Codeworx.Rest.UnitTests
         {
             _controller = Client<IMethodOverloadingController>(FormatterSelection.Json);
         }
-
+#if !NET461
         [Fact]
         public async Task TestMethodsWithSameNames()
         {
@@ -31,6 +31,7 @@ namespace Codeworx.Rest.UnitTests
             var resultItem = await _controller.MethodWithSameName(resultItemName);
             Assert.Equal(resultItemName, resultItem.Name);
         }
+#endif
 
 #if NETCOREAPP2_1
         [Fact]

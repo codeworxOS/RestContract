@@ -57,11 +57,11 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                 options.OutputFormatters.Add(new ProtobufOutputFormatter(RuntimeTypeModel.Default));
                 options.InputFormatters.Add(new StreamInputFormatter());
             })
-#if NETCOREAPP2_1
+#if NETCOREAPP3_1
+                .AddNewtonsoftJson()
+#else
                 .AddApiExplorer()
                 .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver())
-#else 
-                .AddNewtonsoftJson()
 #endif
                 .AddRestContract()
                 ;
