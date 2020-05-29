@@ -132,7 +132,7 @@ namespace Codeworx.Rest.Client
             evaluator.AddMissingQueryParameters(query);
             var formatter = _options.GetFormatter();
 
-            requestUrl = $"{uri.AbsoluteUri.TrimStart('/')}";
+            requestUrl = $"{uri.AbsolutePath.TrimStart('/')}";
             if (query.Any())
             {
                 var data = from q in query
