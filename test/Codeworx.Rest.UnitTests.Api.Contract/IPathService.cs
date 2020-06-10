@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Codeworx.Rest.UnitTests.Model;
+using System;
 using System.Threading.Tasks;
-using Codeworx.Rest.UnitTests.Model;
 
 namespace Codeworx.Rest.UnitTests.Api.Contract
 {
@@ -11,7 +9,7 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
     {
         [RestPost("Com/{textUrl}/{numberUrl}/{idUrl}/{dateUrl}/plex")]
         Task<bool> ComplexPathWithAllParameters(
-            [BodyMember]Item itemBody,
+            [BodyMember] Item itemBody,
             string textQuery,
             int numberQuery,
             Guid idQuery,
@@ -26,6 +24,9 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
 
         [RestGet("Com/plex")]
         Task<bool> ComplexPathWithoutParameters();
+
+        [RestHead("Com/plex")]
+        Task<bool> ComplexPathWithParameters([QueryMember] Item item);
 
         [RestPut("Com/plex")]
         Task<bool> ComplexPathWithQueryParameters(
@@ -59,8 +60,19 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestGet]
         Task<bool> EmptyPathWithoutParameters();
 
+        [RestHead]
+        Task<bool> EmptyPathWithParameters([QueryMember] Item item);
+
         [RestPut]
         Task<bool> EmptyPathWithQueryParameters(
+            string text,
+            int number,
+            Guid id,
+            DateTime date);
+
+        [RestHead("{text}/{number}/{id}/{date}")]
+        Task<bool> EmptyPathWithUrlAndQueryParameters(
+            [QueryMember] Item item,
             string text,
             int number,
             Guid id,
