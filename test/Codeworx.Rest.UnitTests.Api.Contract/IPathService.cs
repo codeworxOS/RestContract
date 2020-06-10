@@ -25,7 +25,7 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestGet("Com/plex")]
         Task<bool> ComplexPathWithoutParameters();
 
-        [RestHead("Com/plex")]
+        [RestDelete("Com/plex")]
         Task<bool> ComplexPathWithParameters([QueryMember] Item item);
 
         [RestPut("Com/plex")]
@@ -60,7 +60,7 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestGet]
         Task<bool> EmptyPathWithoutParameters();
 
-        [RestHead]
+        [RestDelete]
         Task<bool> EmptyPathWithParameters([QueryMember] Item item);
 
         [RestPut]
@@ -70,12 +70,12 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
             Guid id,
             DateTime date);
 
-        [RestHead("{text}/{number}/{id}/{date}")]
+        [RestDelete("{text}/{number}/{id2}/{date}")]
         Task<bool> EmptyPathWithUrlAndQueryParameters(
             [QueryMember] Item item,
             string text,
             int number,
-            Guid id,
+            Guid id2,
             DateTime date);
 
         [RestGet("{text}/{number}/{id}/{date}")]
