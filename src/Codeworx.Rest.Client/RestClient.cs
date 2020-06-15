@@ -12,7 +12,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Codeworx.Rest.Internal;
-using Newtonsoft.Json;
 
 namespace Codeworx.Rest.Client
 {
