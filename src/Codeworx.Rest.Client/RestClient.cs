@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -13,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Codeworx.Rest.Internal;
+using Newtonsoft.Json;
 
 namespace Codeworx.Rest.Client
 {
@@ -198,7 +198,8 @@ namespace Codeworx.Rest.Client
                                         {
                                             ParameterType = p.Parameter.ParameterType,
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
-                                            IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null
+                                            IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null,
+                                            IsQueryMember = p.Parameter.GetCustomAttribute<QueryMemberAttribute>() != null
                                         });
 
                 var cancellationTokenParameter = _parameterValues.Where(p => p.Value.Data is CancellationToken).ToList();
@@ -224,7 +225,22 @@ namespace Codeworx.Rest.Client
 
                 foreach (var param in missing)
                 {
-                    queryParameters.Add(param.Key, new List<string> { GetDataStringValue(param.Value.Data) });
+                    if (param.Value.IsQueryMember)
+                    {
+                        var data = param.Value.Data;
+                        var queryKeyValuePairs = data.GetType()
+                                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(data)?.ToString());
+
+                        foreach (var item in queryKeyValuePairs.Where(p => p.Value != null))
+                        {
+                            queryParameters.Add(item.Key, new List<string> { GetDataStringValue(item.Value) });
+                        }
+                    }
+                    else
+                    {
+                        queryParameters.Add(param.Key, new List<string> { GetDataStringValue(param.Value.Data) });
+                    }
                 }
             }
 
@@ -236,6 +252,11 @@ namespace Codeworx.Rest.Client
                     if (value.IsBodyMember)
                     {
                         throw new TemplateParseException($"Parameter {parameterName} was found in the template but is marked as BodyMember.");
+                    }
+
+                    if (value.IsQueryMember)
+                    {
+                        throw new TemplateParseException($"Parameter {parameterName} was found in the template but is marked as QueryMember.");
                     }
 
                     _usedParameters.Add(parameterName);
@@ -303,6 +324,8 @@ namespace Codeworx.Rest.Client
                 public object Data { get; set; }
 
                 public bool IsBodyMember { get; set; }
+
+                public bool IsQueryMember { get; set; }
 
                 public Type ParameterType { get; set; }
             }
