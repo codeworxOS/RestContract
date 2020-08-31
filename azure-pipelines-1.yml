@@ -22,7 +22,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    projects: './src/tests/Codeworx.Rest.Codeworx.Rest.IntegrationTests/Codeworx.Rest.UnitTests.csproj'
+    projects: './test/Codeworx.Rest.Codeworx.Rest.IntegrationTests/Codeworx.Rest.UnitTests.csproj'
     feedsToUse: 'select'
     versioningScheme: 'off'
 - task: PowerShell@2
