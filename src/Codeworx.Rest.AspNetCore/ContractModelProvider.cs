@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-
-#if NETSTANDARD2_0
-
-using Microsoft.AspNetCore.Mvc.Internal;
-
-#endif
-
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing;
 
 namespace Codeworx.Rest.AspNetCore
 {
     public class ContractModelProvider : IApplicationModelProvider
     {
+        private readonly IEnumerable<IAttributeMetadataProvider> _metadataProviders;
+
+        public ContractModelProvider(IEnumerable<IAttributeMetadataProvider> metadataProviders)
+        {
+            _metadataProviders = metadataProviders;
+        }
+
         public int Order => 9999;
 
         public void OnProvidersExecuted(ApplicationModelProviderContext context)
@@ -31,14 +25,10 @@ namespace Codeworx.Rest.AspNetCore
             foreach (var controller in context.Result.Controllers)
             {
                 var serviceInterfaces = controller.ControllerType.GetInterfaces();
-                var serviceInterface = serviceInterfaces.FirstOrDefault(p => p.GetCustomAttribute<RestRouteAttribute>() != null);
-
-                var routeAttribute = controller.ControllerType.GetCustomAttribute<RestRouteAttribute>();
-                routeAttribute = routeAttribute ?? serviceInterface?.GetTypeInfo()?.GetCustomAttribute<RestRouteAttribute>();
-
-                if (routeAttribute != null)
+                var attributes = serviceInterfaces.SelectMany(p => p.GetCustomAttributes()).ToList();
+                foreach (var provider in _metadataProviders)
                 {
-                    controller.Selectors.First().AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(routeAttribute.RoutePrefix));
+                    provider.ProcessController(attributes, controller);
                 }
 
                 var actionsToRemove = new List<ActionModel>();
@@ -46,104 +36,42 @@ namespace Codeworx.Rest.AspNetCore
                 {
                     var method = action.ActionMethod;
 
-                    var methodAtt = method.GetCustomAttributes().OfType<RestOperationAttribute>().FirstOrDefault();
+                    method = serviceInterfaces
+                                .Select(p => p.GetTypeInfo().GetMethod(method.Name, method.GetParameters().Select(x => x.ParameterType).ToArray()))
+                                .FirstOrDefault(p => p != null);
 
-                    if (methodAtt == null)
-                    {
-                        method = serviceInterfaces
-                                    .Select(p => p.GetTypeInfo().GetMethod(method.Name, method.GetParameters().Select(x => x.ParameterType).ToArray()))
-                                    .FirstOrDefault(p => p != null);
-
-                        methodAtt = method?.GetCustomAttributes().OfType<RestOperationAttribute>().FirstOrDefault();
-                    }
-
-                    if (methodAtt != null)
-                    {
-                        var targetAttribute = GetTargetAttribute(methodAtt.HttpMethod(), methodAtt.Template);
-
-                        action.Selectors.Clear();
-                        action.Selectors.Add(CreateSelectorModel(targetAttribute, action.ActionMethod));
-
-                        for (int i = 0; i < action.Parameters.Count; i++)
-                        {
-                            if (method.GetParameters()[i].GetCustomAttribute<BodyMemberAttribute>() != null)
-                            {
-                                action.Parameters[i].BindingInfo = BindingInfo.GetBindingInfo(new object[] { new FromBodyAttribute() });
-                            }
-                        }
-                    }
-                    else if (routeAttribute != null)
+                    if (method == null)
                     {
                         actionsToRemove.Add(action);
+                        continue;
                     }
+
+                    var actionAttributes = method.GetCustomAttributes().ToList();
+                    foreach (var item in _metadataProviders)
+                    {
+                        item.ProcessAction(actionAttributes, action);
+                    }
+
+                    for (int i = 0; i < action.Parameters.Count; i++)
+                    {
+                        var parameterAttributes = method.GetParameters()[i].GetCustomAttributes();
+
+                        foreach (var item in _metadataProviders)
+                        {
+                            item.ProcessParameter(parameterAttributes, action.Parameters[i]);
+                        }
+                    }
+
+                    ////if (routeAttribute != null)
+                    ////{
+                    ////    actionsToRemove.Add(action);
+                    ////}
                 }
 
                 foreach (var action in actionsToRemove)
                 {
                     controller.Actions.Remove(action);
                 }
-            }
-        }
-
-        private static SelectorModel CreateSelectorModel(IRouteTemplateProvider route, MethodInfo method)
-        {
-            var selectorModel = new SelectorModel();
-            if (route != null)
-            {
-                selectorModel.AttributeRouteModel = new AttributeRouteModel(route);
-            }
-
-            foreach (var item in method.GetCustomAttributes().OfType<IActionConstraintMetadata>())
-            {
-                selectorModel.ActionConstraints.Add(item);
-                selectorModel.EndpointMetadata.Add(item);
-            }
-
-            selectorModel.EndpointMetadata.Add(route);
-
-            // Simple case, all HTTP method attributes apply
-            var httpMethods = new[] { route }
-                .OfType<IActionHttpMethodProvider>()
-                .SelectMany(a => a.HttpMethods)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToArray();
-
-            if (httpMethods.Length > 0)
-            {
-                selectorModel.ActionConstraints.Add(new HttpMethodActionConstraint(httpMethods));
-                selectorModel.EndpointMetadata.Add(new HttpMethodMetadata(httpMethods));
-            }
-
-            return selectorModel;
-        }
-
-        private IRouteTemplateProvider GetTargetAttribute(string method, string template)
-        {
-            switch (method)
-            {
-                case "GET":
-                    return template == null ? new HttpGetAttribute() : new HttpGetAttribute(template);
-
-                case "POST":
-                    return template == null ? new HttpPostAttribute() : new HttpPostAttribute(template);
-
-                case "PUT":
-                    return template == null ? new HttpPutAttribute() : new HttpPutAttribute(template);
-
-                case "DELETE":
-                    return template == null ? new HttpDeleteAttribute() : new HttpDeleteAttribute(template);
-
-                case "HEAD":
-                    return template == null ? new HttpHeadAttribute() : new HttpHeadAttribute(template);
-
-                case "OPTIONS":
-                    return template == null ? new HttpOptionsAttribute() : new HttpOptionsAttribute(template);
-
-                case "PATCH":
-                    return template == null ? new HttpPatchAttribute() : new HttpPatchAttribute(template);
-
-                default:
-                    throw new NotSupportedException($"Http method {method} is not supported by the rest contract package!");
             }
         }
     }

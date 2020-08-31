@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Net.Mime;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Codeworx.Rest.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.Generation.TypeMappers;
@@ -24,8 +27,10 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseAuthentication();
 #if NETCOREAPP3_1
             app.UseRouting();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseOpenApi();
 #else
@@ -50,7 +55,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
 #if NETCOREAPP3_1
                 .AddControllers(options =>
 #else
-                .AddMvcCore(options =>
+                .AddMvc(options =>
 #endif
             {
                 options.InputFormatters.Add(new ProtobufInputFormatter(RuntimeTypeModel.Default));
@@ -59,12 +64,16 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
             })
 #if NETCOREAPP3_1
                 .AddNewtonsoftJson()
-#else
-                .AddApiExplorer()
-                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver())
 #endif
-                .AddRestContract()
-                ;
+                .AddRestContract();
+
+            services.AddAuthentication("TEST")
+                .AddScheme<DummyAuthenticationOptions, DummyAuthenticationHandler>("TEST", p => { });
+
+            services.AddAuthorization(p => p.AddPolicy("Default", builder =>
+            {
+                builder.RequireAuthenticatedUser();
+            }));
         }
 
         private class StreamInputFormatter : InputFormatter
@@ -111,6 +120,23 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
             protected override bool CanWriteType(Type type)
             {
                 return type == typeof(Stream);
+            }
+        }
+
+        private class DummyAuthenticationOptions : AuthenticationSchemeOptions
+        {
+        }
+
+        private class DummyAuthenticationHandler : AuthenticationHandler<DummyAuthenticationOptions>
+        {
+            public DummyAuthenticationHandler(IOptionsMonitor<DummyAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+                : base(options, logger, encoder, clock)
+            {
+            }
+
+            protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+            {
+                return Task.FromResult(AuthenticateResult.NoResult());
             }
         }
     }
