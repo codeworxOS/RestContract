@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
-using Codeworx.Rest.UnitTests.Generated;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -38,6 +37,14 @@ namespace Codeworx.Rest.UnitTests
         public async Task TestComplexPathWithNoParameters()
         {
             var result = await _service.ComplexPathWithoutParameters();
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task TestComplexPathWithParameters()
+        {
+            var item = await ItemsGenerator.GenerateItem();
+            var result = await _service.ComplexPathWithParameters(item);
             Assert.True(result);
         }
 
@@ -82,9 +89,25 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Fact]
+        public async Task TestNoPathWithParameters()
+        {
+            var item = await ItemsGenerator.GenerateItem();
+            var result = await _service.EmptyPathWithParameters(item);
+            Assert.True(result);
+        }
+
+        [Fact]
         public async Task TestNoPathWithQueryParameters()
         {
             var result = await _service.EmptyPathWithQueryParameters(ItemsGenerator.TestString, ItemsGenerator.TestInt, ItemsGenerator.TestGuid, ItemsGenerator.TestDate);
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task TestNoPathWithUrlAndQueryParameters()
+        {
+            var item = await ItemsGenerator.GenerateItem();
+            var result = await _service.EmptyPathWithUrlAndQueryParameters(item, ItemsGenerator.TestString, ItemsGenerator.TestInt, ItemsGenerator.TestGuid, ItemsGenerator.TestDate);
             Assert.True(result);
         }
 
