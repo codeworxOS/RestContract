@@ -46,6 +46,13 @@ namespace Codeworx.Rest.Client
                 return;
             }
 
+            var supportedResponseTypes = GetSupportedResponseTypes(operationSelector);
+            if (supportedResponseTypes.TryGetValue((int)response.StatusCode, out var responseType))
+            {
+                var error = await DeserializeServiceError(response, responseType);
+                throw error;
+            }
+
             throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
@@ -60,16 +67,14 @@ namespace Codeworx.Rest.Client
                     return default(TResult);
                 }
 
-                if (TypeKey<TResult>.Key == TypeKey<Stream>.Key)
-                {
-                    var resultStream = await response.Content.ReadAsStreamAsync();
-                    return (TResult)(object)resultStream;
-                }
+                return await GetPayload<TResult>(response);
+            }
 
-                var formatter = _options.GetFormatter(response.Content?.Headers?.ContentType?.MediaType);
-
-                var result = await formatter.DeserializeAsync<TResult>(response);
-                return result;
+            var supportedResponseTypes = GetSupportedResponseTypes(operationSelector);
+            if (supportedResponseTypes.TryGetValue((int)response.StatusCode, out var responseType))
+            {
+                var error = await DeserializeServiceError(response, responseType);
+                throw error;
             }
 
             throw new UnexpectedHttpStatusCodeException(response.StatusCode);
@@ -78,6 +83,38 @@ namespace Codeworx.Rest.Client
         private static bool IsMatch(string templateValue, string parameterName)
         {
             return _parameterRegex.IsMatch(templateValue) && _parameterRegex.Match(templateValue).Groups["parameterName"].Value == parameterName;
+        }
+
+        private async Task<Exception> DeserializeServiceError(HttpResponseMessage response, Type responseType)
+        {
+            Expression<Func<RestClient<TContract>, Task<Exception>>> exp = p => p.DeserializeServiceError<object>(null);
+            var methodInfo = ((MethodCallExpression)exp.Body).Method.GetGenericMethodDefinition();
+
+            var toCall = methodInfo.MakeGenericMethod(responseType).Invoke(this, new object[] { response }) as Task<Exception>;
+
+            return await toCall;
+        }
+
+        private async Task<Exception> DeserializeServiceError<TResult>(HttpResponseMessage response)
+        {
+            var payload = await GetPayload<TResult>(response);
+            var error = Options.ErrorDispatcher.GetException<TResult>(payload);
+
+            return error;
+        }
+
+        private async Task<TResult> GetPayload<TResult>(HttpResponseMessage response)
+        {
+            if (TypeKey<TResult>.Key == TypeKey<Stream>.Key)
+            {
+                var resultStream = await response.Content.ReadAsStreamAsync();
+                return (TResult)(object)resultStream;
+            }
+
+            var formatter = _options.GetFormatter(response.Content?.Headers?.ContentType?.MediaType);
+
+            var result = await formatter.DeserializeAsync<TResult>(response);
+            return result;
         }
 
         private async Task<HttpResponseMessage> GetResponse(LambdaExpression operationSelector)
@@ -111,7 +148,7 @@ namespace Codeworx.Rest.Client
                 requestUrl = $"{typeof(TContract).GetCustomAttribute<RestRouteAttribute>().RoutePrefix}/{attribute.Template}";
             }
 
-            var evaluator = new ParameterMatchEvaluator(methodCall);
+            var evaluator = new ParameterMatchEvaluator(methodCall, Options.GetAdditionData());
 
             requestUrl = _parameterRegex.Replace(requestUrl, evaluator.Evaluate);
 
@@ -176,18 +213,37 @@ namespace Codeworx.Rest.Client
             return response;
         }
 
+        private IDictionary<int, Type> GetSupportedResponseTypes(LambdaExpression operationSelector)
+        {
+            var methodCall = operationSelector.Body as MethodCallExpression;
+
+            var param = operationSelector.Parameters.First();
+
+            if (param != methodCall?.Object)
+            {
+                throw new NotSupportedException();
+            }
+
+            var result = methodCall.Method.GetCustomAttributes().OfType<ResponseTypeAttribute>()
+                                .ToDictionary(p => p.StatusCode, p => p.PayloadType);
+
+            return result;
+        }
+
         private class ParameterMatchEvaluator
         {
+            private readonly IReadOnlyDictionary<string, object> _additionalParameters;
             private readonly Dictionary<string, ParameterData> _parameterValues;
             private MethodCallExpression _methodCall;
             private HashSet<string> _usedParameters;
 
-            public ParameterMatchEvaluator(MethodCallExpression methodCall)
+            public ParameterMatchEvaluator(MethodCallExpression methodCall, IReadOnlyDictionary<string, object> additionalParameters)
                 : base()
             {
                 _methodCall = methodCall;
                 _usedParameters = new HashSet<string>();
 
+                _additionalParameters = additionalParameters;
                 _parameterValues = methodCall.Method.GetParameters()
                                     .Select((p, i) => new { Parameter = p, Index = i })
                                     .ToDictionary(
@@ -239,6 +295,10 @@ namespace Codeworx.Rest.Client
 
                     _usedParameters.Add(parameterName);
                     return HttpUtility.UrlPathEncode(GetDataStringValue(value.Data));
+                }
+                else if (_additionalParameters.TryGetValue(parameterName, out var additionalValue))
+                {
+                    return HttpUtility.UrlPathEncode(GetDataStringValue(additionalValue));
                 }
 
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");

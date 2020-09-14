@@ -4,6 +4,7 @@ using Codeworx.Rest;
 using Codeworx.Rest.Client;
 using Codeworx.Rest.Client.Builder;
 using Codeworx.Rest.Client.Formatters;
+using Codeworx.Rest.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -47,6 +48,11 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddScoped<RestOptions>();
             builder.Services.AddSingleton<IContentFormatter, JsonContentFormatter>(sp => new JsonContentFormatter(CreateDefaultJsonSettings()));
             builder.Services.AddScoped<DefaultFormatterSelector>(sp => () => "application/json");
+
+            if (!builder.Services.Any(p => p.ServiceType == typeof(IServiceErrorDispatcher)))
+            {
+                builder.Services.AddSingleton<IServiceErrorDispatcher, ServiceExceptionErrorDispatcher>();
+            }
 
             if (!string.IsNullOrWhiteSpace(baseUrl))
             {

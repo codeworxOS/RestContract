@@ -60,5 +60,53 @@ namespace Codeworx.Rest.UnitTests
             Assert.Equal(new Uri("http://localhost:4321/"), c2.BaseAddress);
             Assert.Equal(new Uri("http://localhost:4321/"), c4.BaseAddress);
         }
+
+        [Fact]
+        public async Task CheckHttpClientFactoryScopedValueInFactoryAsync()
+        {
+            var services = new ServiceCollection();
+            services.AddScoped<TenantInfo>();
+            services.AddRestClient()
+                .WithHttpClient((sp, client) =>
+                {
+                    var info = sp.GetRequiredService<TenantInfo>();
+                    client.BaseAddress = info.BaseUrl;
+                })
+                .Contract<IPathService>(p =>
+                    p.WithHttpClient((sp, client) =>
+                    {
+                        var info = sp.GetRequiredService<TenantInfo>();
+                        client.BaseAddress = new Uri(info.BaseUrl, "path");
+                    })
+                );
+
+            using (var sp = services.BuildServiceProvider())
+            {
+                using (var scope = sp.CreateScope())
+                {
+                    var info = scope.ServiceProvider.GetRequiredService<TenantInfo>();
+                    info.BaseUrl = new Uri("http://localhost:7654");
+                    var statusCodeClient = scope.ServiceProvider.GetService<RestClient<IStatusCodeController>>();
+                    var pathClient = scope.ServiceProvider.GetService<RestClient<IPathService>>();
+                    Assert.Equal(new Uri("http://localhost:7654"), statusCodeClient.Options.GetHttpClient().BaseAddress);
+                    Assert.Equal(new Uri("http://localhost:7654/path"), pathClient.Options.GetHttpClient().BaseAddress);
+                }
+
+                using (var scope = sp.CreateScope())
+                {
+                    var info = scope.ServiceProvider.GetRequiredService<TenantInfo>();
+                    info.BaseUrl = new Uri("http://localhost:4321");
+                    var statusCodeClient = scope.ServiceProvider.GetService<RestClient<IStatusCodeController>>();
+                    var pathClient = scope.ServiceProvider.GetService<RestClient<IPathService>>();
+                    Assert.Equal(new Uri("http://localhost:4321"), statusCodeClient.Options.GetHttpClient().BaseAddress);
+                    Assert.Equal(new Uri("http://localhost:4321/path"), pathClient.Options.GetHttpClient().BaseAddress);
+                }
+            }
+        }
+
+        private class TenantInfo
+        {
+            public Uri BaseUrl { get; set; }
+        }
     }
 }
