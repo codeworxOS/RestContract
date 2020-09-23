@@ -23,6 +23,11 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.ComplexPathWithoutParameters());
         }
 
+        public global::System.Threading.Tasks.Task<bool> ComplexPathWithParameters(global::Codeworx.Rest.UnitTests.Model.Item item)
+        {
+            return CallAsync(c => c.ComplexPathWithParameters(item));
+        }
+
         public global::System.Threading.Tasks.Task<bool> ComplexPathWithQueryParameters(string text, int number, global::System.Guid id, global::System.DateTime date)
         {
             return CallAsync(c => c.ComplexPathWithQueryParameters(text, number, id, date));
@@ -48,9 +53,19 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.EmptyPathWithoutParameters());
         }
 
+        public global::System.Threading.Tasks.Task<bool> EmptyPathWithParameters(global::Codeworx.Rest.UnitTests.Model.Item item)
+        {
+            return CallAsync(c => c.EmptyPathWithParameters(item));
+        }
+
         public global::System.Threading.Tasks.Task<bool> EmptyPathWithQueryParameters(string text, int number, global::System.Guid id, global::System.DateTime date)
         {
             return CallAsync(c => c.EmptyPathWithQueryParameters(text, number, id, date));
+        }
+
+        public global::System.Threading.Tasks.Task<bool> EmptyPathWithUrlAndQueryParameters(global::Codeworx.Rest.UnitTests.Model.Item item, string text, int number, global::System.Guid id, global::System.DateTime date)
+        {
+            return CallAsync(c => c.EmptyPathWithUrlAndQueryParameters(item, text, number, id, date));
         }
 
         public global::System.Threading.Tasks.Task<bool> EmptyPathWithUrlParameters(string text, int number, global::System.Guid id, global::System.DateTime date)

@@ -46,6 +46,13 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(true);
         }
 
+        public async Task<bool> ComplexPathWithParameters(Item item)
+        {
+            var isItemCorrect = await IsItemCorrect(item);
+
+            return isItemCorrect;
+        }
+
         public async Task<bool> ComplexPathWithQueryParameters(
             string text,
             int number,
@@ -110,6 +117,13 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(true);
         }
 
+        public async Task<bool> EmptyPathWithParameters(Item item)
+        {
+            var isItemCorrect = await IsItemCorrect(item);
+
+            return isItemCorrect;
+        }
+
         public async Task<bool> EmptyPathWithQueryParameters(
             string text,
             int number,
@@ -122,6 +136,18 @@ namespace Codeworx.Rest.UnitTests.Api
                 id,
                 date);
             return areValuesCorrect;
+        }
+
+        public async Task<bool> EmptyPathWithUrlAndQueryParameters(Item item, string text, int number, Guid id2, DateTime date)
+        {
+            var isItemCorrect = await IsItemCorrect(item);
+            var areValuesCorrect = await AreValuesCorrect(
+                text,
+                number,
+                id2,
+                date);
+
+            return isItemCorrect && areValuesCorrect;
         }
 
         public async Task<bool> EmptyPathWithUrlParameters(
