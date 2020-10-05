@@ -6,7 +6,7 @@ namespace Codeworx.Rest.AspNetCore
 {
     public abstract class AttributeMetadataProvider<TSource> : IAttributeMetadataProvider
     {
-        public void ProcessAction(IEnumerable<object> attributes, ActionModel action)
+        public void ProcessAction(IEnumerable<object> attributes, ActionModel action, MetadataProviderContext context)
         {
             foreach (var item in attributes.OfType<TSource>())
             {
@@ -14,7 +14,7 @@ namespace Codeworx.Rest.AspNetCore
             }
         }
 
-        public void ProcessController(IEnumerable<object> attributes, ControllerModel controller)
+        public void ProcessController(IEnumerable<object> attributes, ControllerModel controller, MetadataProviderContext context)
         {
             foreach (var item in attributes.OfType<TSource>())
             {
@@ -22,7 +22,7 @@ namespace Codeworx.Rest.AspNetCore
             }
         }
 
-        public void ProcessParameter(IEnumerable<object> attributes, ParameterModel parameter)
+        public void ProcessParameter(IEnumerable<object> attributes, ParameterModel parameter, MetadataProviderContext context)
         {
             foreach (var item in attributes.OfType<TSource>())
             {

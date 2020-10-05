@@ -5,10 +5,10 @@ namespace Codeworx.Rest.AspNetCore
 {
     public interface IAttributeMetadataProvider
     {
-        void ProcessController(IEnumerable<object> attributes, ControllerModel controller);
+        void ProcessController(IEnumerable<object> attributes, ControllerModel controller, MetadataProviderContext context);
 
-        void ProcessAction(IEnumerable<object> attributes, ActionModel action);
+        void ProcessAction(IEnumerable<object> attributes, ActionModel action, MetadataProviderContext context);
 
-        void ProcessParameter(IEnumerable<object> attributes, ParameterModel parameter);
+        void ProcessParameter(IEnumerable<object> attributes, ParameterModel parameter, MetadataProviderContext context);
     }
 }

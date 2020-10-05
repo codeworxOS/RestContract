@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
@@ -15,24 +16,38 @@ using Microsoft.AspNetCore.Mvc.Internal;
 
 namespace Codeworx.Rest.AspNetCore.Authorization
 {
-    public class RestOperationMetadataProvider : AttributeMetadataProvider<RestOperationAttribute>
+    public class RestOperationMetadataProvider : IAttributeMetadataProvider
     {
-        protected override void TransformAction(RestOperationAttribute source, ActionModel model)
+        public void ProcessAction(IEnumerable<object> attributes, ActionModel action, MetadataProviderContext context)
+        {
+            var operation = attributes.OfType<RestOperationAttribute>().FirstOrDefault();
+
+            if (operation == null)
+            {
+                context.ActionsToRemove.Add(action);
+            }
+            else
+            {
+                TransformAction(operation, action);
+            }
+        }
+
+        public void ProcessController(IEnumerable<object> attributes, ControllerModel controller, MetadataProviderContext context)
+        {
+            // do nothing.
+        }
+
+        public void ProcessParameter(IEnumerable<object> attributes, ParameterModel parameter, MetadataProviderContext context)
+        {
+            // do nothing.
+        }
+
+        protected void TransformAction(RestOperationAttribute source, ActionModel model)
         {
             var targetAttribute = GetTargetAttribute(source.HttpMethod(), source.Template);
 
             model.Selectors.Clear();
             model.Selectors.Add(CreateSelectorModel(targetAttribute, model.ActionMethod));
-        }
-
-        protected override void TransformController(RestOperationAttribute source, ControllerModel model)
-        {
-            // do nothing;
-        }
-
-        protected override void TransformParameter(RestOperationAttribute source, ParameterModel model)
-        {
-            // to nothing;
         }
 
         private static SelectorModel CreateSelectorModel(IRouteTemplateProvider route, MethodInfo method)

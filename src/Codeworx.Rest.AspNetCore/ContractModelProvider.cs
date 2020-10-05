@@ -22,16 +22,17 @@ namespace Codeworx.Rest.AspNetCore
 
         public void OnProvidersExecuting(ApplicationModelProviderContext context)
         {
+            var metadataContext = new MetadataProviderContext();
+
             foreach (var controller in context.Result.Controllers)
             {
                 var serviceInterfaces = controller.ControllerType.GetInterfaces();
                 var attributes = serviceInterfaces.SelectMany(p => p.GetCustomAttributes()).ToList();
                 foreach (var provider in _metadataProviders)
                 {
-                    provider.ProcessController(attributes, controller);
+                    provider.ProcessController(attributes, controller, metadataContext);
                 }
 
-                var actionsToRemove = new List<ActionModel>();
                 foreach (var action in controller.Actions)
                 {
                     var method = action.ActionMethod;
@@ -42,14 +43,14 @@ namespace Codeworx.Rest.AspNetCore
 
                     if (method == null)
                     {
-                        actionsToRemove.Add(action);
+                        metadataContext.ActionsToRemove.Add(action);
                         continue;
                     }
 
                     var actionAttributes = method.GetCustomAttributes().ToList();
                     foreach (var item in _metadataProviders)
                     {
-                        item.ProcessAction(actionAttributes, action);
+                        item.ProcessAction(actionAttributes, action, metadataContext);
                     }
 
                     for (int i = 0; i < action.Parameters.Count; i++)
@@ -58,17 +59,12 @@ namespace Codeworx.Rest.AspNetCore
 
                         foreach (var item in _metadataProviders)
                         {
-                            item.ProcessParameter(parameterAttributes, action.Parameters[i]);
+                            item.ProcessParameter(parameterAttributes, action.Parameters[i], metadataContext);
                         }
                     }
-
-                    ////if (routeAttribute != null)
-                    ////{
-                    ////    actionsToRemove.Add(action);
-                    ////}
                 }
 
-                foreach (var action in actionsToRemove)
+                foreach (var action in metadataContext.ActionsToRemove)
                 {
                     controller.Actions.Remove(action);
                 }
