@@ -12,7 +12,7 @@ namespace Codeworx.Rest.AspNetCore.Filters
         {
             var dispatcher = context.HttpContext.RequestServices.GetRequiredService<IServiceErrorDispatcher>();
 
-            if (dispatcher.CanHandler(context.Exception))
+            if (dispatcher.CanHandle(context.Exception))
             {
                 var supportedResponseTypes = context.ActionDescriptor.EndpointMetadata.OfType<ResponseTypeAttribute>()
                                                 .ToDictionary(p => p.PayloadType, p => p.StatusCode);

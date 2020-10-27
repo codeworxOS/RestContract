@@ -4,7 +4,7 @@ namespace Codeworx.Rest.Internal
 {
     public class ServiceExceptionErrorDispatcher : IServiceErrorDispatcher
     {
-        public bool CanHandler(Exception ex)
+        public bool CanHandle(Exception ex)
         {
             return ex is ServiceException;
         }
