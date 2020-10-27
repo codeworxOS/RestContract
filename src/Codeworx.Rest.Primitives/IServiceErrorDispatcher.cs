@@ -4,7 +4,7 @@ namespace Codeworx.Rest
 {
     public interface IServiceErrorDispatcher
     {
-        bool CanHandler(Exception ex);
+        bool CanHandle(Exception ex);
 
         object GetPayload(Exception ex);
 
