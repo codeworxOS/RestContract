@@ -10,7 +10,7 @@ namespace Codeworx.Rest.AspNetCore.Authorization
 {
     public class PolicyMetadataProvider : AttributeMetadataProvider<PolicyAttribute>
     {
-        protected override void TransformAction(PolicyAttribute source, ActionModel model)
+        protected override void TransformAction(PolicyAttribute source, ActionModel model, MetadataProviderContext context)
         {
 #if NETSTANDARD
             model.Filters.Add(new AuthorizeFilter(source.Name));
@@ -18,7 +18,7 @@ namespace Codeworx.Rest.AspNetCore.Authorization
             model.Selectors.First().EndpointMetadata.Add(new AuthorizeAttribute(source.Name));
         }
 
-        protected override void TransformController(PolicyAttribute source, ControllerModel model)
+        protected override void TransformController(PolicyAttribute source, ControllerModel model, MetadataProviderContext context)
         {
 #if NETSTANDARD
             model.Filters.Add(new AuthorizeFilter(source.Name));
@@ -26,7 +26,7 @@ namespace Codeworx.Rest.AspNetCore.Authorization
             model.Selectors.First().EndpointMetadata.Add(new AuthorizeAttribute(source.Name));
         }
 
-        protected override void TransformParameter(PolicyAttribute source, ParameterModel model)
+        protected override void TransformParameter(PolicyAttribute source, ParameterModel model, MetadataProviderContext context)
         {
             // do nothing;
         }

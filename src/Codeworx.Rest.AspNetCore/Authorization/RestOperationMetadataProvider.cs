@@ -28,7 +28,7 @@ namespace Codeworx.Rest.AspNetCore.Authorization
             }
             else
             {
-                TransformAction(operation, action);
+                TransformAction(operation, action, context);
             }
         }
 
@@ -42,7 +42,7 @@ namespace Codeworx.Rest.AspNetCore.Authorization
             // do nothing.
         }
 
-        protected void TransformAction(RestOperationAttribute source, ActionModel model)
+        protected void TransformAction(RestOperationAttribute source, ActionModel model, MetadataProviderContext context)
         {
             var targetAttribute = GetTargetAttribute(source.HttpMethod(), source.Template);
 

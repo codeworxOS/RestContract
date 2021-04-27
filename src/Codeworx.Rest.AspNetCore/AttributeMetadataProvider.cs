@@ -10,7 +10,7 @@ namespace Codeworx.Rest.AspNetCore
         {
             foreach (var item in attributes.OfType<TSource>())
             {
-                TransformAction(item, action);
+                TransformAction(item, action, context);
             }
         }
 
@@ -18,7 +18,7 @@ namespace Codeworx.Rest.AspNetCore
         {
             foreach (var item in attributes.OfType<TSource>())
             {
-                TransformController(item, controller);
+                TransformController(item, controller, context);
             }
         }
 
@@ -26,14 +26,14 @@ namespace Codeworx.Rest.AspNetCore
         {
             foreach (var item in attributes.OfType<TSource>())
             {
-                TransformParameter(item, parameter);
+                TransformParameter(item, parameter, context);
             }
         }
 
-        protected abstract void TransformAction(TSource source, ActionModel model);
+        protected abstract void TransformAction(TSource source, ActionModel model, MetadataProviderContext context);
 
-        protected abstract void TransformController(TSource source, ControllerModel model);
+        protected abstract void TransformController(TSource source, ControllerModel model, MetadataProviderContext context);
 
-        protected abstract void TransformParameter(TSource source, ParameterModel model);
+        protected abstract void TransformParameter(TSource source, ParameterModel model, MetadataProviderContext context);
     }
 }

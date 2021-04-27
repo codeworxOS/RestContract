@@ -20,6 +20,8 @@ namespace Codeworx.Rest.UnitTests
         private readonly HttpClient _httpClient;
         private readonly TestServer _testServer;
 
+        protected HttpClient HttpClient => _httpClient;
+
         protected TestServerTestsBase()
         {
             _clientProviders = new HashSet<IDisposable>();

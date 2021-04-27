@@ -10,6 +10,8 @@ namespace Codeworx.Rest.AspNetCore
             this.ActionsToRemove = new HashSet<ActionModel>();
         }
 
+        public bool CanProcess { get; set; }
+
         public HashSet<ActionModel> ActionsToRemove { get; }
     }
 }
