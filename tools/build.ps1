@@ -9,7 +9,7 @@ $projects = "..\src\Codeworx.Rest.Primitives\Codeworx.Rest.Primitives.csproj",
 
 New-NugetPackages `
     -Projects $projects `
-    -NugetServerUrl "https://api.nuget.org/v3/index.json" `
+    -NugetServerUrl "http://www.nuget.org/api/v2" `
     -VersionPackage "Codeworx.Rest.Primitives" `
     -VersionFilePath "..\version.json" `
     -OutputPath "..\dist\nuget\" `
