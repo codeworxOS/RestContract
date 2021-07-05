@@ -17,5 +17,10 @@ namespace Codeworx.Rest.UnitTests.Generated
         {
             return CallAsync(c => c.GetValueException());
         }
+
+        public global::System.Threading.Tasks.Task DeleteEntry(string id)
+        {
+            return CallAsync(c => c.DeleteEntry(id));
+        }
     }
 }

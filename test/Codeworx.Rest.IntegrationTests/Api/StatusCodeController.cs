@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
+using Codeworx.Rest.UnitTests.Api.Contract.Model;
 using Microsoft.AspNetCore.Http;
 
 namespace Codeworx.Rest.UnitTests.Api
@@ -18,6 +19,20 @@ namespace Codeworx.Rest.UnitTests.Api
         public async Task<bool> GetValueException()
         {
             throw new Exception();
+        }
+
+        public Task DeleteEntry(string id)
+        {
+            if (id == "1")
+            {
+                throw new ServiceException<EntryNotFoundError>(new EntryNotFoundError());
+            }
+            else if (id == "2")
+            {
+                throw new ServiceException<StillInUseError>(new StillInUseError { BlockingResource = "Invoice" });
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -47,6 +46,13 @@ namespace Codeworx.Rest.Client
                 return;
             }
 
+            var supportedResponseTypes = GetSupportedResponseTypes(operationSelector);
+            if (supportedResponseTypes.TryGetValue((int)response.StatusCode, out var responseType))
+            {
+                var error = await DeserializeServiceError(response, responseType);
+                throw error;
+            }
+
             throw new UnexpectedHttpStatusCodeException(response.StatusCode);
         }
 
@@ -61,16 +67,14 @@ namespace Codeworx.Rest.Client
                     return default(TResult);
                 }
 
-                if (TypeKey<TResult>.Key == TypeKey<Stream>.Key)
-                {
-                    var resultStream = await response.Content.ReadAsStreamAsync();
-                    return (TResult)(object)resultStream;
-                }
+                return await GetPayload<TResult>(response);
+            }
 
-                var formatter = _options.GetFormatter(response.Content?.Headers?.ContentType?.MediaType);
-
-                var result = await formatter.DeserializeAsync<TResult>(response);
-                return result;
+            var supportedResponseTypes = GetSupportedResponseTypes(operationSelector);
+            if (supportedResponseTypes.TryGetValue((int)response.StatusCode, out var responseType))
+            {
+                var error = await DeserializeServiceError(response, responseType);
+                throw error;
             }
 
             throw new UnexpectedHttpStatusCodeException(response.StatusCode);
@@ -79,6 +83,38 @@ namespace Codeworx.Rest.Client
         private static bool IsMatch(string templateValue, string parameterName)
         {
             return _parameterRegex.IsMatch(templateValue) && _parameterRegex.Match(templateValue).Groups["parameterName"].Value == parameterName;
+        }
+
+        private async Task<Exception> DeserializeServiceError(HttpResponseMessage response, Type responseType)
+        {
+            Expression<Func<RestClient<TContract>, Task<Exception>>> exp = p => p.DeserializeServiceError<object>(null);
+            var methodInfo = ((MethodCallExpression)exp.Body).Method.GetGenericMethodDefinition();
+
+            var toCall = methodInfo.MakeGenericMethod(responseType).Invoke(this, new object[] { response }) as Task<Exception>;
+
+            return await toCall;
+        }
+
+        private async Task<Exception> DeserializeServiceError<TResult>(HttpResponseMessage response)
+        {
+            var payload = await GetPayload<TResult>(response);
+            var error = Options.ErrorDispatcher.GetException<TResult>(payload);
+
+            return error;
+        }
+
+        private async Task<TResult> GetPayload<TResult>(HttpResponseMessage response)
+        {
+            if (TypeKey<TResult>.Key == TypeKey<Stream>.Key)
+            {
+                var resultStream = await response.Content.ReadAsStreamAsync();
+                return (TResult)(object)resultStream;
+            }
+
+            var formatter = _options.GetFormatter(response.Content?.Headers?.ContentType?.MediaType);
+
+            var result = await formatter.DeserializeAsync<TResult>(response);
+            return result;
         }
 
         private async Task<HttpResponseMessage> GetResponse(LambdaExpression operationSelector)
@@ -112,23 +148,36 @@ namespace Codeworx.Rest.Client
                 requestUrl = $"{typeof(TContract).GetCustomAttribute<RestRouteAttribute>().RoutePrefix}/{attribute.Template}";
             }
 
-            var evaluator = new ParameterMatchEvaluator(methodCall);
+            var evaluator = new ParameterMatchEvaluator(methodCall, Options.GetAdditionData());
 
             requestUrl = _parameterRegex.Replace(requestUrl, evaluator.Evaluate);
 
             var tempUrl = $"http://unknown/{requestUrl.TrimStart('/')}";
             var uri = new Uri(tempUrl, UriKind.Absolute);
 
-            var query = HttpUtility.ParseQueryString(uri.Query);
+            var parsedQuery = from q in uri.Query.TrimStart('?').Split('&')
+                              let keyValue = q.Split('=')
+                              where keyValue.Length == 2
+                              select new { Key = Uri.UnescapeDataString(keyValue[0]), Value = Uri.UnescapeDataString(keyValue[1]) };
+
+            var query = parsedQuery.GroupBy(p => p.Key)
+                            .ToDictionary(p => p.Key, p => p.Select(x => x.Value).ToList());
+
             var httpMethod = attribute.HttpMethod();
 
             evaluator.AddMissingQueryParameters(query);
             var formatter = _options.GetFormatter();
 
-            var builder = new UriBuilder();
-            builder.Path = uri.AbsolutePath;
-            builder.Query = query.ToString();
-            requestUrl = builder.Uri.PathAndQuery.TrimStart('/');
+            requestUrl = $"{uri.AbsolutePath.TrimStart('/')}";
+            if (query.Any())
+            {
+                var data = from q in query
+                           from v in q.Value
+                           where v != null
+                           select $"{Uri.EscapeDataString(q.Key)}={Uri.EscapeDataString(v)}";
+
+                requestUrl += $"?{string.Join("&", data)}";
+            }
 
             var request = new HttpRequestMessage(new HttpMethod(httpMethod), requestUrl);
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(formatter.MimeType));
@@ -164,18 +213,37 @@ namespace Codeworx.Rest.Client
             return response;
         }
 
+        private IDictionary<int, Type> GetSupportedResponseTypes(LambdaExpression operationSelector)
+        {
+            var methodCall = operationSelector.Body as MethodCallExpression;
+
+            var param = operationSelector.Parameters.First();
+
+            if (param != methodCall?.Object)
+            {
+                throw new NotSupportedException();
+            }
+
+            var result = methodCall.Method.GetCustomAttributes().OfType<ResponseTypeAttribute>()
+                                .ToDictionary(p => p.StatusCode, p => p.PayloadType);
+
+            return result;
+        }
+
         private class ParameterMatchEvaluator
         {
+            private readonly IReadOnlyDictionary<string, object> _additionalParameters;
             private readonly Dictionary<string, ParameterData> _parameterValues;
             private MethodCallExpression _methodCall;
             private HashSet<string> _usedParameters;
 
-            public ParameterMatchEvaluator(MethodCallExpression methodCall)
+            public ParameterMatchEvaluator(MethodCallExpression methodCall, IReadOnlyDictionary<string, object> additionalParameters)
                 : base()
             {
                 _methodCall = methodCall;
                 _usedParameters = new HashSet<string>();
 
+                _additionalParameters = additionalParameters;
                 _parameterValues = methodCall.Method.GetParameters()
                                     .Select((p, i) => new { Parameter = p, Index = i })
                                     .ToDictionary(
@@ -185,7 +253,8 @@ namespace Codeworx.Rest.Client
                                         {
                                             ParameterType = p.Parameter.ParameterType,
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
-                                            IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null
+                                            IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null,
+                                            IsQueryMember = p.Parameter.GetCustomAttribute<QueryMemberAttribute>() != null
                                         });
 
                 var cancellationTokenParameter = _parameterValues.Where(p => p.Value.Data is CancellationToken).ToList();
@@ -203,7 +272,7 @@ namespace Codeworx.Rest.Client
 
             public CancellationToken? CancellationToken { get; }
 
-            public void AddMissingQueryParameters(NameValueCollection queryParameters)
+            public void AddMissingQueryParameters(IDictionary<string, List<string>> queryParameters)
             {
                 var missing = _parameterValues
                     .Where(p => !p.Value.IsBodyMember && !_usedParameters.Contains(p.Key))
@@ -211,7 +280,22 @@ namespace Codeworx.Rest.Client
 
                 foreach (var param in missing)
                 {
-                    queryParameters[param.Key] = GetDataStringValue(param.Value.Data);
+                    if (param.Value.IsQueryMember)
+                    {
+                        var data = param.Value.Data;
+                        var queryKeyValuePairs = data.GetType()
+                                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(data)?.ToString());
+
+                        foreach (var item in queryKeyValuePairs.Where(p => p.Value != null))
+                        {
+                            queryParameters.Add(item.Key, new List<string> { GetDataStringValue(item.Value) });
+                        }
+                    }
+                    else
+                    {
+                        queryParameters.Add(param.Key, new List<string> { GetDataStringValue(param.Value.Data) });
+                    }
                 }
             }
 
@@ -225,8 +309,17 @@ namespace Codeworx.Rest.Client
                         throw new TemplateParseException($"Parameter {parameterName} was found in the template but is marked as BodyMember.");
                     }
 
+                    if (value.IsQueryMember)
+                    {
+                        throw new TemplateParseException($"Parameter {parameterName} was found in the template but is marked as QueryMember.");
+                    }
+
                     _usedParameters.Add(parameterName);
                     return HttpUtility.UrlPathEncode(GetDataStringValue(value.Data));
+                }
+                else if (_additionalParameters.TryGetValue(parameterName, out var additionalValue))
+                {
+                    return HttpUtility.UrlPathEncode(GetDataStringValue(additionalValue));
                 }
 
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");
@@ -290,6 +383,8 @@ namespace Codeworx.Rest.Client
                 public object Data { get; set; }
 
                 public bool IsBodyMember { get; set; }
+
+                public bool IsQueryMember { get; set; }
 
                 public Type ParameterType { get; set; }
             }

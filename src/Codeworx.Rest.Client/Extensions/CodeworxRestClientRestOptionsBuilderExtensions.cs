@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using Codeworx.Rest;
@@ -67,20 +68,43 @@ namespace Microsoft.Extensions.DependencyInjection
     where TContract : class
         {
             var clientKey = $"restclient.{typeof(TContract).FullName}";
-            var clientBuilder = builder.Services.AddHttpClient(clientKey, clientFactory);
+            var clientBuilder = builder.Services.AddHttpClient(clientKey);
             httpClientBuilder?.Invoke(clientBuilder);
 
-            builder.Services.AddOrReplace<HttpClientFactory<TContract>>(ServiceLifetime.Scoped, sp => () => sp.GetRequiredService<IHttpClientFactory>().CreateClient(clientKey));
+            builder.Services.AddOrReplace<HttpClientFactory<TContract>>(ServiceLifetime.Transient, sp => () =>
+            {
+                var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(clientKey);
+                clientFactory(sp, client);
+                return client;
+            });
+
             return builder;
         }
 
         public static IRestOptionsBuilder WithHttpClient(this IRestOptionsBuilder builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder = null)
         {
-            var clientBuilder = builder.Services.AddHttpClient("restclient.default", clientFactory);
+            var clientBuilder = builder.Services.AddHttpClient("restclient.default");
             httpClientBuilder?.Invoke(clientBuilder);
 
-            builder.Services.AddOrReplace<HttpClientFactory>(ServiceLifetime.Transient, sp => () => sp.GetRequiredService<IHttpClientFactory>().CreateClient("restclient.default"));
+            builder.Services.AddOrReplace<HttpClientFactory>(ServiceLifetime.Transient, sp => () =>
+            {
+                var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient("restclient.default");
+                clientFactory(sp, client);
+                return client;
+            });
 
+            return builder;
+        }
+
+        public static IRestOptionsBuilder WithAdditionalData(this IRestOptionsBuilder builder, IDictionary<string, object> data)
+        {
+            builder.Services.AddSingleton<IAdditionalDataProvider>(new AdditionalConstantDataProvider(data));
+            return builder;
+        }
+
+        public static IRestOptionsBuilder WithAdditionalData(this IRestOptionsBuilder builder, Func<IServiceProvider, IDictionary<string, object>> data)
+        {
+            builder.Services.AddScoped<IAdditionalDataProvider>(sp => new AdditionalDataProviderFactory(sp, data));
             return builder;
         }
 
@@ -95,6 +119,38 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddOrReplace<HttpClientFactory>(ServiceLifetime.Scoped, sp => () => clientFactory(sp));
             return builder;
+        }
+
+        private class AdditionalConstantDataProvider : IAdditionalDataProvider
+        {
+            private IDictionary<string, object> _data;
+
+            public AdditionalConstantDataProvider(IDictionary<string, object> data)
+            {
+                this._data = data;
+            }
+
+            public IDictionary<string, object> GetValues()
+            {
+                return _data;
+            }
+        }
+
+        private class AdditionalDataProviderFactory : IAdditionalDataProvider
+        {
+            private readonly IServiceProvider _serviceProvider;
+            private Func<IServiceProvider, IDictionary<string, object>> _factory;
+
+            public AdditionalDataProviderFactory(IServiceProvider serviceProvider, Func<IServiceProvider, IDictionary<string, object>> factory)
+            {
+                _factory = factory;
+                _serviceProvider = serviceProvider;
+            }
+
+            public IDictionary<string, object> GetValues()
+            {
+                return _factory(_serviceProvider);
+            }
         }
     }
 }

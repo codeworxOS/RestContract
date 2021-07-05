@@ -6,7 +6,7 @@ namespace Codeworx.Rest
     public class UnexpectedHttpStatusCodeException : InvalidOperationException
     {
         public UnexpectedHttpStatusCodeException(HttpStatusCode statusCode)
-            : base("Unexpected http status code.")
+            : base($"Unexpected http status code ({(int)statusCode}).")
         {
             StatusCode = statusCode;
         }
