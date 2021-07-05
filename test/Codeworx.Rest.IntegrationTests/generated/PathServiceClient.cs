@@ -63,9 +63,9 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.EmptyPathWithQueryParameters(text, number, id, date));
         }
 
-        public global::System.Threading.Tasks.Task<bool> EmptyPathWithUrlAndQueryParameters(global::Codeworx.Rest.UnitTests.Model.Item item, string text, int number, global::System.Guid id, global::System.DateTime date)
+        public global::System.Threading.Tasks.Task<bool> EmptyPathWithUrlAndQueryParameters(global::Codeworx.Rest.UnitTests.Model.Item item, string text, int number, global::System.Guid id2, global::System.DateTime date)
         {
-            return CallAsync(c => c.EmptyPathWithUrlAndQueryParameters(item, text, number, id, date));
+            return CallAsync(c => c.EmptyPathWithUrlAndQueryParameters(item, text, number, id2, date));
         }
 
         public global::System.Threading.Tasks.Task<bool> EmptyPathWithUrlParameters(string text, int number, global::System.Guid id, global::System.DateTime date)
