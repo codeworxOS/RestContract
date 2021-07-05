@@ -5,7 +5,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- dev
 
 pool:
   name: Hosted Windows 2019 with VS2019
