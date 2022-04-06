@@ -1,11 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
-using Codeworx.Rest.UnitTests.Generated;
 using Codeworx.Rest.UnitTests.TestServerUtilities;
-#if NETCOREAPP2_1
-using Microsoft.AspNetCore.Mvc.Internal;
-#endif
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests
@@ -18,7 +16,7 @@ namespace Codeworx.Rest.UnitTests
         {
             _controller = Client<IMethodOverloadingController>(FormatterSelection.Json);
         }
-#if !NET461
+
         [Fact]
         public async Task TestMethodsWithSameNames()
         {
@@ -31,14 +29,13 @@ namespace Codeworx.Rest.UnitTests
             var resultItem = await _controller.MethodWithSameName(resultItemName);
             Assert.Equal(resultItemName, resultItem.Name);
         }
-#endif
 
-#if NETCOREAPP2_1
         [Fact]
         public async Task TestMethodsWithSameUrls()
         {
-            await Assert.ThrowsAsync<AmbiguousActionException>(async () => await _controller.MethodWithSameUrl1());
+            var ex = await Assert.ThrowsAnyAsync<Exception>(async () => await _controller.MethodWithSameUrl1());
+            Assert.Equal("AmbiguousMatchException", ex.GetType().Name);
+
         }
-#endif
     }
 }
