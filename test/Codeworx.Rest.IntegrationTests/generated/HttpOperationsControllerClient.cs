@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class HttpOperationsControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IHttpOperationsController>, global::Codeworx.Rest.UnitTests.Api.Contract.IHttpOperationsController
     {
-        public HttpOperationsControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IHttpOperationsController> options): base(options)
+        public HttpOperationsControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IHttpOperationsController> options) : base(options)
         {
         }
 

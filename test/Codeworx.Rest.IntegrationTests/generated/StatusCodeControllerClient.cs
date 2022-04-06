@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class StatusCodeControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IStatusCodeController>, global::Codeworx.Rest.UnitTests.Api.Contract.IStatusCodeController
     {
-        public StatusCodeControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IStatusCodeController> options): base(options)
+        public StatusCodeControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IStatusCodeController> options) : base(options)
         {
         }
 

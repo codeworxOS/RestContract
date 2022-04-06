@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class PathServiceClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IPathService>, global::Codeworx.Rest.UnitTests.Api.Contract.IPathService
     {
-        public PathServiceClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IPathService> options): base(options)
+        public PathServiceClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IPathService> options) : base(options)
         {
         }
 

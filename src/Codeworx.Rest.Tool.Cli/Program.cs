@@ -1,18 +1,31 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using CommandLine;
 
-namespace Codeworx.Rest.Tool.Cli
+namespace Codeworx.Rest.Tool
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
-            var location = new FileInfo(typeof(Program).Assembly.Location);
-            var path = Path.Combine(location.DirectoryName, "Codeworx.Rest.Tool.exe");
-            var process = Process.Start(path, string.Join(" ", args.Select(p => $"\"{p}\"")));
-            process.WaitForExit();
+            var versionString = Assembly.GetEntryAssembly()
+                                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                                    .InformationalVersion
+                                    .ToString();
+            Console.WriteLine($"restcontract v{versionString}");
+
+            var result = CommandLine.Parser.Default.ParseArguments<Options>(args);
+            if (result.Tag == ParserResultType.Parsed)
+            {
+                var parsed = (Parsed<Options>)result;
+                var worker = new ProxyCreator(parsed.Value);
+                await worker.ProcessAsync();
+            }
+            else
+            {
+                var notParsed = (NotParsed<Options>)result;
+            }
         }
     }
 }

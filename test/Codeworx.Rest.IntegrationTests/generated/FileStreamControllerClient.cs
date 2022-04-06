@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class FileStreamControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IFileStreamController>, global::Codeworx.Rest.UnitTests.Api.Contract.IFileStreamController
     {
-        public FileStreamControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IFileStreamController> options): base(options)
+        public FileStreamControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IFileStreamController> options) : base(options)
         {
         }
 

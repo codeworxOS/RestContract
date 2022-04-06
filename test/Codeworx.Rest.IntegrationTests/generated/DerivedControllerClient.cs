@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class DerivedControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IDerivedController>, global::Codeworx.Rest.UnitTests.Api.Contract.IDerivedController
     {
-        public DerivedControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IDerivedController> options): base(options)
+        public DerivedControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IDerivedController> options) : base(options)
         {
         }
 

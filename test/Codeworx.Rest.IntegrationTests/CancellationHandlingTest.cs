@@ -22,7 +22,7 @@ namespace Codeworx.Rest.UnitTests
             var isCancelled = await _controller.Delete(tokenSource.Token);
             Assert.False(isCancelled);
             tokenSource.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Delete(tokenSource.Token));
+            await ThrowsCanceledAsync(async () => await _controller.Delete(tokenSource.Token));
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Codeworx.Rest.UnitTests
             var isCancelled = await _controller.Get(tokenSource.Token);
             Assert.False(isCancelled);
             tokenSource.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Get(tokenSource.Token));
+            await ThrowsCanceledAsync(async () => await _controller.Get(tokenSource.Token));
         }
 
 
@@ -53,7 +53,7 @@ namespace Codeworx.Rest.UnitTests
             var isCancelled = await _controller.Post("test", tokenSource.Token);
             Assert.False(isCancelled);
             tokenSource.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Post("test", tokenSource.Token));
+            await ThrowsCanceledAsync(async () => await _controller.Post("test", tokenSource.Token));
         }
 
         [Fact]
@@ -63,7 +63,10 @@ namespace Codeworx.Rest.UnitTests
             var isCancelled = await _controller.Put(new Model.Item { Id = Guid.NewGuid() }, tokenSource.Token);
             Assert.False(isCancelled);
             tokenSource.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Put(new Model.Item { Id = Guid.NewGuid() }, tokenSource.Token));
+
+            await ThrowsCanceledAsync(async () => await _controller.Put(new Model.Item { Id = Guid.NewGuid() }, tokenSource.Token));
+
+            await ThrowsCanceledAsync(async () => await _controller.Put(new Model.Item { Id = Guid.NewGuid() }, tokenSource.Token));
         }
 
         [Fact]
@@ -73,7 +76,16 @@ namespace Codeworx.Rest.UnitTests
             var isCancelled = await _controller.Head(tokenSource.Token);
             Assert.False(isCancelled);
             tokenSource.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await _controller.Head(tokenSource.Token));
+            await ThrowsCanceledAsync(async () => await _controller.Head(tokenSource.Token));
+        }
+
+        private static async Task ThrowsCanceledAsync(Func<Task> testCode)
+        {
+#if NET6_0_OR_GREATER
+            await Assert.ThrowsAsync<TaskCanceledException>(testCode);
+#else
+            await Assert.ThrowsAsync<OperationCanceledException>(testCode);
+#endif
         }
     }
 }

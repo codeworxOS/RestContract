@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class ExtraPathSegmentControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IExtraPathSegmentController>, global::Codeworx.Rest.UnitTests.Api.Contract.IExtraPathSegmentController
     {
-        public ExtraPathSegmentControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IExtraPathSegmentController> options): base(options)
+        public ExtraPathSegmentControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IExtraPathSegmentController> options) : base(options)
         {
         }
 

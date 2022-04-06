@@ -28,15 +28,11 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
         {
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();
-#if NETCOREAPP3_1
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseOpenApi();
-#else
-            app.UseMvc();
-            app.UseOpenApi();
-#endif
+
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -52,7 +48,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                     }));
                     options.OperationProcessors.Add(new StreamBodyOperationProcessor());
                 })
-#if NETCOREAPP3_1
+#if NETCOREAPP3_1 || NET5_0
                 .AddControllers(options =>
 #else
                 .AddMvc(options =>
@@ -62,7 +58,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                 options.OutputFormatters.Add(new ProtobufOutputFormatter(RuntimeTypeModel.Default));
                 options.InputFormatters.Add(new StreamInputFormatter());
             })
-#if NETCOREAPP3_1
+#if NETCOREAPP3_1 || NET5_0
                 .AddNewtonsoftJson()
 #endif
                 .AddRestContract();

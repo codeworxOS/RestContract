@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class CancellationTokenControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.ICancellationTokenController>, global::Codeworx.Rest.UnitTests.Api.Contract.ICancellationTokenController
     {
-        public CancellationTokenControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.ICancellationTokenController> options): base(options)
+        public CancellationTokenControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.ICancellationTokenController> options) : base(options)
         {
         }
 
