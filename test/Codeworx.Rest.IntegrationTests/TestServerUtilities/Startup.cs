@@ -48,19 +48,13 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                     }));
                     options.OperationProcessors.Add(new StreamBodyOperationProcessor());
                 })
-#if NETCOREAPP3_1 || NET5_0
                 .AddControllers(options =>
-#else
-                .AddMvc(options =>
-#endif
             {
                 options.InputFormatters.Add(new ProtobufInputFormatter(RuntimeTypeModel.Default));
                 options.OutputFormatters.Add(new ProtobufOutputFormatter(RuntimeTypeModel.Default));
                 options.InputFormatters.Add(new StreamInputFormatter());
             })
-#if NETCOREAPP3_1 || NET5_0
                 .AddNewtonsoftJson()
-#endif
                 .AddRestContract();
 
             services.AddAuthentication("TEST")

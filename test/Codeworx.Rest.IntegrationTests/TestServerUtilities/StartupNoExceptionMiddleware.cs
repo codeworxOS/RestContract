@@ -18,9 +18,6 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
         {
             services.AddMvcCore()
                 .AddRestContract()
-#if NETCOREAPP2_1
-                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver())
-#endif
                 ;
         }
     }
