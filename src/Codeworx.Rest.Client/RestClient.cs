@@ -254,7 +254,7 @@ namespace Codeworx.Rest.Client
                                             ParameterType = p.Parameter.ParameterType,
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
                                             IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null,
-                                            IsQueryMember = p.Parameter.GetCustomAttribute<QueryMemberAttribute>() != null
+                                            IsQueryMember = p.Parameter.GetCustomAttribute<QueryMemberAttribute>() != null,
                                         });
 
                 var cancellationTokenParameter = _parameterValues.Where(p => p.Value.Data is CancellationToken).ToList();

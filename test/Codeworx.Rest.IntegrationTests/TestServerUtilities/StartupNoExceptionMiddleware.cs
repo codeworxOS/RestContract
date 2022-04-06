@@ -1,10 +1,7 @@
-﻿using Codeworx.Rest.AspNetCore;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 
 namespace Codeworx.Rest.UnitTests.TestServerUtilities
 {
@@ -12,12 +9,9 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
     {
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-#if NETCOREAPP3_1 || NET5_0
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-#else
-            app.UseMvc();
-#endif
+
         }
 
         public void ConfigureServices(IServiceCollection services)

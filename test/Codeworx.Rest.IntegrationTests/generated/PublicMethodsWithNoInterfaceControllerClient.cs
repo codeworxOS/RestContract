@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class PublicMethodsWithNoInterfaceControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IPublicMethodsWithNoInterfaceController>, global::Codeworx.Rest.UnitTests.Api.Contract.IPublicMethodsWithNoInterfaceController
     {
-        public PublicMethodsWithNoInterfaceControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IPublicMethodsWithNoInterfaceController> options): base(options)
+        public PublicMethodsWithNoInterfaceControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IPublicMethodsWithNoInterfaceController> options) : base(options)
         {
         }
 

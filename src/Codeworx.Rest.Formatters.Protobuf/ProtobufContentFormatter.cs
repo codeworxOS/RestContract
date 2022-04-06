@@ -35,12 +35,14 @@ namespace Codeworx.Rest.Formatters.Protobuf
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(MimeType);
                 return Task.CompletedTask;
             }
+
             using (var buffer = new MemoryStream())
             {
                 _model.Serialize(buffer, value);
                 request.Content = new ByteArrayContent(buffer.ToArray());
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(MimeType);
             }
+
             return Task.CompletedTask;
         }
     }

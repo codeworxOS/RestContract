@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class SerializeResultControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.ISerializeResultController>, global::Codeworx.Rest.UnitTests.Api.Contract.ISerializeResultController
     {
-        public SerializeResultControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.ISerializeResultController> options): base(options)
+        public SerializeResultControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.ISerializeResultController> options) : base(options)
         {
         }
 

@@ -28,15 +28,11 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
         {
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();
-#if NETCOREAPP3_1 || NET5_0
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseOpenApi();
-#else
-            app.UseMvc();
-            app.UseOpenApi();
-#endif
+
         }
 
         public void ConfigureServices(IServiceCollection services)

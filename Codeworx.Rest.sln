@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5A1E884B-1C98-4510-AC24-7460F7BCD9DC}"
 EndProject
@@ -11,7 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Primitives", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".global", ".global", "{7FB46C42-677B-4C3F-8D58-3356F3BDB761}"
 	ProjectSection(SolutionItems) = preProject
-		.global\GlobalInfo.targets = .global\GlobalInfo.targets
 		.global\stylecop.json = .global\stylecop.json
 		.global\Stylecop.ruleset = .global\Stylecop.ruleset
 	EndProjectSection
@@ -22,13 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Client", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.UnitTests", "test\Codeworx.Rest.IntegrationTests\Codeworx.Rest.UnitTests.csproj", "{013A4191-4B77-4AAC-8913-FB74480F01E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Tool", "src\Codeworx.Rest.Tool\Codeworx.Rest.Tool.csproj", "{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.UnitTests.Api.Contract", "test\Codeworx.Rest.UnitTests.Api.Contract\Codeworx.Rest.UnitTests.Api.Contract.csproj", "{53291D93-308B-453E-A91C-E90A0FE718D8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Formatters.Protobuf", "src\Codeworx.Rest.Formatters.Protobuf\Codeworx.Rest.Formatters.Protobuf.csproj", "{FD3786FE-5D48-4A50-A6CE-28333E443BE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codeworx.Rest.Tool.Cli", "src\Codeworx.Rest.Tool.Cli\Codeworx.Rest.Tool.Cli.csproj", "{DC0011FA-7C07-4371-BF26-16FB06AAC0FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Tool.Cli", "src\Codeworx.Rest.Tool.Cli\Codeworx.Rest.Tool.Cli.csproj", "{B9D2F102-D0F5-4282-8101-245F3A5B98D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +49,6 @@ Global
 		{013A4191-4B77-4AAC-8913-FB74480F01E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{013A4191-4B77-4AAC-8913-FB74480F01E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{013A4191-4B77-4AAC-8913-FB74480F01E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{53291D93-308B-453E-A91C-E90A0FE718D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{53291D93-308B-453E-A91C-E90A0FE718D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53291D93-308B-453E-A91C-E90A0FE718D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,10 +57,10 @@ Global
 		{FD3786FE-5D48-4A50-A6CE-28333E443BE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD3786FE-5D48-4A50-A6CE-28333E443BE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD3786FE-5D48-4A50-A6CE-28333E443BE7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC0011FA-7C07-4371-BF26-16FB06AAC0FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC0011FA-7C07-4371-BF26-16FB06AAC0FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC0011FA-7C07-4371-BF26-16FB06AAC0FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC0011FA-7C07-4371-BF26-16FB06AAC0FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9D2F102-D0F5-4282-8101-245F3A5B98D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9D2F102-D0F5-4282-8101-245F3A5B98D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9D2F102-D0F5-4282-8101-245F3A5B98D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9D2F102-D0F5-4282-8101-245F3A5B98D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,10 +70,9 @@ Global
 		{C4C82746-F4E2-4C48-955F-46D8C5AC3463} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 		{FFFD7D1C-2D1C-4862-9AEB-9A33EFFDE5C1} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 		{013A4191-4B77-4AAC-8913-FB74480F01E0} = {D3241CC1-F92F-4306-8017-E590EB4B51D5}
-		{B61F4982-2F57-4779-B0EB-71C3E9D3A00B} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 		{53291D93-308B-453E-A91C-E90A0FE718D8} = {D3241CC1-F92F-4306-8017-E590EB4B51D5}
 		{FD3786FE-5D48-4A50-A6CE-28333E443BE7} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
-		{DC0011FA-7C07-4371-BF26-16FB06AAC0FB} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
+		{B9D2F102-D0F5-4282-8101-245F3A5B98D0} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A42E45F-3828-47D7-81E3-9C107D7980F3}

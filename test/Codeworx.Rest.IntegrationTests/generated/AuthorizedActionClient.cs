@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class AuthorizedActionClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IAuthorizedAction>, global::Codeworx.Rest.UnitTests.Api.Contract.IAuthorizedAction
     {
-        public AuthorizedActionClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IAuthorizedAction> options): base(options)
+        public AuthorizedActionClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IAuthorizedAction> options) : base(options)
         {
         }
 

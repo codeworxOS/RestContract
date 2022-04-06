@@ -4,7 +4,7 @@ namespace Codeworx.Rest.UnitTests.Generated
 {
     public class MethodOverloadingControllerClient : Codeworx.Rest.Client.RestClient<global::Codeworx.Rest.UnitTests.Api.Contract.IMethodOverloadingController>, global::Codeworx.Rest.UnitTests.Api.Contract.IMethodOverloadingController
     {
-        public MethodOverloadingControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IMethodOverloadingController> options): base(options)
+        public MethodOverloadingControllerClient(Codeworx.Rest.Client.RestOptions<global::Codeworx.Rest.UnitTests.Api.Contract.IMethodOverloadingController> options) : base(options)
         {
         }
 
