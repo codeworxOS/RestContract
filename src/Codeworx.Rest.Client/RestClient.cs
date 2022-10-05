@@ -207,7 +207,7 @@ namespace Codeworx.Rest.Client
             }
             else
             {
-                response = await client.SendAsync(request);
+                response = await client.SendAsync(request, completionOptions);
             }
 
             return response;
