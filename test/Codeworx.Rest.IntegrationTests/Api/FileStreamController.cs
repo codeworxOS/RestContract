@@ -13,7 +13,6 @@ using Microsoft.Net.Http.Headers;
 
 namespace Codeworx.Rest.UnitTests.Api
 {
-    [Consumes(MediaTypeNames.Application.Octet)]
     public class FileStreamController : IFileStreamController
     {
         public FileStreamController()
@@ -41,7 +40,6 @@ namespace Codeworx.Rest.UnitTests.Api
             return streamItem;
         }
 
-        [Consumes(MediaTypeNames.Application.Octet)]
         public async Task<string> UpdateFile(Stream stream)
         {
             var testFilePath = ItemsGenerator.CreateTestFilename();
@@ -101,7 +99,7 @@ namespace Codeworx.Rest.UnitTests.Api
         }
 
         [HttpPost("uploadbla")]
-        [Consumes(MediaTypeNames.Application.Octet)]
+        [RequestFormat(MediaTypeNames.Application.Octet)]
         public Task Whatever([FromBody] Stream file)
         {
             return Task.CompletedTask;

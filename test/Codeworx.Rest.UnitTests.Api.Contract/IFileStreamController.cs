@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
@@ -8,6 +9,7 @@ using Codeworx.Rest.UnitTests.Api.Contract.Model;
 namespace Codeworx.Rest.UnitTests.Api.Contract
 {
     [RestRoute("api/FileStream")]
+    [RequestFormat(MediaTypeNames.Application.Octet)]
     public interface IFileStreamController
     {
         [RestGet("Stream")]
@@ -17,6 +19,7 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         Task<StreamItem> GetStreamItem();
 
         [RestPut("Stream")]
+        [RequestFormat(MediaTypeNames.Application.Octet)]
         Task<string> UpdateFile([BodyMember] Stream fileStream);
 
         [RestPut("Stream/{id}")]
