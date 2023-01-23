@@ -14,5 +14,6 @@ namespace Codeworx.Rest.UnitTests
             var response = await request.SendAsync(HttpMethods.Get);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
+
     }
 }
