@@ -11,6 +11,12 @@ namespace Codeworx.Rest
             PayloadType = payloadType;
         }
 
+        public ResponseTypeAttribute(int statusCode)
+        {
+            StatusCode = statusCode;
+            PayloadType = null;
+        }
+
         public int StatusCode { get; }
 
         public Type PayloadType { get; }

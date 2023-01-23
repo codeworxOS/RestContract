@@ -16,7 +16,8 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         Task<bool> GetValueException();
 
 
-        [RestGet("Login")]
+        [RestGet("Delete")]
+        [ResponseType((int)System.Net.HttpStatusCode.OK)]
         [ResponseType((int)System.Net.HttpStatusCode.Gone, typeof(EntryNotFoundError))]
         [ResponseType((int)System.Net.HttpStatusCode.Conflict, typeof(StillInUseError))]
         Task DeleteEntry(string id);
