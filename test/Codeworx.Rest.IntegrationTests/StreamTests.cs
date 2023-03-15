@@ -4,9 +4,6 @@ using Codeworx.Rest.Client;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
 using Codeworx.Rest.UnitTests.Data;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Extensions.DependencyInjection;
-using NSwag.Generation.AspNetCore;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests

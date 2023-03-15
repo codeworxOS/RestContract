@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Codeworx.Rest.UnitTests.Api
 {
@@ -19,6 +15,7 @@ namespace Codeworx.Rest.UnitTests.Api
 
         public async Task<bool> GetValueException()
         {
+            await Task.Yield();
             throw new Exception();
         }
 

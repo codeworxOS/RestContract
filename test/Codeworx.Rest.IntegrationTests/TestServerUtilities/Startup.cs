@@ -5,18 +5,12 @@ using System.IO;
 using System.Net.Mime;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Codeworx.Rest.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
-using NJsonSchema;
 using NJsonSchema.Generation.TypeMappers;
 using ProtoBuf.Meta;
 
@@ -24,7 +18,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
 {
     public class Startup
     {
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();

@@ -1,15 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
 using Codeworx.Rest.UnitTests.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Net.Http.Headers;
 
 namespace Codeworx.Rest.UnitTests.Api
 {

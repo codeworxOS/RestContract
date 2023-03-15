@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.Client;
 using Codeworx.Rest.UnitTests.Api.Contract;
@@ -15,6 +13,8 @@ namespace Codeworx.Rest.UnitTests
         [Fact]
         public async Task CheckHttpClientFactoryRegistrationWithBaseUrlAsync()
         {
+            await Task.Yield();
+
             HttpClient c1, c2, c3, c4;
 
             var defaultCallCount = 0;
@@ -64,6 +64,8 @@ namespace Codeworx.Rest.UnitTests
         [Fact]
         public async Task CheckHttpClientFactoryScopedValueInFactoryAsync()
         {
+            await Task.Yield();
+
             var services = new ServiceCollection();
             services.AddScoped<TenantInfo>();
             services.AddRestClient()

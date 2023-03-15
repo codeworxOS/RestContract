@@ -1,0 +1,100 @@
+﻿abstract Codeworx.Rest.RestOperationAttribute.HttpMethod() -> string
+abstract Codeworx.Rest.ServiceException.GetPayload() -> object
+abstract Codeworx.Rest.ServiceException.PayloadType.get -> System.Type
+Codeworx.Rest.Authorization.AnonymousAttribute
+Codeworx.Rest.Authorization.AnonymousAttribute.AnonymousAttribute() -> void
+Codeworx.Rest.Authorization.IAnonymous
+Codeworx.Rest.Authorization.IPolicy
+Codeworx.Rest.Authorization.IPolicy.Name.get -> string
+Codeworx.Rest.Authorization.PolicyAttribute
+Codeworx.Rest.Authorization.PolicyAttribute.Name.get -> string
+Codeworx.Rest.Authorization.PolicyAttribute.PolicyAttribute(string name) -> void
+Codeworx.Rest.BodyMemberAttribute
+Codeworx.Rest.BodyMemberAttribute.BodyMemberAttribute() -> void
+Codeworx.Rest.DefaultFormatterSelector
+Codeworx.Rest.HttpClientFactory
+Codeworx.Rest.HttpClientFactory<TContract>
+Codeworx.Rest.IAdditionalDataProvider
+Codeworx.Rest.IAdditionalDataProvider.GetValues() -> System.Collections.Generic.IDictionary<string, object>
+Codeworx.Rest.IContentFormatter
+Codeworx.Rest.IContentFormatter.DeserializeAsync(System.Type contentType, System.Net.Http.HttpResponseMessage response) -> System.Threading.Tasks.Task<object>
+Codeworx.Rest.IContentFormatter.MimeType.get -> string
+Codeworx.Rest.IContentFormatter.SerializeAsync(System.Type contentType, object value, System.Net.Http.HttpRequestMessage request) -> System.Threading.Tasks.Task
+Codeworx.Rest.Internal.ServiceExceptionErrorDispatcher
+Codeworx.Rest.Internal.ServiceExceptionErrorDispatcher.CanHandle(System.Exception ex) -> bool
+Codeworx.Rest.Internal.ServiceExceptionErrorDispatcher.GetException<TPayload>(TPayload payload) -> System.Exception
+Codeworx.Rest.Internal.ServiceExceptionErrorDispatcher.GetPayload(System.Exception ex) -> object
+Codeworx.Rest.Internal.ServiceExceptionErrorDispatcher.GetPayloadType(System.Exception ex) -> System.Type
+Codeworx.Rest.Internal.ServiceExceptionErrorDispatcher.ServiceExceptionErrorDispatcher() -> void
+Codeworx.Rest.Internal.TypeKey<T>
+Codeworx.Rest.Internal.TypeKey<T>.TypeKey() -> void
+Codeworx.Rest.IRestOptionsBuilder
+Codeworx.Rest.IRestOptionsBuilder.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+Codeworx.Rest.IRestOptionsBuilder<TContract>
+Codeworx.Rest.IRestOptionsBuilder<TContract>.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+Codeworx.Rest.IServiceErrorDispatcher
+Codeworx.Rest.IServiceErrorDispatcher.CanHandle(System.Exception ex) -> bool
+Codeworx.Rest.IServiceErrorDispatcher.GetException<TPayload>(TPayload payload) -> System.Exception
+Codeworx.Rest.IServiceErrorDispatcher.GetPayload(System.Exception ex) -> object
+Codeworx.Rest.IServiceErrorDispatcher.GetPayloadType(System.Exception ex) -> System.Type
+Codeworx.Rest.QueryMemberAttribute
+Codeworx.Rest.QueryMemberAttribute.QueryMemberAttribute() -> void
+Codeworx.Rest.ResponseTypeAttribute
+Codeworx.Rest.ResponseTypeAttribute.PayloadType.get -> System.Type
+Codeworx.Rest.ResponseTypeAttribute.ResponseTypeAttribute(int statusCode) -> void
+Codeworx.Rest.ResponseTypeAttribute.ResponseTypeAttribute(int statusCode, System.Type payloadType) -> void
+Codeworx.Rest.ResponseTypeAttribute.StatusCode.get -> int
+Codeworx.Rest.RestDeleteAttribute
+Codeworx.Rest.RestDeleteAttribute.RestDeleteAttribute() -> void
+Codeworx.Rest.RestDeleteAttribute.RestDeleteAttribute(string template) -> void
+Codeworx.Rest.RestGetAttribute
+Codeworx.Rest.RestGetAttribute.RestGetAttribute() -> void
+Codeworx.Rest.RestGetAttribute.RestGetAttribute(string template) -> void
+Codeworx.Rest.RestHeadAttribute
+Codeworx.Rest.RestHeadAttribute.RestHeadAttribute() -> void
+Codeworx.Rest.RestHeadAttribute.RestHeadAttribute(string template) -> void
+Codeworx.Rest.RestOperationAttribute
+Codeworx.Rest.RestOperationAttribute.RestOperationAttribute() -> void
+Codeworx.Rest.RestOperationAttribute.RestOperationAttribute(string template) -> void
+Codeworx.Rest.RestOperationAttribute.Template.get -> string
+Codeworx.Rest.RestOptionsAttribute
+Codeworx.Rest.RestOptionsAttribute.RestOptionsAttribute() -> void
+Codeworx.Rest.RestOptionsAttribute.RestOptionsAttribute(string template) -> void
+Codeworx.Rest.RestPatchAttribute
+Codeworx.Rest.RestPatchAttribute.RestPatchAttribute() -> void
+Codeworx.Rest.RestPatchAttribute.RestPatchAttribute(string template) -> void
+Codeworx.Rest.RestPostAttribute
+Codeworx.Rest.RestPostAttribute.RestPostAttribute() -> void
+Codeworx.Rest.RestPostAttribute.RestPostAttribute(string template) -> void
+Codeworx.Rest.RestProxyAttribute
+Codeworx.Rest.RestProxyAttribute.ContractType.get -> System.Type
+Codeworx.Rest.RestProxyAttribute.ProxyType.get -> System.Type
+Codeworx.Rest.RestProxyAttribute.RestProxyAttribute(System.Type contractType, System.Type proxyType) -> void
+Codeworx.Rest.RestPutAttribute
+Codeworx.Rest.RestPutAttribute.RestPutAttribute() -> void
+Codeworx.Rest.RestPutAttribute.RestPutAttribute(string template) -> void
+Codeworx.Rest.RestRouteAttribute
+Codeworx.Rest.RestRouteAttribute.RestRouteAttribute(string routePrefix) -> void
+Codeworx.Rest.RestRouteAttribute.RoutePrefix.get -> string
+Codeworx.Rest.ServiceException
+Codeworx.Rest.ServiceException.ServiceException() -> void
+Codeworx.Rest.ServiceException<TPayload>
+Codeworx.Rest.ServiceException<TPayload>.Payload.get -> TPayload
+Codeworx.Rest.ServiceException<TPayload>.ServiceException(TPayload payload) -> void
+Codeworx.Rest.TemplateParseException
+Codeworx.Rest.TemplateParseException.TemplateParseException() -> void
+Codeworx.Rest.TemplateParseException.TemplateParseException(string message) -> void
+Codeworx.Rest.TemplateParseException.TemplateParseException(string message, System.Exception innerException) -> void
+Codeworx.Rest.UnexpectedHttpStatusCodeException
+Codeworx.Rest.UnexpectedHttpStatusCodeException.StatusCode.get -> System.Net.HttpStatusCode
+Codeworx.Rest.UnexpectedHttpStatusCodeException.UnexpectedHttpStatusCodeException(System.Net.HttpStatusCode statusCode) -> void
+override Codeworx.Rest.RestDeleteAttribute.HttpMethod() -> string
+override Codeworx.Rest.RestGetAttribute.HttpMethod() -> string
+override Codeworx.Rest.RestHeadAttribute.HttpMethod() -> string
+override Codeworx.Rest.RestOptionsAttribute.HttpMethod() -> string
+override Codeworx.Rest.RestPatchAttribute.HttpMethod() -> string
+override Codeworx.Rest.RestPostAttribute.HttpMethod() -> string
+override Codeworx.Rest.RestPutAttribute.HttpMethod() -> string
+override Codeworx.Rest.ServiceException<TPayload>.GetPayload() -> object
+override Codeworx.Rest.ServiceException<TPayload>.PayloadType.get -> System.Type
+static Codeworx.Rest.Internal.TypeKey<T>.Key.get -> object
