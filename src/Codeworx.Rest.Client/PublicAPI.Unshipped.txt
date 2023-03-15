@@ -1,1 +1,18 @@
-﻿
+﻿Codeworx.Rest.Client.Builder.GroupRestOptionsBuilder
+Codeworx.Rest.Client.Builder.GroupRestOptionsBuilder.GroupId.get -> string
+Codeworx.Rest.Client.Builder.GroupRestOptionsBuilder.GroupRestOptionsBuilder(Microsoft.Extensions.DependencyInjection.IServiceCollection services, string groupId) -> void
+Codeworx.Rest.Client.Builder.GroupRestOptionsBuilder.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+Codeworx.Rest.Client.DefaultRestOptions<TContract>.DefaultRestOptions(Codeworx.Rest.Client.RestOptions options, Codeworx.Rest.Client.HttpClientGroupService service) -> void
+Codeworx.Rest.Client.HttpClientGroupService
+Codeworx.Rest.Client.HttpClientGroupService.HttpClientGroupService(System.Collections.Generic.IEnumerable<Codeworx.Rest.HttpClientGroup> groups, System.IServiceProvider serviceProvider) -> void
+Codeworx.Rest.Client.HttpClientGroupService.TryGetClient(string groupId, out System.Net.Http.HttpClient httpClient) -> bool
+override Codeworx.Rest.Client.DefaultRestOptions<TContract>.GetHttpClient() -> System.Net.Http.HttpClient
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.Group(this Codeworx.Rest.IRestOptionsBuilder builder, string groupId, System.Action<Codeworx.Rest.IGroupRestOptionsBuilder> subBuilder) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithBaseUrl(this Codeworx.Rest.IGroupRestOptionsBuilder builder, string baseUrl) -> Codeworx.Rest.IGroupRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithBaseUrl(this Codeworx.Rest.IGroupRestOptionsBuilder builder, string baseUrl, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilder) -> Codeworx.Rest.IGroupRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithBaseUrl(this Codeworx.Rest.IRestOptionsBuilder builder, string baseUrl) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithBaseUrl<TContract>(this Codeworx.Rest.IRestOptionsBuilder<TContract> builder, string baseUrl) -> Codeworx.Rest.IRestOptionsBuilder<TContract>
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithHttpClient(this Codeworx.Rest.IGroupRestOptionsBuilder builder, System.Action<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory) -> Codeworx.Rest.IGroupRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithHttpClient(this Codeworx.Rest.IGroupRestOptionsBuilder builder, System.Action<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilder) -> Codeworx.Rest.IGroupRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithHttpClient(this Codeworx.Rest.IRestOptionsBuilder builder, System.Action<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithHttpClient<TContract>(this Codeworx.Rest.IRestOptionsBuilder<TContract> builder, System.Action<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory) -> Codeworx.Rest.IRestOptionsBuilder<TContract>

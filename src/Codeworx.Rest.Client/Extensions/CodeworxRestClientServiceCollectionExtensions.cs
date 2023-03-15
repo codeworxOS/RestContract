@@ -43,6 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IRestOptionsBuilder AddRestClient(this IServiceCollection services, string baseUrl = null)
         {
             IRestOptionsBuilder builder = new RestOptionsBuilder(services);
+            builder.Services.AddScoped(typeof(HttpClientGroupService));
             builder.Services.AddScoped(typeof(RestOptions<>), typeof(DefaultRestOptions<>));
             builder.Services.AddScoped(typeof(RestClient<>));
             builder.Services.AddScoped<RestOptions>();

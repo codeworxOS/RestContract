@@ -1,1 +1,9 @@
-﻿
+﻿Codeworx.Rest.HttpClientGroup
+Codeworx.Rest.HttpClientGroup.Factory.get -> System.Func<System.IServiceProvider, System.Net.Http.HttpClient>
+Codeworx.Rest.HttpClientGroup.GroupId.get -> string
+Codeworx.Rest.HttpClientGroup.HttpClientGroup(string groupId, System.Func<System.IServiceProvider, System.Net.Http.HttpClient> factory) -> void
+Codeworx.Rest.IGroupRestOptionsBuilder
+Codeworx.Rest.IGroupRestOptionsBuilder.GroupId.get -> string
+Codeworx.Rest.IGroupRestOptionsBuilder.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+Codeworx.Rest.RestRouteAttribute.GroupId.get -> string
+Codeworx.Rest.RestRouteAttribute.RestRouteAttribute(string routePrefix, string groupId) -> void
