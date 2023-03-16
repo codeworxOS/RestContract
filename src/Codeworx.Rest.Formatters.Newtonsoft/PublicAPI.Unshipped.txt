@@ -1,0 +1,8 @@
+﻿Codeworx.Rest.Formatters.Newtonsoft.NewtonsoftJsonContentFormatter
+Codeworx.Rest.Formatters.Newtonsoft.NewtonsoftJsonContentFormatter.DeserializeAsync(System.Type contentType, System.Net.Http.HttpResponseMessage response) -> System.Threading.Tasks.Task<object>
+Codeworx.Rest.Formatters.Newtonsoft.NewtonsoftJsonContentFormatter.MimeType.get -> string
+Codeworx.Rest.Formatters.Newtonsoft.NewtonsoftJsonContentFormatter.NewtonsoftJsonContentFormatter(Newtonsoft.Json.JsonSerializerSettings settings) -> void
+Codeworx.Rest.Formatters.Newtonsoft.NewtonsoftJsonContentFormatter.SerializeAsync(System.Type contentType, object value, System.Net.Http.HttpRequestMessage request) -> System.Threading.Tasks.Task
+Microsoft.Extensions.DependencyInjection.CodeworxRestFormattersNewtonsoftRestOptionsBuilderExtensions
+static Microsoft.Extensions.DependencyInjection.CodeworxRestFormattersNewtonsoftRestOptionsBuilderExtensions.AddNewtonsoftJsonFormatter(this Codeworx.Rest.IRestOptionsBuilder builder) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestFormattersNewtonsoftRestOptionsBuilderExtensions.AddNewtonsoftJsonFormatter(this Codeworx.Rest.IRestOptionsBuilder builder, System.Action<Newtonsoft.Json.JsonSerializerSettings> options) -> Codeworx.Rest.IRestOptionsBuilder
