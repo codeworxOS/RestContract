@@ -48,6 +48,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                 options.OutputFormatters.Add(new ProtobufOutputFormatter(RuntimeTypeModel.Default));
                 options.InputFormatters.Add(new StreamInputFormatter());
             })
+                .AddNewtonsoftJson()
                 .AddRestContract();
 
             services.AddAuthentication("TEST")

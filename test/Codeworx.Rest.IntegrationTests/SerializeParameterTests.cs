@@ -16,8 +16,6 @@ namespace Codeworx.Rest.UnitTests
             new object[] {null, FormatterSelection.Json},
             new object[] {ItemsGenerator.TestDate, FormatterSelection.Protobuf},
             new object[] {null, FormatterSelection.Protobuf},
-            new object[] {ItemsGenerator.TestDate, FormatterSelection.NewtonsoftJson},
-            new object[] {null, FormatterSelection.NewtonsoftJson},
         };
 
         public static IEnumerable<object[]> DecimalParameters = new List<object[]>
@@ -26,8 +24,6 @@ namespace Codeworx.Rest.UnitTests
             new object[] { null, FormatterSelection.Json },
             new object[] {ItemsGenerator.TestDecimal, FormatterSelection.Protobuf },
             new object[] { null, FormatterSelection.Protobuf },
-            new object[] {ItemsGenerator.TestDecimal, FormatterSelection.NewtonsoftJson },
-            new object[] { null, FormatterSelection.NewtonsoftJson },
         };
 
         public static IEnumerable<object[]> DoubleParameters = new List<object[]>
@@ -35,9 +31,7 @@ namespace Codeworx.Rest.UnitTests
             new object[] {ItemsGenerator.TestDouble, FormatterSelection.Json},
             new object[] { null, FormatterSelection.Json },
             new object[] {ItemsGenerator.TestDouble, FormatterSelection.Protobuf},
-            new object[] { null, FormatterSelection.Protobuf },
-            new object[] {ItemsGenerator.TestDouble, FormatterSelection.NewtonsoftJson},
-            new object[] { null, FormatterSelection.NewtonsoftJson }
+            new object[] { null, FormatterSelection.Protobuf }
         };
 
         public static IEnumerable<object[]> FloatParameters = new List<object[]>
@@ -45,16 +39,13 @@ namespace Codeworx.Rest.UnitTests
             new object[] {ItemsGenerator.TestFloat, FormatterSelection.Json},
             new object[] { null, FormatterSelection.Json },
             new object[] {ItemsGenerator.TestFloat, FormatterSelection.Protobuf},
-            new object[] { null, FormatterSelection.Protobuf },
-            new object[] {ItemsGenerator.TestFloat, FormatterSelection.NewtonsoftJson},
-            new object[] { null, FormatterSelection.NewtonsoftJson }
+            new object[] { null, FormatterSelection.Protobuf }
         };
 
         public static IEnumerable<object[]> FormatterParameters = new List<object[]>
         {
            new object[] {FormatterSelection.Json },
            new object[] {FormatterSelection.Protobuf },
-           new object[] {FormatterSelection.NewtonsoftJson },
         };
 
         public static IEnumerable<object[]> GuidListParameters = new List<object[]>
@@ -63,8 +54,6 @@ namespace Codeworx.Rest.UnitTests
             new object[] { null, FormatterSelection.Json },
             new object[] {_guidList, FormatterSelection.Protobuf},
             new object[] { null, FormatterSelection.Protobuf },
-            new object[] {_guidList, FormatterSelection.NewtonsoftJson},
-            new object[] { null, FormatterSelection.NewtonsoftJson },
         };
 
         public static IEnumerable<object[]> GuidParameters = new List<object[]>
@@ -73,8 +62,6 @@ namespace Codeworx.Rest.UnitTests
             new object[] {null, FormatterSelection.Json},
             new object[] {ItemsGenerator.TestGuid, FormatterSelection.Protobuf},
             new object[] {null, FormatterSelection.Protobuf},
-            new object[] {ItemsGenerator.TestGuid, FormatterSelection.NewtonsoftJson},
-            new object[] {null, FormatterSelection.NewtonsoftJson},
         };
 
         public static IEnumerable<object[]> IntParameters = new List<object[]>
@@ -83,8 +70,6 @@ namespace Codeworx.Rest.UnitTests
             new object[] {null, FormatterSelection.Json},
             new object[] {ItemsGenerator.TestInt, FormatterSelection.Protobuf},
             new object[] {null, FormatterSelection.Protobuf},
-            new object[] {ItemsGenerator.TestInt, FormatterSelection.NewtonsoftJson},
-            new object[] {null, FormatterSelection.NewtonsoftJson},
         };
 
         public static IEnumerable<object[]> StringParameters = new List<object[]>
@@ -93,14 +78,10 @@ namespace Codeworx.Rest.UnitTests
             new object[] {null, FormatterSelection.Json},
             new object[] {ItemsGenerator.TestString, FormatterSelection.Protobuf},
             new object[] {null, FormatterSelection.Protobuf},
-            new object[] {ItemsGenerator.TestString, FormatterSelection.NewtonsoftJson},
-            new object[] {null, FormatterSelection.NewtonsoftJson},
             new object[] {ItemsGenerator.TestStringForEscape, FormatterSelection.Json},
             new object[] {ItemsGenerator.TestStringForEscape, FormatterSelection.Protobuf},
-            new object[] {ItemsGenerator.TestStringForEscape, FormatterSelection.NewtonsoftJson},
             new object[] {ItemsGenerator.TestStringSpeciaChars, FormatterSelection.Json},
             new object[] {ItemsGenerator.TestStringSpeciaChars, FormatterSelection.Protobuf},
-            new object[] {ItemsGenerator.TestStringSpeciaChars, FormatterSelection.NewtonsoftJson},
         };
 
         private static List<Guid> _guidList = new List<Guid>

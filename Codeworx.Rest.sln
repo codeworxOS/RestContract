@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Formatters.Pr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeworx.Rest.Tool.Cli", "src\Codeworx.Rest.Tool.Cli\Codeworx.Rest.Tool.Cli.csproj", "{B9D2F102-D0F5-4282-8101-245F3A5B98D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codeworx.Rest.Formatters.Newtonsoft", "src\Codeworx.Rest.Formatters.Newtonsoft\Codeworx.Rest.Formatters.Newtonsoft.csproj", "{B23E1954-6816-401E-ACD2-26AF439AFFE3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,10 +61,6 @@ Global
 		{B9D2F102-D0F5-4282-8101-245F3A5B98D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9D2F102-D0F5-4282-8101-245F3A5B98D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9D2F102-D0F5-4282-8101-245F3A5B98D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B23E1954-6816-401E-ACD2-26AF439AFFE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B23E1954-6816-401E-ACD2-26AF439AFFE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B23E1954-6816-401E-ACD2-26AF439AFFE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B23E1954-6816-401E-ACD2-26AF439AFFE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,7 +73,6 @@ Global
 		{53291D93-308B-453E-A91C-E90A0FE718D8} = {D3241CC1-F92F-4306-8017-E590EB4B51D5}
 		{FD3786FE-5D48-4A50-A6CE-28333E443BE7} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 		{B9D2F102-D0F5-4282-8101-245F3A5B98D0} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
-		{B23E1954-6816-401E-ACD2-26AF439AFFE3} = {5A1E884B-1C98-4510-AC24-7460F7BCD9DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A42E45F-3828-47D7-81E3-9C107D7980F3}
