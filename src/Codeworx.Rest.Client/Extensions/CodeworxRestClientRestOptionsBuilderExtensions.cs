@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json;
 using Codeworx.Rest;
 using Codeworx.Rest.Client.Builder;
 using Codeworx.Rest.Client.Formatters;
-using Newtonsoft.Json;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CodeworxRestClientRestOptionsBuilderExtensions
     {
-        public static IRestOptionsBuilder AddJsonFormatter(this IRestOptionsBuilder builder, Action<JsonSerializerSettings> options)
+        public static IRestOptionsBuilder AddJsonFormatter(this IRestOptionsBuilder builder)
+        {
+            return builder.AddJsonFormatter(_ => { });
+        }
+
+        public static IRestOptionsBuilder AddJsonFormatter(this IRestOptionsBuilder builder, Action<JsonSerializerOptions> options)
         {
             builder.Services.AddOrReplace<IContentFormatter, JsonContentFormatter>(ServiceLifetime.Singleton, sp =>
             {
-                var settings = new JsonSerializerSettings();
+                var settings = new JsonSerializerOptions(JsonSerializerDefaults.Web);
                 options(settings);
                 return new JsonContentFormatter(settings);
             });
@@ -31,14 +36,6 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             return options;
-        }
-
-        public static IRestOptionsBuilder Group(this IRestOptionsBuilder builder, string groupId, Action<IGroupRestOptionsBuilder> subBuilder)
-        {
-            var sub = new GroupRestOptionsBuilder(builder.Services, groupId);
-            subBuilder(sub);
-
-            return builder;
         }
 
         public static IRestOptionsBuilder Contract<TContract>(this IRestOptionsBuilder builder, Action<IRestOptionsBuilder<TContract>> subBuilder)
@@ -59,6 +56,26 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IRestOptionsBuilder DefaultFormatter(this IRestOptionsBuilder builder, Func<IServiceProvider, string> mimeTypeSelector)
         {
             builder.Services.AddOrReplace<DefaultFormatterSelector>(ServiceLifetime.Scoped, sp => () => mimeTypeSelector(sp));
+            return builder;
+        }
+
+        public static IRestOptionsBuilder Group(this IRestOptionsBuilder builder, string groupId, Action<IGroupRestOptionsBuilder> subBuilder)
+        {
+            var sub = new GroupRestOptionsBuilder(builder.Services, groupId);
+            subBuilder(sub);
+
+            return builder;
+        }
+
+        public static IRestOptionsBuilder WithAdditionalData(this IRestOptionsBuilder builder, IDictionary<string, object> data)
+        {
+            builder.Services.AddSingleton<IAdditionalDataProvider>(new AdditionalConstantDataProvider(data));
+            return builder;
+        }
+
+        public static IRestOptionsBuilder WithAdditionalData(this IRestOptionsBuilder builder, Func<IServiceProvider, IDictionary<string, object>> data)
+        {
+            builder.Services.AddScoped<IAdditionalDataProvider>(sp => new AdditionalDataProviderFactory(sp, data));
             return builder;
         }
 
@@ -165,18 +182,6 @@ where TContract : class
                 return client;
             });
 
-            return builder;
-        }
-
-        public static IRestOptionsBuilder WithAdditionalData(this IRestOptionsBuilder builder, IDictionary<string, object> data)
-        {
-            builder.Services.AddSingleton<IAdditionalDataProvider>(new AdditionalConstantDataProvider(data));
-            return builder;
-        }
-
-        public static IRestOptionsBuilder WithAdditionalData(this IRestOptionsBuilder builder, Func<IServiceProvider, IDictionary<string, object>> data)
-        {
-            builder.Services.AddScoped<IAdditionalDataProvider>(sp => new AdditionalDataProviderFactory(sp, data));
             return builder;
         }
 

@@ -93,6 +93,10 @@ namespace Codeworx.Rest.UnitTests
             {
                 builder = builder.AddProtobufFormatter(makeDefault: true);
             }
+            else if (selection == FormatterSelection.NewtonsoftJson)
+            {
+                builder = builder.AddNewtonsoftJsonFormatter();
+            }
 
             builderAction?.Invoke(builder);
 

@@ -61,7 +61,7 @@ namespace Codeworx.Rest.UnitTests
         {
             var services = new ServiceCollection();
             services.AddSingleton<IContentFormatter, JsonContentFormatter>(sp => null);
-            services.AddOrReplace<IContentFormatter, JsonContentFormatter>(ServiceLifetime.Singleton, sp => new JsonContentFormatter(new Newtonsoft.Json.JsonSerializerSettings()));
+            services.AddOrReplace<IContentFormatter, JsonContentFormatter>(ServiceLifetime.Singleton, sp => new JsonContentFormatter(new System.Text.Json.JsonSerializerOptions()));
 
             var provider = services.BuildServiceProvider();
 

@@ -5,7 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="2.4.4" />
+    <Compile Include="..\Codeworx.Rest.Client\Internal\CodeworxRestClientInternalServiceCollectionExtensions.cs" Link="Internals\CodeworxRestClientInternalServiceCollectionExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="3.2.12" />
 	  <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -14,5 +18,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Codeworx.Rest.Client\Codeworx.Rest.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Internals\" />
   </ItemGroup>
 </Project>
