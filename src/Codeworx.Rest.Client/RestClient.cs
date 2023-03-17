@@ -58,7 +58,7 @@ namespace Codeworx.Rest.Client
 
         public async Task<TResult> CallAsync<TResult>(Expression<Func<TContract, Task<TResult>>> operationSelector)
         {
-            HttpResponseMessage response = await GetResponse(operationSelector);
+            HttpResponseMessage response = await GetResponse(operationSelector, (TypeKey<TResult>.Key == TypeKey<Stream>.Key) ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead);
             if (response.IsSuccessStatusCode)
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent
@@ -117,7 +117,7 @@ namespace Codeworx.Rest.Client
             return result;
         }
 
-        private async Task<HttpResponseMessage> GetResponse(LambdaExpression operationSelector)
+        private async Task<HttpResponseMessage> GetResponse(LambdaExpression operationSelector, HttpCompletionOption completionOptions = HttpCompletionOption.ResponseContentRead)
         {
             var methodCall = operationSelector.Body as MethodCallExpression;
 
@@ -203,11 +203,11 @@ namespace Codeworx.Rest.Client
 
             if (evaluator.CancellationToken.HasValue)
             {
-                response = await client.SendAsync(request, evaluator.CancellationToken.Value);
+                response = await client.SendAsync(request, completionOptions, evaluator.CancellationToken.Value);
             }
             else
             {
-                response = await client.SendAsync(request);
+                response = await client.SendAsync(request, completionOptions);
             }
 
             return response;

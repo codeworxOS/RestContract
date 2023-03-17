@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Codeworx.Rest;
@@ -32,6 +33,14 @@ namespace Microsoft.Extensions.DependencyInjection
             return options;
         }
 
+        public static IRestOptionsBuilder Group(this IRestOptionsBuilder builder, string groupId, Action<IGroupRestOptionsBuilder> subBuilder)
+        {
+            var sub = new GroupRestOptionsBuilder(builder.Services, groupId);
+            subBuilder(sub);
+
+            return builder;
+        }
+
         public static IRestOptionsBuilder Contract<TContract>(this IRestOptionsBuilder builder, Action<IRestOptionsBuilder<TContract>> subBuilder)
             where TContract : class
         {
@@ -53,18 +62,45 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IRestOptionsBuilder WithBaseUrl(this IRestOptionsBuilder builder, string baseUrl, Action<IHttpClientBuilder> httpClientBuilder = null)
+        public static IRestOptionsBuilder WithBaseUrl(this IRestOptionsBuilder builder, string baseUrl)
+        {
+            return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), null);
+        }
+
+        public static IRestOptionsBuilder WithBaseUrl(this IRestOptionsBuilder builder, string baseUrl, Action<IHttpClientBuilder> httpClientBuilder)
         {
             return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), httpClientBuilder);
         }
 
-        public static IRestOptionsBuilder<TContract> WithBaseUrl<TContract>(this IRestOptionsBuilder<TContract> builder, string baseUrl, Action<IHttpClientBuilder> httpClientBuilder = null)
+        public static IRestOptionsBuilder<TContract> WithBaseUrl<TContract>(this IRestOptionsBuilder<TContract> builder, string baseUrl)
+    where TContract : class
+        {
+            return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), null);
+        }
+
+        public static IRestOptionsBuilder<TContract> WithBaseUrl<TContract>(this IRestOptionsBuilder<TContract> builder, string baseUrl, Action<IHttpClientBuilder> httpClientBuilder)
             where TContract : class
         {
             return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), httpClientBuilder);
         }
 
-        public static IRestOptionsBuilder<TContract> WithHttpClient<TContract>(this IRestOptionsBuilder<TContract> builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder = null)
+        public static IGroupRestOptionsBuilder WithBaseUrl(this IGroupRestOptionsBuilder builder, string baseUrl)
+        {
+            return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), null);
+        }
+
+        public static IGroupRestOptionsBuilder WithBaseUrl(this IGroupRestOptionsBuilder builder, string baseUrl, Action<IHttpClientBuilder> httpClientBuilder)
+        {
+            return builder.WithHttpClient((sp, client) => client.BaseAddress = new Uri(baseUrl), httpClientBuilder);
+        }
+
+        public static IRestOptionsBuilder<TContract> WithHttpClient<TContract>(this IRestOptionsBuilder<TContract> builder, Action<IServiceProvider, HttpClient> clientFactory)
+where TContract : class
+        {
+            return builder.WithHttpClient(clientFactory, null);
+        }
+
+        public static IRestOptionsBuilder<TContract> WithHttpClient<TContract>(this IRestOptionsBuilder<TContract> builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder)
     where TContract : class
         {
             var clientKey = $"restclient.{typeof(TContract).FullName}";
@@ -81,7 +117,43 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IRestOptionsBuilder WithHttpClient(this IRestOptionsBuilder builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder = null)
+        public static IGroupRestOptionsBuilder WithHttpClient(this IGroupRestOptionsBuilder builder, Action<IServiceProvider, HttpClient> clientFactory)
+        {
+            return builder.WithHttpClient(clientFactory, null);
+        }
+
+        public static IGroupRestOptionsBuilder WithHttpClient(this IGroupRestOptionsBuilder builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder)
+        {
+            var clientKey = $"restclient.{builder.GroupId}";
+            var clientBuilder = builder.Services.AddHttpClient(clientKey);
+            httpClientBuilder?.Invoke(clientBuilder);
+
+            var existing = builder.Services.FirstOrDefault(p => p.ServiceType == typeof(HttpClientGroup) && p.ImplementationInstance != null && ((HttpClientGroup)p.ImplementationInstance).GroupId == builder.GroupId);
+
+            if (existing != null)
+            {
+                builder.Services.Remove(existing);
+            }
+
+            builder.Services.AddSingleton(
+                new HttpClientGroup(
+                builder.GroupId,
+                sp =>
+                {
+                    var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient(clientKey);
+                    clientFactory(sp, client);
+                    return client;
+                }));
+
+            return builder;
+        }
+
+        public static IRestOptionsBuilder WithHttpClient(this IRestOptionsBuilder builder, Action<IServiceProvider, HttpClient> clientFactory)
+        {
+            return builder.WithHttpClient(clientFactory, null);
+        }
+
+        public static IRestOptionsBuilder WithHttpClient(this IRestOptionsBuilder builder, Action<IServiceProvider, HttpClient> clientFactory, Action<IHttpClientBuilder> httpClientBuilder)
         {
             var clientBuilder = builder.Services.AddHttpClient("restclient.default");
             httpClientBuilder?.Invoke(clientBuilder);

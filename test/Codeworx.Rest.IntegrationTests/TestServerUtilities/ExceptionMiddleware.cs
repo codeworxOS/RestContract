@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -30,7 +28,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
                  * rethrow exception to receive a OperationCanceledException on client.SendAsync(request, token) */
                 throw; 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 httpContext.Response.ContentType = MediaTypeNames.Text.Plain;
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

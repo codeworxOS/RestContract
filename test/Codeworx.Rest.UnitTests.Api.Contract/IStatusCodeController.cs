@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract.Model;
 
 namespace Codeworx.Rest.UnitTests.Api.Contract
@@ -16,7 +13,8 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         Task<bool> GetValueException();
 
 
-        [RestGet("Login")]
+        [RestGet("Delete")]
+        [ResponseType((int)System.Net.HttpStatusCode.OK)]
         [ResponseType((int)System.Net.HttpStatusCode.Gone, typeof(EntryNotFoundError))]
         [ResponseType((int)System.Net.HttpStatusCode.Conflict, typeof(StillInUseError))]
         Task DeleteEntry(string id);

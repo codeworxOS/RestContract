@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
-using System.Threading.Tasks;
 using Codeworx.Rest.Client;
 using Codeworx.Rest.Client.Formatters;
 using Codeworx.Rest.UnitTests.Api.Contract;
-using Codeworx.Rest.UnitTests.Data;
-using Codeworx.Rest.UnitTests.Generated;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 

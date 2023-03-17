@@ -1,0 +1,10 @@
+﻿Codeworx.Rest.Formatters.Protobuf.Constants
+Codeworx.Rest.Formatters.Protobuf.ProtobufContentFormatter
+Codeworx.Rest.Formatters.Protobuf.ProtobufContentFormatter.DeserializeAsync(System.Type contentType, System.Net.Http.HttpResponseMessage response) -> System.Threading.Tasks.Task<object>
+Codeworx.Rest.Formatters.Protobuf.ProtobufContentFormatter.MimeType.get -> string
+Codeworx.Rest.Formatters.Protobuf.ProtobufContentFormatter.ProtobufContentFormatter(ProtoBuf.Meta.TypeModel model) -> void
+Codeworx.Rest.Formatters.Protobuf.ProtobufContentFormatter.SerializeAsync(System.Type contentType, object value, System.Net.Http.HttpRequestMessage request) -> System.Threading.Tasks.Task
+const Codeworx.Rest.Formatters.Protobuf.Constants.ProtobufMimeType = "application/x-protobuf" -> string
+const Codeworx.Rest.Formatters.Protobuf.Constants.ProtobufNullHeader = "x-protobuff-null" -> string
+Microsoft.Extensions.DependencyInjection.CodeworxRestFormattersProtobufRestOptionsBuilderExtensions
+static Microsoft.Extensions.DependencyInjection.CodeworxRestFormattersProtobufRestOptionsBuilderExtensions.AddProtobufFormatter(this Codeworx.Rest.IRestOptionsBuilder builder, System.Func<ProtoBuf.Meta.TypeModel> model = null, bool makeDefault = false) -> Codeworx.Rest.IRestOptionsBuilder

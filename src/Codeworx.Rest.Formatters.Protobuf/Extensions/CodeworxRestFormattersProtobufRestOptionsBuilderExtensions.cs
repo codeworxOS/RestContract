@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Net.Http;
-using System.Reflection;
 using Codeworx.Rest;
-using Codeworx.Rest.Client;
-using Codeworx.Rest.Client.Builder;
 using Codeworx.Rest.Formatters.Protobuf;
 using ProtoBuf.Meta;
 

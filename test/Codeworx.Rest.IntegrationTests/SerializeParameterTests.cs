@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
-using Codeworx.Rest.UnitTests.Generated;
 using Codeworx.Rest.UnitTests.Model;
 using Xunit;
 

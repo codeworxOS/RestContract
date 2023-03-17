@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
 using Codeworx.Rest.UnitTests.TestServerUtilities;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests

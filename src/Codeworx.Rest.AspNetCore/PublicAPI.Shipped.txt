@@ -1,0 +1,62 @@
+﻿abstract Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>.TransformAction(TSource source, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+abstract Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>.TransformController(TSource source, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+abstract Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>.TransformParameter(TSource source, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>
+Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>.AttributeMetadataProvider() -> void
+Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>.ProcessAction(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel action, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>.ProcessController(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel controller, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.AttributeMetadataProvider<TSource>.ProcessParameter(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel parameter, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.Authorization.AnonymousMetadataProvider
+Codeworx.Rest.AspNetCore.Authorization.AnonymousMetadataProvider.AnonymousMetadataProvider() -> void
+Codeworx.Rest.AspNetCore.Authorization.BodyMemberMetadataProvider
+Codeworx.Rest.AspNetCore.Authorization.BodyMemberMetadataProvider.BodyMemberMetadataProvider() -> void
+Codeworx.Rest.AspNetCore.Authorization.PolicyMetadataProvider
+Codeworx.Rest.AspNetCore.Authorization.PolicyMetadataProvider.PolicyMetadataProvider() -> void
+Codeworx.Rest.AspNetCore.Authorization.RestOperationMetadataProvider
+Codeworx.Rest.AspNetCore.Authorization.RestOperationMetadataProvider.ProcessAction(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel action, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.Authorization.RestOperationMetadataProvider.ProcessController(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel controller, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.Authorization.RestOperationMetadataProvider.ProcessParameter(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel parameter, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.Authorization.RestOperationMetadataProvider.RestOperationMetadataProvider() -> void
+Codeworx.Rest.AspNetCore.Authorization.RestOperationMetadataProvider.TransformAction(Codeworx.Rest.RestOperationAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.Authorization.RestRouteMetadataProvider
+Codeworx.Rest.AspNetCore.Authorization.RestRouteMetadataProvider.RestRouteMetadataProvider() -> void
+Codeworx.Rest.AspNetCore.ContractControllerFeatureProvider
+Codeworx.Rest.AspNetCore.ContractControllerFeatureProvider.ContractControllerFeatureProvider() -> void
+Codeworx.Rest.AspNetCore.ContractControllerFeatureProvider.PopulateFeature(System.Collections.Generic.IEnumerable<Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPart> parts, Microsoft.AspNetCore.Mvc.Controllers.ControllerFeature feature) -> void
+Codeworx.Rest.AspNetCore.ContractModelProvider
+Codeworx.Rest.AspNetCore.ContractModelProvider.ContractModelProvider(System.Collections.Generic.IEnumerable<Codeworx.Rest.AspNetCore.IAttributeMetadataProvider> metadataProviders) -> void
+Codeworx.Rest.AspNetCore.ContractModelProvider.OnProvidersExecuted(Microsoft.AspNetCore.Mvc.ApplicationModels.ApplicationModelProviderContext context) -> void
+Codeworx.Rest.AspNetCore.ContractModelProvider.OnProvidersExecuting(Microsoft.AspNetCore.Mvc.ApplicationModels.ApplicationModelProviderContext context) -> void
+Codeworx.Rest.AspNetCore.ContractModelProvider.Order.get -> int
+Codeworx.Rest.AspNetCore.Filters.ErrorResponseFilter
+Codeworx.Rest.AspNetCore.Filters.ErrorResponseFilter.ErrorResponseFilter() -> void
+Codeworx.Rest.AspNetCore.Filters.ErrorResponseFilter.OnExceptionAsync(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext context) -> System.Threading.Tasks.Task
+Codeworx.Rest.AspNetCore.Filters.ResponseTypeMetadataProvider
+Codeworx.Rest.AspNetCore.Filters.ResponseTypeMetadataProvider.ResponseTypeMetadataProvider() -> void
+Codeworx.Rest.AspNetCore.IAttributeMetadataProvider
+Codeworx.Rest.AspNetCore.IAttributeMetadataProvider.ProcessAction(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel action, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.IAttributeMetadataProvider.ProcessController(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel controller, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.IAttributeMetadataProvider.ProcessParameter(System.Collections.Generic.IEnumerable<object> attributes, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel parameter, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+Codeworx.Rest.AspNetCore.MetadataProviderContext
+Codeworx.Rest.AspNetCore.MetadataProviderContext.ActionsToRemove.get -> System.Collections.Generic.HashSet<Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel>
+Codeworx.Rest.AspNetCore.MetadataProviderContext.CanProcess.get -> bool
+Codeworx.Rest.AspNetCore.MetadataProviderContext.CanProcess.set -> void
+Codeworx.Rest.AspNetCore.MetadataProviderContext.MetadataProviderContext() -> void
+Microsoft.Extensions.DependencyInjection.CodeworxRestAspNetCoreMvcBuilderExtensions
+override Codeworx.Rest.AspNetCore.Authorization.AnonymousMetadataProvider.TransformAction(Codeworx.Rest.Authorization.AnonymousAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.AnonymousMetadataProvider.TransformController(Codeworx.Rest.Authorization.AnonymousAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.AnonymousMetadataProvider.TransformParameter(Codeworx.Rest.Authorization.AnonymousAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.BodyMemberMetadataProvider.TransformAction(Codeworx.Rest.BodyMemberAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.BodyMemberMetadataProvider.TransformController(Codeworx.Rest.BodyMemberAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.BodyMemberMetadataProvider.TransformParameter(Codeworx.Rest.BodyMemberAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.PolicyMetadataProvider.TransformAction(Codeworx.Rest.Authorization.PolicyAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.PolicyMetadataProvider.TransformController(Codeworx.Rest.Authorization.PolicyAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.PolicyMetadataProvider.TransformParameter(Codeworx.Rest.Authorization.PolicyAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.RestRouteMetadataProvider.TransformAction(Codeworx.Rest.RestRouteAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.RestRouteMetadataProvider.TransformController(Codeworx.Rest.RestRouteAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Authorization.RestRouteMetadataProvider.TransformParameter(Codeworx.Rest.RestRouteAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Filters.ResponseTypeMetadataProvider.TransformAction(Codeworx.Rest.ResponseTypeAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ActionModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Filters.ResponseTypeMetadataProvider.TransformController(Codeworx.Rest.ResponseTypeAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ControllerModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+override Codeworx.Rest.AspNetCore.Filters.ResponseTypeMetadataProvider.TransformParameter(Codeworx.Rest.ResponseTypeAttribute source, Microsoft.AspNetCore.Mvc.ApplicationModels.ParameterModel model, Codeworx.Rest.AspNetCore.MetadataProviderContext context) -> void
+static Microsoft.Extensions.DependencyInjection.CodeworxRestAspNetCoreMvcBuilderExtensions.AddRestContract(this Microsoft.Extensions.DependencyInjection.IMvcBuilder builder) -> Microsoft.Extensions.DependencyInjection.IMvcBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestAspNetCoreMvcBuilderExtensions.AddRestContract(this Microsoft.Extensions.DependencyInjection.IMvcCoreBuilder builder) -> Microsoft.Extensions.DependencyInjection.IMvcCoreBuilder

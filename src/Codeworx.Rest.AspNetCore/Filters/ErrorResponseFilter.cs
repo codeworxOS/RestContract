@@ -14,8 +14,9 @@ namespace Codeworx.Rest.AspNetCore.Filters
 
             if (dispatcher.CanHandle(context.Exception))
             {
-                var supportedResponseTypes = context.ActionDescriptor.EndpointMetadata.OfType<ResponseTypeAttribute>()
-                                                .ToDictionary(p => p.PayloadType, p => p.StatusCode);
+                var supportedResponseTypes = context.Filters.OfType<ProducesResponseTypeAttribute>()
+                                                .Where(p => p.Type != null)
+                                                .ToDictionary(p => p.Type, p => p.StatusCode);
 
                 var payloadType = dispatcher.GetPayloadType(context.Exception);
                 if (supportedResponseTypes.TryGetValue(payloadType, out var statusCode))

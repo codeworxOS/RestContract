@@ -1,0 +1,50 @@
+﻿Codeworx.Rest.Client.Builder.RestOptionsBuilder
+Codeworx.Rest.Client.Builder.RestOptionsBuilder.RestOptionsBuilder(Microsoft.Extensions.DependencyInjection.IServiceCollection services) -> void
+Codeworx.Rest.Client.Builder.RestOptionsBuilder.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+Codeworx.Rest.Client.Builder.RestOptionsBuilder<TContract>
+Codeworx.Rest.Client.Builder.RestOptionsBuilder<TContract>.RestOptionsBuilder(Microsoft.Extensions.DependencyInjection.IServiceCollection services) -> void
+Codeworx.Rest.Client.Builder.RestOptionsBuilder<TContract>.Services.get -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+Codeworx.Rest.Client.CodeworxRestClientFormatterExtensions
+Codeworx.Rest.Client.DefaultRestOptions<TContract>
+Codeworx.Rest.Client.DefaultRestOptions<TContract>.DefaultRestOptions(Codeworx.Rest.Client.RestOptions options) -> void
+Codeworx.Rest.Client.Formatters.JsonContentFormatter
+Codeworx.Rest.Client.Formatters.JsonContentFormatter.DeserializeAsync(System.Type contentType, System.Net.Http.HttpResponseMessage response) -> System.Threading.Tasks.Task<object>
+Codeworx.Rest.Client.Formatters.JsonContentFormatter.JsonContentFormatter(Newtonsoft.Json.JsonSerializerSettings settings) -> void
+Codeworx.Rest.Client.Formatters.JsonContentFormatter.MimeType.get -> string
+Codeworx.Rest.Client.Formatters.JsonContentFormatter.SerializeAsync(System.Type contentType, object value, System.Net.Http.HttpRequestMessage request) -> System.Threading.Tasks.Task
+Codeworx.Rest.Client.RestClient<TContract>
+Codeworx.Rest.Client.RestClient<TContract>.CallAsync(System.Linq.Expressions.Expression<System.Func<TContract, System.Threading.Tasks.Task>> operationSelector) -> System.Threading.Tasks.Task
+Codeworx.Rest.Client.RestClient<TContract>.CallAsync<TResult>(System.Linq.Expressions.Expression<System.Func<TContract, System.Threading.Tasks.Task<TResult>>> operationSelector) -> System.Threading.Tasks.Task<TResult>
+Codeworx.Rest.Client.RestClient<TContract>.Options.get -> Codeworx.Rest.Client.RestOptions
+Codeworx.Rest.Client.RestClient<TContract>.RestClient(Codeworx.Rest.Client.RestOptions options) -> void
+Codeworx.Rest.Client.RestClient<TContract>.RestClient(Codeworx.Rest.Client.RestOptions<TContract> options) -> void
+Codeworx.Rest.Client.RestOptions
+Codeworx.Rest.Client.RestOptions.AdditionalDataProviders.get -> System.Collections.Generic.IEnumerable<Codeworx.Rest.IAdditionalDataProvider>
+Codeworx.Rest.Client.RestOptions.DefaultFormatter.get -> string
+Codeworx.Rest.Client.RestOptions.ErrorDispatcher.get -> Codeworx.Rest.IServiceErrorDispatcher
+Codeworx.Rest.Client.RestOptions.Formatters.get -> System.Collections.Generic.IEnumerable<Codeworx.Rest.IContentFormatter>
+Codeworx.Rest.Client.RestOptions.GetAdditionData() -> System.Collections.Generic.IReadOnlyDictionary<string, object>
+Codeworx.Rest.Client.RestOptions.RestOptions(Codeworx.Rest.HttpClientFactory clientFactory, Codeworx.Rest.DefaultFormatterSelector defaultFormatterSelector, System.Collections.Generic.IEnumerable<Codeworx.Rest.IContentFormatter> formatters, System.Collections.Generic.IEnumerable<Codeworx.Rest.IAdditionalDataProvider> additionalDataProviders, Codeworx.Rest.IServiceErrorDispatcher errorDispatcher) -> void
+Codeworx.Rest.Client.RestOptions<TContract>
+Codeworx.Rest.Client.RestOptions<TContract>.RestOptions(Codeworx.Rest.HttpClientFactory<TContract> clientFactory, Codeworx.Rest.DefaultFormatterSelector defaultFormatterSelector, System.Collections.Generic.IEnumerable<Codeworx.Rest.IContentFormatter> additionalFormatters, System.Collections.Generic.IEnumerable<Codeworx.Rest.IAdditionalDataProvider> additionalDataProviders, Codeworx.Rest.IServiceErrorDispatcher errorDispatcher) -> void
+Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions
+Microsoft.Extensions.DependencyInjection.CodeworxRestClientServiceCollectionExtensions
+static Codeworx.Rest.Client.CodeworxRestClientFormatterExtensions.DeserializeAsync<TResult>(this Codeworx.Rest.IContentFormatter formatter, System.Net.Http.HttpResponseMessage response) -> System.Threading.Tasks.Task<TResult>
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.AddJsonFormatter(this Codeworx.Rest.IRestOptionsBuilder builder, System.Action<Newtonsoft.Json.JsonSerializerSettings> options) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.AddRestProxies(this Codeworx.Rest.IRestOptionsBuilder options, System.Reflection.Assembly proxyAssembly) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.Contract<TContract>(this Codeworx.Rest.IRestOptionsBuilder builder, System.Action<Codeworx.Rest.IRestOptionsBuilder<TContract>> subBuilder) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.DefaultFormatter(this Codeworx.Rest.IRestOptionsBuilder builder, string mimeType) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.DefaultFormatter(this Codeworx.Rest.IRestOptionsBuilder builder, System.Func<System.IServiceProvider, string> mimeTypeSelector) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithAdditionalData(this Codeworx.Rest.IRestOptionsBuilder builder, System.Collections.Generic.IDictionary<string, object> data) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithAdditionalData(this Codeworx.Rest.IRestOptionsBuilder builder, System.Func<System.IServiceProvider, System.Collections.Generic.IDictionary<string, object>> data) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithBaseUrl(this Codeworx.Rest.IRestOptionsBuilder builder, string baseUrl, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilder) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithBaseUrl<TContract>(this Codeworx.Rest.IRestOptionsBuilder<TContract> builder, string baseUrl, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilder) -> Codeworx.Rest.IRestOptionsBuilder<TContract>
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithHttpClient(this Codeworx.Rest.IRestOptionsBuilder builder, System.Action<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilder) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithHttpClient<TContract>(this Codeworx.Rest.IRestOptionsBuilder<TContract> builder, System.Action<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory, System.Action<Microsoft.Extensions.DependencyInjection.IHttpClientBuilder> httpClientBuilder) -> Codeworx.Rest.IRestOptionsBuilder<TContract>
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithTestingHttpClient(this Codeworx.Rest.IRestOptionsBuilder builder, System.Func<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory) -> Codeworx.Rest.IRestOptionsBuilder
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientRestOptionsBuilderExtensions.WithTestingHttpClient<TContract>(this Codeworx.Rest.IRestOptionsBuilder<TContract> builder, System.Func<System.IServiceProvider, System.Net.Http.HttpClient> clientFactory) -> Codeworx.Rest.IRestOptionsBuilder<TContract>
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientServiceCollectionExtensions.AddOrReplace<TContract, TImplementation>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.DependencyInjection.ServiceLifetime lifetime, System.Func<System.IServiceProvider, TContract> factory) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientServiceCollectionExtensions.AddOrReplace<TContract>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.DependencyInjection.ServiceLifetime lifetime, System.Func<System.IServiceProvider, TContract> factory) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+static Microsoft.Extensions.DependencyInjection.CodeworxRestClientServiceCollectionExtensions.AddRestClient(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, string baseUrl = null) -> Codeworx.Rest.IRestOptionsBuilder
+virtual Codeworx.Rest.Client.RestOptions.GetFormatter(string mimeType = null) -> Codeworx.Rest.IContentFormatter
+virtual Codeworx.Rest.Client.RestOptions.GetHttpClient() -> System.Net.Http.HttpClient
