@@ -1,26 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>2.0.0</PackageValidationBaselineVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\Codeworx.Rest.Client\Internal\CodeworxRestClientInternalServiceCollectionExtensions.cs" Link="Internals\CodeworxRestClientInternalServiceCollectionExtensions.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\Codeworx.Rest.Client\Internal\CodeworxRestClientInternalServiceCollectionExtensions.cs" Link="Internals\CodeworxRestClientInternalServiceCollectionExtensions.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="3.2.12" />
-	  <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="protobuf-net" Version="3.2.12" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Codeworx.Rest.Client\Codeworx.Rest.Client.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Codeworx.Rest.Client\Codeworx.Rest.Client.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Internals\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Internals\" />
+	</ItemGroup>
 </Project>

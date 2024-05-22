@@ -59,6 +59,20 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        public static IRestOptionsBuilder<TContract> DefaultFormatter<TContract>(this IRestOptionsBuilder<TContract> builder, string mimeType)
+            where TContract : class
+        {
+            builder.Services.AddOrReplace<DefaultFormatterSelector<TContract>>(ServiceLifetime.Scoped, sp => () => mimeType);
+            return builder;
+        }
+
+        public static IRestOptionsBuilder<TContract> DefaultFormatter<TContract>(this IRestOptionsBuilder<TContract> builder, Func<IServiceProvider, string> mimeTypeSelector)
+            where TContract : class
+        {
+            builder.Services.AddOrReplace<DefaultFormatterSelector<TContract>>(ServiceLifetime.Scoped, sp => () => mimeTypeSelector(sp));
+            return builder;
+        }
+
         public static IRestOptionsBuilder Group(this IRestOptionsBuilder builder, string groupId, Action<IGroupRestOptionsBuilder> subBuilder)
         {
             var sub = new GroupRestOptionsBuilder(builder.Services, groupId);

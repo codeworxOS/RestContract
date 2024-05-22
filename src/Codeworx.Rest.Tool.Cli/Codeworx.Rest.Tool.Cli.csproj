@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6</TargetFramework>
+		<TargetFrameworks>net6;net8</TargetFrameworks>
 		<LangVersion>Latest</LangVersion>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>dotnet-restcontract</ToolCommandName>

@@ -2,26 +2,23 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>2.0.0</PackageValidationBaselineVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\Codeworx.Rest.Client\Internal\CodeworxRestClientInternalServiceCollectionExtensions.cs" Link="Internal\CodeworxRestClientInternalServiceCollectionExtensions.cs" />
+		<Compile Include="..\Codeworx.Rest.Client\Internal\CodeworxRestClientInternalServiceCollectionExtensions.cs" Link="Internal\CodeworxRestClientInternalServiceCollectionExtensions.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Codeworx.Rest.Primitives\Codeworx.Rest.Primitives.csproj" />
+		<ProjectReference Include="..\Codeworx.Rest.Primitives\Codeworx.Rest.Primitives.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Internal\" />
+		<Folder Include="Internal\" />
 	</ItemGroup>
 </Project>
