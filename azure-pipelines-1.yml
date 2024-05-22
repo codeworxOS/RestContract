@@ -68,11 +68,6 @@ steps:
       # Write your commands here
       echo '##vso[build.updatebuildnumber]$(PackageVersion)'
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: './dist/nuget'
-    Contents: '*'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
