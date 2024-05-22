@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\.global\StyleCop.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\.global\stylecop.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
 </Project>
