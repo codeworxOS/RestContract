@@ -21,7 +21,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
 	</ItemGroup>
-		<ItemGroup Condition="'$(TargetFramework)' == 'net7'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7'">
 		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
 	</ItemGroup>
