@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Codeworx.Rest.Client
 {
@@ -10,16 +11,21 @@ namespace Codeworx.Rest.Client
             DefaultFormatterSelector defaultFormatterSelector,
             IEnumerable<IContentFormatter> additionalFormatters,
             IEnumerable<IAdditionalDataProvider> additionalDataProviders,
+            IServiceErrorDispatcher errorDispatcher)
+            : base(() => clientFactory(), () => defaultFormatterSelector(), additionalFormatters, additionalDataProviders, errorDispatcher)
+        {
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public RestOptions(
+            HttpClientFactory<TContract> clientFactory,
+            DefaultFormatterSelector defaultFormatterSelector,
+            IEnumerable<IContentFormatter> additionalFormatters,
+            IEnumerable<IAdditionalDataProvider> additionalDataProviders,
             IServiceErrorDispatcher errorDispatcher,
             DefaultFormatterSelector<TContract> contractFormatterSelector = null)
             : base(() => clientFactory(), () => contractFormatterSelector != null ? contractFormatterSelector() : defaultFormatterSelector(), additionalFormatters, additionalDataProviders, errorDispatcher)
         {
         }
-
-        ////[ActivatorUtilitiesConstructor]
-        ////public RestOptions(HttpClientFactory<TContract> clientFactory, DefaultFormatterSelector defaultFormatterSelector, IEnumerable<IContentFormatter> additionalFormatters, IEnumerable<IAdditionalDataProvider> additionalDataProviders, IServiceErrorDispatcher errorDispatcher)
-        ////    : base(() => clientFactory(), () => defaultFormatterSelector(), additionalFormatters, additionalDataProviders, errorDispatcher)
-        ////{
-        ////}
     }
 }
