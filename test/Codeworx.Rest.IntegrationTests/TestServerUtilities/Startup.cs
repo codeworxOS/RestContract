@@ -34,7 +34,7 @@ namespace Codeworx.Rest.UnitTests.TestServerUtilities
             services
                 .AddOpenApiDocument(options =>
                 {
-                    options.TypeMappers.Add(new PrimitiveTypeMapper(typeof(Stream), p =>
+                    options.SchemaSettings.TypeMappers.Add(new PrimitiveTypeMapper(typeof(Stream), p =>
                     {
                         p.IsNullableRaw = false;
                         p.Format = "binary";
