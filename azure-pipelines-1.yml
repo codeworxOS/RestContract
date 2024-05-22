@@ -15,14 +15,16 @@ variables:
   minor: 0
   packageName: 'Codeworx.Rest.Primitives'
   projects: 'src/Codeworx.Rest.Primitives;src/Codeworx.Rest.AspNetCore;src/Codeworx.Rest.Client;src/Codeworx.Rest.Tool.Cli;src/Codeworx.Rest.Formatters.Newtonsoft;src/Codeworx.Rest.Formatters.Protobuf'
+  testProjects: './test/Codeworx.Rest.IntegrationTests/Codeworx.Rest.UnitTests.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: Run dotnet test
   inputs:
     command: 'test'
-    projects: './test/Codeworx.Rest.IntegrationTests/Codeworx.Rest.UnitTests.csproj'
+    projects: '$(testProjects)'
     feedsToUse: 'select'
     versioningScheme: 'off'
 - task: DotNetCoreCLI@2
@@ -57,7 +59,6 @@ steps:
     configuration: '$(buildConfiguration)'
     versioningScheme: 'off'
     buildProperties: 'Version=$(PackageVersion);FileVersion=$(PackageVersionFileVersion);AssemblyVersion=$(major).0.0.0;SignAssembly=true;AssemblyOriginatorKeyFile=..\..\private\restcontract_signkey.snk'
-    verbosityPack: 'Quiet'
 
 - task: Bash@3
   displayName: "Update build version"
