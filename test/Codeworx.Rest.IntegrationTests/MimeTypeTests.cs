@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Codeworx.Rest.Client;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Data;
 using Xunit;

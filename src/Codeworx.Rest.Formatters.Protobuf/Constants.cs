@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Codeworx.Rest.Formatters.Protobuf
+﻿namespace Codeworx.Rest.Formatters.Protobuf
 {
     public static class Constants
     {
