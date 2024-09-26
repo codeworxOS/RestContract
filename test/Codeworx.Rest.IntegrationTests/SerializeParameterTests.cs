@@ -10,6 +10,16 @@ namespace Codeworx.Rest.UnitTests
 {
     public class SerializeParameterTests : TestServerTestsBase
     {
+        public static IEnumerable<object[]> DateOffsetParameters = new List<object[]>
+        {
+            new object[] {ItemsGenerator.TestDateOffset, FormatterSelection.Json},
+            new object[] {null, FormatterSelection.Json},
+            new object[] {ItemsGenerator.TestDateOffset, FormatterSelection.Protobuf},
+            new object[] {null, FormatterSelection.Protobuf},
+            new object[] {ItemsGenerator.TestDateOffset, FormatterSelection.NewtonsoftJson},
+            new object[] {null, FormatterSelection.NewtonsoftJson},
+        };
+
         public static IEnumerable<object[]> DateParameters = new List<object[]>
         {
             new object[] {ItemsGenerator.TestDate, FormatterSelection.Json},
@@ -128,6 +138,53 @@ namespace Codeworx.Rest.UnitTests
             var actualItem = await client.GetItemBodyParameterWithNoAttribute(expectedItem);
             Assert.NotEqual(expectedItem, actualItem);
         }
+
+
+        [Theory]
+        [MemberData(nameof(DateOffsetParameters))]
+        public async Task TestDateTimeOffsetBodyParameter(DateTimeOffset? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeOffsetBodyParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+
+            if (expectedParameter.HasValue)
+            {
+                Assert.Equal(expectedParameter.Value.Offset, actualParameter.Value.Offset);
+                Assert.Equal(expectedParameter.Value.UtcDateTime, actualParameter.Value.UtcDateTime);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(DateOffsetParameters))]
+        public async Task TestDateTimeOffsetQueryParameter(DateTimeOffset? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeOffsetQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+
+            if (expectedParameter.HasValue)
+            {
+                Assert.Equal(expectedParameter.Value.Offset, actualParameter.Value.Offset);
+                Assert.Equal(expectedParameter.Value.UtcDateTime, actualParameter.Value.UtcDateTime);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(DateOffsetParameters))]
+        public async Task TestDateTimeOffsetUrlParameter(DateTimeOffset? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeOffsetUrlParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+
+            if (expectedParameter.HasValue)
+            {
+                Assert.Equal(expectedParameter.Value.Offset, actualParameter.Value.Offset);
+                Assert.Equal(expectedParameter.Value.UtcDateTime, actualParameter.Value.UtcDateTime);
+            }
+        }
+
 
         [Theory]
         [MemberData(nameof(DateParameters))]

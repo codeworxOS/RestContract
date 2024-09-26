@@ -182,15 +182,47 @@ namespace Codeworx.Rest.Client
             var request = new HttpRequestMessage(new HttpMethod(httpMethod), requestUrl);
             request.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(formatter.MimeType));
 
-            if (evaluator.TryGetBody(out var body, out var type))
+            if (evaluator.TryGetBody(out var body, out var type, out var contentTypes))
             {
                 if (body is Stream stream)
                 {
                     request.Content = new StreamContent(stream);
-                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                    if (contentTypes.Any())
+                    {
+                        request.Content.Headers.ContentType = new MediaTypeHeaderValue(contentTypes[0]);
+                    }
+                    else
+                    {
+                        request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                    }
                 }
                 else
                 {
+                    if (contentTypes.Any())
+                    {
+                        if (!contentTypes.Contains(formatter.MimeType, StringComparer.OrdinalIgnoreCase))
+                        {
+                            foreach (var item in contentTypes)
+                            {
+                                formatter = _options.GetFormatter(item);
+
+                                if (formatter.MimeType.Equals(item, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    formatter = null;
+                                }
+                            }
+                        }
+                    }
+
+                    if (formatter == null)
+                    {
+                        throw new NotSupportedException($"No matching formatter found.");
+                    }
+
                     await formatter.SerializeAsync(type, body, request);
                 }
             }
@@ -254,6 +286,7 @@ namespace Codeworx.Rest.Client
                                             ParameterType = p.Parameter.ParameterType,
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
                                             IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null,
+                                            ContentTypes = p.Parameter.GetCustomAttribute<BodyMemberAttribute>()?.ContentTypes ?? new string[] { },
                                             IsQueryMember = p.Parameter.GetCustomAttribute<QueryMemberAttribute>() != null,
                                         });
 
@@ -327,6 +360,11 @@ namespace Codeworx.Rest.Client
 
             public bool TryGetBody(out object value, out Type valueType)
             {
+                return TryGetBody(out value, out valueType, out var contentTypes);
+            }
+
+            public bool TryGetBody(out object value, out Type valueType, out string[] contentTypes)
+            {
                 var bodyMembers = _parameterValues.Where(p => p.Value.IsBodyMember)
                                     .ToDictionary(p => p.Key, p => p.Value);
 
@@ -334,17 +372,20 @@ namespace Codeworx.Rest.Client
                 {
                     value = bodyMembers.Values.First().Data;
                     valueType = bodyMembers.Values.First().ParameterType;
+                    contentTypes = bodyMembers.Values.First().ContentTypes;
                     return true;
                 }
                 else if (bodyMembers.Count > 1)
                 {
                     value = bodyMembers.ToDictionary(p => p.Key, p => p.Value.Data);
                     valueType = typeof(Dictionary<string, object>);
+                    contentTypes = bodyMembers.Values.First().ContentTypes;
                     return true;
                 }
 
                 value = null;
                 valueType = null;
+                contentTypes = new string[] { };
                 return false;
             }
 
@@ -363,7 +404,10 @@ namespace Codeworx.Rest.Client
                         return value;
 
                     case DateTime value:
-                        return value.ToString("s", culture);
+                        return value.ToString("o", culture);
+
+                    case DateTimeOffset value:
+                        return value.ToString("o", culture);
 
                     case decimal value:
                         return value.ToString(culture);
@@ -387,6 +431,8 @@ namespace Codeworx.Rest.Client
                 public bool IsQueryMember { get; set; }
 
                 public Type ParameterType { get; set; }
+
+                public string[] ContentTypes { get; set; }
             }
         }
     }

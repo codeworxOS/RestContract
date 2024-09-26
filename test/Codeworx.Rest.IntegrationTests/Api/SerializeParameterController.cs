@@ -39,6 +39,21 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(parameter);
         }
 
+        public async Task<DateTimeOffset?> GetDateTimeOffsetQueryParameter(DateTimeOffset? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<DateTimeOffset?> GetDateTimeOffsetUrlParameter(DateTimeOffset? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
+        public async Task<DateTimeOffset?> GetDateTimeOffsetBodyParameter(DateTimeOffset? parameter)
+        {
+            return await Task.FromResult(parameter);
+        }
+
         public async Task<Guid?> GetGuidQueryParameter(Guid? parameter)
         {
             return await Task.FromResult(parameter);

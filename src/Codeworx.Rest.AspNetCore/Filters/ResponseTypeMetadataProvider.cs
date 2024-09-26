@@ -27,7 +27,12 @@ namespace Codeworx.Rest.AspNetCore.Filters
                 return new ProducesResponseTypeAttribute(source.StatusCode);
             }
 
-            return new ProducesResponseTypeAttribute(source.PayloadType, source.StatusCode);
+            if (source.ContentType == null)
+            {
+                return new ProducesResponseTypeAttribute(source.PayloadType, source.StatusCode);
+            }
+
+            return new ProducesResponseTypeAttribute(source.PayloadType, source.StatusCode, source.ContentType);
         }
     }
 }

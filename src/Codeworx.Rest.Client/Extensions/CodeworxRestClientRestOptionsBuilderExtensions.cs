@@ -12,6 +12,12 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CodeworxRestClientRestOptionsBuilderExtensions
     {
+        public static IRestOptionsBuilder AddTextPlainFormatter(this IRestOptionsBuilder builder)
+        {
+            builder.Services.AddOrReplace<IContentFormatter, TextPlainFormatter>(ServiceLifetime.Singleton, sp => new TextPlainFormatter());
+            return builder;
+        }
+
         public static IRestOptionsBuilder AddJsonFormatter(this IRestOptionsBuilder builder)
         {
             return builder.AddJsonFormatter(_ => { });

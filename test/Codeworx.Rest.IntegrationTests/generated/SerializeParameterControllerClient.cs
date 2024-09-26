@@ -23,6 +23,21 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetDateTimeUrlParameter(parameter));
         }
 
+        public global::System.Threading.Tasks.Task<global::System.DateTimeOffset?> GetDateTimeOffsetBodyParameter(global::System.DateTimeOffset? parameter)
+        {
+            return CallAsync(c => c.GetDateTimeOffsetBodyParameter(parameter));
+        }
+
+        public global::System.Threading.Tasks.Task<global::System.DateTimeOffset?> GetDateTimeOffsetQueryParameter(global::System.DateTimeOffset? parameter)
+        {
+            return CallAsync(c => c.GetDateTimeOffsetQueryParameter(parameter));
+        }
+
+        public global::System.Threading.Tasks.Task<global::System.DateTimeOffset?> GetDateTimeOffsetUrlParameter(global::System.DateTimeOffset? parameter)
+        {
+            return CallAsync(c => c.GetDateTimeOffsetUrlParameter(parameter));
+        }
+
         public global::System.Threading.Tasks.Task<decimal?> GetDecimalBodyParameter(decimal? parameter)
         {
             return CallAsync(c => c.GetDecimalBodyParameter(parameter));
