@@ -17,6 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddScoped(typeof(RestClient<>));
             builder.Services.AddScoped<RestOptions>();
             builder.Services.AddSingleton<IContentFormatter, JsonContentFormatter>(sp => new JsonContentFormatter(new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web)));
+            builder.Services.AddSingleton<IContentFormatter, TextPlainFormatter>(sp => new TextPlainFormatter());
             builder.Services.AddScoped<DefaultFormatterSelector>(sp => () => "application/json");
 
             if (!builder.Services.Any(p => p.ServiceType == typeof(IServiceErrorDispatcher)))

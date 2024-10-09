@@ -12,6 +12,12 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CodeworxRestClientRestOptionsBuilderExtensions
     {
+        public static IRestOptionsBuilder AddTextPlainFormatter(this IRestOptionsBuilder builder)
+        {
+            builder.Services.AddOrReplace<IContentFormatter, TextPlainFormatter>(ServiceLifetime.Singleton, sp => new TextPlainFormatter());
+            return builder;
+        }
+
         public static IRestOptionsBuilder AddJsonFormatter(this IRestOptionsBuilder builder)
         {
             return builder.AddJsonFormatter(_ => { });
@@ -56,6 +62,20 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IRestOptionsBuilder DefaultFormatter(this IRestOptionsBuilder builder, Func<IServiceProvider, string> mimeTypeSelector)
         {
             builder.Services.AddOrReplace<DefaultFormatterSelector>(ServiceLifetime.Scoped, sp => () => mimeTypeSelector(sp));
+            return builder;
+        }
+
+        public static IRestOptionsBuilder<TContract> DefaultFormatter<TContract>(this IRestOptionsBuilder<TContract> builder, string mimeType)
+            where TContract : class
+        {
+            builder.Services.AddOrReplace<DefaultFormatterSelector<TContract>>(ServiceLifetime.Scoped, sp => () => mimeType);
+            return builder;
+        }
+
+        public static IRestOptionsBuilder<TContract> DefaultFormatter<TContract>(this IRestOptionsBuilder<TContract> builder, Func<IServiceProvider, string> mimeTypeSelector)
+            where TContract : class
+        {
+            builder.Services.AddOrReplace<DefaultFormatterSelector<TContract>>(ServiceLifetime.Scoped, sp => () => mimeTypeSelector(sp));
             return builder;
         }
 

@@ -49,6 +49,8 @@ namespace Codeworx.Rest.AspNetCore
                             continue;
                         }
 
+                        metadataContext.CurrentAction = method;
+
                         var actionAttributes = method.GetCustomAttributes().ToList();
                         foreach (var item in _metadataProviders)
                         {

@@ -44,6 +44,25 @@ namespace Codeworx.Rest.UnitTests
         }
 
         [Fact]
+        public void WithDifferentFormatterOnContractExpectsOK()
+        {
+            var services = new ServiceCollection();
+            services.AddRestClient()
+                .AddProtobufFormatter(makeDefault: true)
+                .WithBaseUrl("http://localhost:1234/testurl")
+                .Contract<IPathService>(p =>
+                                p.WithBaseUrl("http://localhost:4321/testurl")
+                                   .DefaultFormatter("application/json"));
+
+            var provider = services.BuildServiceProvider();
+
+            var options = provider.GetRequiredService<RestOptions<IFileStreamController>>();
+            var pathOptions = provider.GetRequiredService<RestOptions<IPathService>>();
+            Assert.Equal("application/x-protobuf", options.DefaultFormatter);
+            Assert.Equal("application/json", pathOptions.DefaultFormatter);
+        }
+
+        [Fact]
         public void WithUrlExpectsOK()
         {
             var services = new ServiceCollection();

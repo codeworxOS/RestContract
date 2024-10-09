@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Codeworx.Rest.AspNetCore
@@ -13,5 +14,7 @@ namespace Codeworx.Rest.AspNetCore
         public bool CanProcess { get; set; }
 
         public HashSet<ActionModel> ActionsToRemove { get; }
+
+        public MethodInfo CurrentAction { get; set; }
     }
 }

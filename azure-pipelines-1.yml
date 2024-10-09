@@ -8,33 +8,66 @@ trigger:
 - dev
 
 pool:
-  vmImage: windows-2022
+  vmImage: ubuntu-latest
+
+variables:
+  major: 2
+  minor: 0
+  packageName: 'Codeworx.Rest.Primitives'
+  projects: 'src/Codeworx.Rest.Primitives;src/Codeworx.Rest.AspNetCore;src/Codeworx.Rest.Client;src/Codeworx.Rest.Tool.Cli;src/Codeworx.Rest.Formatters.Newtonsoft;src/Codeworx.Rest.Formatters.Protobuf'
+  testProjects: './test/Codeworx.Rest.IntegrationTests/Codeworx.Rest.UnitTests.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
 steps:
+- task: DotNetCoreCLI@2
+  displayName: Run dotnet test
+  inputs:
+    command: 'test'
+    projects: '$(testProjects)'
+    feedsToUse: 'select'
+    versioningScheme: 'off'
+- task: DotNetCoreCLI@2
+  displayName: "Install package-version tool"
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install Codeworx.PackageVersion -g'
+
+- task: DotNetCoreCLI@2
+  displayName: "Get next PackageVersion"
+  inputs:
+    command: 'custom'
+    custom: 'package-version'
+    arguments: '$(packageName) -m $(major) -n $(minor) -o DevOps -p $(prerelease)'
+
 - task: DownloadSecureFile@1
   inputs:
     secureFile: 'restcontract_signkey.snk'
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: 'restcontract_signkey.snk'
     TargetFolder: './private'
+
 - task: DotNetCoreCLI@2
+  displayName: "run dotnet pack"
   inputs:
-    command: 'test'
-    projects: './test/Codeworx.Rest.IntegrationTests/Codeworx.Rest.UnitTests.csproj'
-    feedsToUse: 'select'
+    command: 'pack'
+    packagesToPack: '$(projects)'
+    configuration: '$(buildConfiguration)'
     versioningScheme: 'off'
-- task: PowerShell@2
+    buildProperties: 'Version=$(PackageVersion);FileVersion=$(PackageVersionFileVersion);AssemblyVersion=$(major).0.0.0;SignAssembly=true;AssemblyOriginatorKeyFile=..\..\private\restcontract_signkey.snk'
+
+- task: Bash@3
+  displayName: "Update build version"
   inputs:
-    filePath: './tools/build.ps1'
-    workingDirectory: './tools'
-  displayName: 'Run the build script'
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: './dist/nuget'
-    Contents: '*'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      echo '##vso[build.updatebuildnumber]$(PackageVersion)'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'

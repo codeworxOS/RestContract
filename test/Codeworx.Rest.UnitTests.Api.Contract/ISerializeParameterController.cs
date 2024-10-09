@@ -17,6 +17,16 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestGet("date/url/{parameter?}")]
         Task<DateTime?> GetDateTimeUrlParameter(DateTime? parameter);
 
+
+        [RestPut("dateoffset/body")]
+        Task<DateTimeOffset?> GetDateTimeOffsetBodyParameter([BodyMember] DateTimeOffset? parameter);
+
+        [RestGet("dateoffset/query")]
+        Task<DateTimeOffset?> GetDateTimeOffsetQueryParameter(DateTimeOffset? parameter);
+
+        [RestGet("dateoffset/url/{parameter?}")]
+        Task<DateTimeOffset?> GetDateTimeOffsetUrlParameter(DateTimeOffset? parameter);
+
         [RestPut("decimal/body")]
         Task<decimal?> GetDecimalBodyParameter([BodyMember]decimal? parameter);
 
