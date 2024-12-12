@@ -20,6 +20,11 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: UseDotNet@2
+  displayName: Install .net 9.0 sdk
+  inputs:
+    packageType: 'sdk'
+    version: '9.x'
 - task: DotNetCoreCLI@2
   displayName: Run dotnet test
   inputs:
