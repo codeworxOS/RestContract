@@ -39,7 +39,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddSingleton<IAttributeMetadataProvider, PolicyMetadataProvider>()
                     .AddSingleton<IAttributeMetadataProvider, ResponseTypeMetadataProvider>()
                     .AddSingleton<IAttributeMetadataProvider, ProducesMetadataProvider>()
-                    .AddSingleton<IAttributeMetadataProvider, ConsumesMetadataProvider>();
+                    .AddSingleton<IAttributeMetadataProvider, ConsumesMetadataProvider>()
+                    .AddSingleton<IAttributeMetadataProvider, IgnoreApiMetadataProvider>();
 
             if (!services.Any(p => p.ServiceType == typeof(IServiceErrorDispatcher)))
             {
