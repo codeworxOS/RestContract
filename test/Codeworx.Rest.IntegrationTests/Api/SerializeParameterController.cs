@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Model;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Codeworx.Rest.UnitTests.Api
 {
@@ -16,6 +17,8 @@ namespace Codeworx.Rest.UnitTests.Api
 
         public async Task<string> GetStringUrlParameter(string parameter)
         {
+            // aspnetcore #11544 - %2F in route parameter is not decoded by model binder.
+            parameter = parameter != null ? Uri.UnescapeDataString(parameter) : null;
             return await Task.FromResult(parameter);
         }
 

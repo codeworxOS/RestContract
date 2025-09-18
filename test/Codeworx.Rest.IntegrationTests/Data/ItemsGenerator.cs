@@ -10,6 +10,7 @@ namespace Codeworx.Rest.UnitTests.Data
     {
         public static string TestString = "Test";
         public static string TestStringForEscape = "Te+st 123&=";
+        public static string TestStringForEscapeWithSlashes = "Te+st/123\\sedond&=";
 
         public static string TestStringSpeciaChars = "ÄÖÜäöü";
 

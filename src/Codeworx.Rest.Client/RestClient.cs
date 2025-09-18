@@ -10,7 +10,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Codeworx.Rest.Internal;
 
 namespace Codeworx.Rest.Client
@@ -348,11 +347,13 @@ namespace Codeworx.Rest.Client
                     }
 
                     _usedParameters.Add(parameterName);
-                    return HttpUtility.UrlEncode(GetDataStringValue(value.Data));
+                    var data = GetDataStringValue(value.Data);
+                    return data != null ? Uri.EscapeDataString(data) : null;
                 }
                 else if (_additionalParameters.TryGetValue(parameterName, out var additionalValue))
                 {
-                    return HttpUtility.UrlEncode(GetDataStringValue(additionalValue));
+                    var data = GetDataStringValue(additionalValue);
+                    return data != null ? Uri.EscapeDataString(data) : null;
                 }
 
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");
