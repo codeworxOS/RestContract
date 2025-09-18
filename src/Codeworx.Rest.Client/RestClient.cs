@@ -348,11 +348,11 @@ namespace Codeworx.Rest.Client
                     }
 
                     _usedParameters.Add(parameterName);
-                    return HttpUtility.UrlPathEncode(GetDataStringValue(value.Data));
+                    return HttpUtility.UrlEncode(GetDataStringValue(value.Data));
                 }
                 else if (_additionalParameters.TryGetValue(parameterName, out var additionalValue))
                 {
-                    return HttpUtility.UrlPathEncode(GetDataStringValue(additionalValue));
+                    return HttpUtility.UrlEncode(GetDataStringValue(additionalValue));
                 }
 
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");
