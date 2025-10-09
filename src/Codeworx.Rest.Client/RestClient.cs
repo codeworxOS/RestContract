@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -282,6 +284,7 @@ namespace Codeworx.Rest.Client
                                         p => new
                                         ParameterData
                                         {
+                                            Key = p.Parameter.Name,
                                             ParameterType = p.Parameter.ParameterType,
                                             Data = Expression.Lambda<Func<object>>(Expression.Convert(methodCall.Arguments[p.Index], typeof(object))).Compile()(),
                                             IsBodyMember = p.Parameter.GetCustomAttribute<BodyMemberAttribute>() != null,
@@ -312,28 +315,15 @@ namespace Codeworx.Rest.Client
 
                 foreach (var param in missing)
                 {
-                    if (param.Value.IsQueryMember)
-                    {
-                        var data = param.Value.Data;
-                        var queryKeyValuePairs = data.GetType()
-                                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(data)?.ToString());
-
-                        foreach (var item in queryKeyValuePairs.Where(p => p.Value != null))
-                        {
-                            queryParameters.Add(item.Key, new List<string> { GetDataStringValue(item.Value) });
-                        }
-                    }
-                    else
-                    {
-                        queryParameters.Add(param.Key, new List<string> { GetDataStringValue(param.Value.Data) });
-                    }
+                    AppendDataStringValues(queryParameters, param.Value);
                 }
             }
 
             public string Evaluate(Match match)
             {
                 var parameterName = match.Groups["parameterName"].Value;
+                ParameterData parameter = null;
+
                 if (_parameterValues.TryGetValue(parameterName, out var value))
                 {
                     if (value.IsBodyMember)
@@ -347,13 +337,33 @@ namespace Codeworx.Rest.Client
                     }
 
                     _usedParameters.Add(parameterName);
-                    var data = GetDataStringValue(value.Data);
-                    return data != null ? Uri.EscapeDataString(data) : null;
+                    if (value.Data == null)
+                    {
+                        return null;
+                    }
+
+                    parameter = value;
                 }
                 else if (_additionalParameters.TryGetValue(parameterName, out var additionalValue))
                 {
-                    var data = GetDataStringValue(additionalValue);
-                    return data != null ? Uri.EscapeDataString(data) : null;
+                    parameter = new ParameterData
+                    {
+                        Key = parameterName,
+                        Data = additionalValue,
+                        ParameterType = additionalValue?.GetType() ?? typeof(object),
+                    };
+                }
+
+                if (parameter != null)
+                {
+                    var values = new Dictionary<string, List<string>>();
+                    AppendDataStringValues(values, parameter);
+                    if (values.TryGetValue(parameter.Key, out var data))
+                    {
+                        return Uri.EscapeDataString(string.Join(",", data));
+                    }
+
+                    return null;
                 }
 
                 throw new TemplateParseException($"Parameter {parameterName} not found on method {_methodCall.Method}.");
@@ -390,62 +400,104 @@ namespace Codeworx.Rest.Client
                 return false;
             }
 
-            private string GetDataStringValue(object data)
+            private void AppendDataStringValues(IDictionary<string, List<string>> values, ParameterData parameter)
             {
-                if (data == null)
+                if (values.ContainsKey(parameter.Key))
                 {
-                    return null;
+                    throw new InvalidOperationException($"Key {parameter.Key} already exists in parameters list.");
+                }
+
+                if (parameter.Data == null)
+                {
+                    return;
                 }
 
                 var culture = CultureInfo.InvariantCulture;
 
-                switch (data)
+                if (parameter.Data is string value)
                 {
-                    case string value:
-                        return value;
+                    values.Add(parameter.Key, new List<string> { value });
+                    return;
+                }
+                else if (parameter.Data is DateTime dateTimeValue)
+                {
+                    values.Add(parameter.Key, new List<string> { dateTimeValue.ToString("o", culture) });
+                    return;
+                }
+                else if (parameter.Data is DateTimeOffset dateTimeOffsetValue)
+                {
+                    values.Add(parameter.Key, new List<string> { dateTimeOffsetValue.ToString("o", culture) });
+                    return;
+                }
+                else if (parameter.Data is IEnumerable enumerable)
+                {
+                    var result = new List<string>();
+                    var param = new ParameterData
+                    {
+                        Key = parameter.Key,
+                        ParameterType = parameter.ParameterType.GetEnumerableElementType(),
+                        ContentTypes = parameter.ContentTypes,
+                    };
 
-                    case DateTime value:
-                        return value.ToString("o", culture);
+                    foreach (var item in enumerable.Cast<object>())
+                    {
+                        param.Data = item;
+                        var temp = new Dictionary<string, List<string>>();
+                        AppendDataStringValues(temp, param);
+                        if (temp.TryGetValue(param.Key, out var data))
+                        {
+                            result.AddRange(data);
+                        }
+                    }
 
-                    case DateTimeOffset value:
-                        return value.ToString("o", culture);
-
-                    case decimal value:
-                        return value.ToString(culture);
-
-                    case double value:
-                        return value.ToString(culture);
-
-                    case float value:
-                        return value.ToString(culture);
-
-                    case byte value:
-                        return value.ToString(culture);
-
-                    case short value:
-                        return value.ToString(culture);
-
-                    case int value:
-                        return value.ToString(culture);
-
-                    case long value:
-                        return value.ToString(culture);
+                    values.Add(parameter.Key, result);
+                    return;
                 }
 
-                return data.ToString();
+                var type = Nullable.GetUnderlyingType(parameter.ParameterType) ?? parameter.ParameterType;
+
+                if (type.HasCustomStringConverter(out var converter))
+                {
+                    var convertedValue = (string)converter.ConvertToInvariantString(parameter.Data);
+                    values.Add(parameter.Key, new List<string> { convertedValue });
+                }
+                else if (parameter.IsQueryMember)
+                {
+                    var queryKeyValuePairs = parameter.Data.GetType()
+                             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                             .ToDictionary(prop => prop, prop => prop.GetValue(parameter.Data));
+
+                    if (queryKeyValuePairs.Count > 0)
+                    {
+                        foreach (var item in queryKeyValuePairs.Where(p => p.Value != null))
+                        {
+                            AppendDataStringValues(values, new ParameterData { Key = item.Key.Name, ParameterType = item.Key.PropertyType, Data = item.Value, ContentTypes = parameter.ContentTypes });
+                        }
+                    }
+                    else
+                    {
+                        values.Add(parameter.Key, new List<string> { parameter.Data.ToString() });
+                    }
+                }
+                else
+                {
+                    values.Add(parameter.Key, new List<string> { parameter.Data.ToString() });
+                }
             }
 
             private class ParameterData
             {
+                public string[] ContentTypes { get; set; }
+
                 public object Data { get; set; }
 
                 public bool IsBodyMember { get; set; }
 
                 public bool IsQueryMember { get; set; }
 
-                public Type ParameterType { get; set; }
+                public string Key { get; set; }
 
-                public string[] ContentTypes { get; set; }
+                public Type ParameterType { get; set; }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
@@ -68,15 +69,7 @@ namespace Codeworx.Rest.UnitTests
            new object[] {FormatterSelection.NewtonsoftJson },
         };
 
-        public static IEnumerable<object[]> GuidListParameters = new List<object[]>
-        {
-            new object[] {_guidList, FormatterSelection.Json},
-            new object[] { null, FormatterSelection.Json },
-            new object[] {_guidList, FormatterSelection.Protobuf},
-            new object[] { null, FormatterSelection.Protobuf },
-            new object[] {_guidList, FormatterSelection.NewtonsoftJson},
-            new object[] { null, FormatterSelection.NewtonsoftJson },
-        };
+        public static IEnumerable<object[]> GuidListParameters;
 
         public static IEnumerable<object[]> GuidParameters = new List<object[]>
         {
@@ -120,11 +113,25 @@ namespace Codeworx.Rest.UnitTests
             new object[] {ItemsGenerator.TestStringSpeciaChars, FormatterSelection.NewtonsoftJson},
         };
 
-        private static List<Guid> _guidList = new List<Guid>
+        static SerializeParameterTests()
         {
-            ItemsGenerator.TestGuid,
-            Guid.NewGuid()
-        };
+            var guidList = new Guid[]
+            {
+                ItemsGenerator.TestGuid,
+                Guid.NewGuid()
+            };
+
+            GuidListParameters = new List<object[]>
+            {
+                new object[] { guidList, FormatterSelection.Json},
+                new object[] { null, FormatterSelection.Json },
+                new object[] { guidList, FormatterSelection.Protobuf},
+                new object[] { null, FormatterSelection.Protobuf },
+                new object[] { guidList, FormatterSelection.NewtonsoftJson},
+                new object[] { null, FormatterSelection.NewtonsoftJson },
+            };
+        }
+
 
         [Theory]
         [MemberData(nameof(FormatterParameters))]
@@ -179,6 +186,21 @@ namespace Codeworx.Rest.UnitTests
 
         [Theory]
         [MemberData(nameof(DateOffsetParameters))]
+        public async Task TestDateTimeOffsetQueryExplicitParameter(DateTimeOffset? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeOffsetQueryExplicitParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+
+            if (expectedParameter.HasValue)
+            {
+                Assert.Equal(expectedParameter.Value.Offset, actualParameter.Value.Offset);
+                Assert.Equal(expectedParameter.Value.UtcDateTime, actualParameter.Value.UtcDateTime);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(DateOffsetParameters))]
         public async Task TestDateTimeOffsetUrlParameter(DateTimeOffset? expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
@@ -213,6 +235,15 @@ namespace Codeworx.Rest.UnitTests
 
         [Theory]
         [MemberData(nameof(DateParameters))]
+        public async Task TestDateTimeQueryExplicitParameter(DateTime? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDateTimeQueryExplicitParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DateParameters))]
         public async Task TestDateTimeUrlParameter(DateTime? expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
@@ -235,6 +266,15 @@ namespace Codeworx.Rest.UnitTests
         {
             var client = Client<ISerializeParameterController>(formatter);
             var actualParameter = await client.GetDecimalQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DecimalParameters))]
+        public async Task TestDecimalQueryExplicitParameter(decimal? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDecimalQueryExplicitParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -267,6 +307,15 @@ namespace Codeworx.Rest.UnitTests
 
         [Theory]
         [MemberData(nameof(DoubleParameters))]
+        public async Task TestDoubleQueryExplicitParameter(double? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetDoubleQueryExplicitParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(DoubleParameters))]
         public async Task TestDoubleUrlParameter(double? expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
@@ -294,6 +343,16 @@ namespace Codeworx.Rest.UnitTests
 
         [Theory]
         [MemberData(nameof(FloatParameters))]
+        public async Task TestFloatQueryExplicitParameter(float? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetFloatQueryExplicitParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+
+        [Theory]
+        [MemberData(nameof(FloatParameters))]
         public async Task TestFloatUrlParameter(float? expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
@@ -312,29 +371,41 @@ namespace Codeworx.Rest.UnitTests
 
         [Theory]
         [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListBodyParameter(List<Guid> expectedParameter, FormatterSelection formatter)
+        public async Task TestGuidListBodyParameter(Guid[] expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
-            var actualParameter = await client.GetGuidListBodyParameter(5, expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
+            var actualParameter = await client.GetGuidListBodyParameter(5, expectedParameter?.ToList());
+            Assert.Equal(expectedParameter, actualParameter?.ToArray());
         }
 
-        [Theory(Skip = "Future feature -> custom model binders")]
+        [Theory()]
         [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListQueryParameter(List<Guid> expectedParameter, FormatterSelection formatter)
+        public async Task TestGuidListQueryParameter(Guid[] expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
-            var actualParameter = await client.GetGuidListQueryParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
+            var actualParameter = await client.GetGuidListQueryParameter(expectedParameter?.ToList());
+            expectedParameter = expectedParameter ?? new Guid[] { };
+            Assert.Equal(expectedParameter, actualParameter.ToArray());
         }
 
-        [Theory(Skip = "Future feature -> custom model binders")]
+        [Theory()]
         [MemberData(nameof(GuidListParameters))]
-        public async Task TestGuidListUrlParameter(List<Guid> expectedParameter, FormatterSelection formatter)
+        public async Task TestGuidListQueryExplicitParameter(Guid[] expectedParameter, FormatterSelection formatter)
         {
             var client = Client<ISerializeParameterController>(formatter);
-            var actualParameter = await client.GetGuidListUrlParameter(expectedParameter);
-            Assert.Equal(expectedParameter, actualParameter);
+            var actualParameter = await client.GetGuidListQueryExplicitParameter(expectedParameter?.ToList());
+            expectedParameter = expectedParameter ?? new Guid[] { };
+            Assert.Equal(expectedParameter, actualParameter.ToArray());
+        }
+
+        [Theory(Skip = "might not be possible in asp.net core as well...")]
+        [MemberData(nameof(GuidListParameters))]
+        public async Task TestGuidListUrlParameter(Guid[] expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidListUrlParameter(expectedParameter?.ToList());
+            expectedParameter = expectedParameter ?? new Guid[] { };
+            Assert.Equal(expectedParameter, actualParameter.ToArray());
         }
 
         [Theory]
@@ -343,6 +414,15 @@ namespace Codeworx.Rest.UnitTests
         {
             var client = Client<ISerializeParameterController>(formatter);
             var actualParameter = await client.GetGuidQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(GuidParameters))]
+        public async Task TestGuidQueryExplicitParameter(Guid? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetGuidQueryExplicitParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -375,11 +455,30 @@ namespace Codeworx.Rest.UnitTests
 
         [Theory]
         [MemberData(nameof(IntParameters))]
+        public async Task TestIntQueryExplicitParameter(int? expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetIntQueryExplicitParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntParameters))]
         public async Task TestIntQueryParameterInCultureSV(int? expectedParameter, FormatterSelection formatter)
         {
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("sv");
             var client = Client<ISerializeParameterController>(formatter);
             var actualParameter = await client.GetIntQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(IntParameters))]
+        public async Task TestIntQueryExplicitParameterInCultureSV(int? expectedParameter, FormatterSelection formatter)
+        {
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("sv");
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetIntQueryExplicitParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 
@@ -446,6 +545,15 @@ namespace Codeworx.Rest.UnitTests
         {
             var client = Client<ISerializeParameterController>(formatter);
             var actualParameter = await client.GetStringQueryParameter(expectedParameter);
+            Assert.Equal(expectedParameter, actualParameter);
+        }
+
+        [Theory]
+        [MemberData(nameof(StringParameters))]
+        public async Task TestStringQueryExplicitParameter(string expectedParameter, FormatterSelection formatter)
+        {
+            var client = Client<ISerializeParameterController>(formatter);
+            var actualParameter = await client.GetStringQueryExplicitParameter(expectedParameter);
             Assert.Equal(expectedParameter, actualParameter);
         }
 

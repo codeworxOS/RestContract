@@ -18,6 +18,11 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetDateTimeQueryParameter(parameter));
         }
 
+        public global::System.Threading.Tasks.Task<global::System.DateTime?> GetDateTimeQueryExplicitParameter(global::System.DateTime? parameter)
+        {
+            return CallAsync(c => c.GetDateTimeQueryExplicitParameter(parameter));
+        }
+
         public global::System.Threading.Tasks.Task<global::System.DateTime?> GetDateTimeUrlParameter(global::System.DateTime? parameter)
         {
             return CallAsync(c => c.GetDateTimeUrlParameter(parameter));
@@ -31,6 +36,11 @@ namespace Codeworx.Rest.UnitTests.Generated
         public global::System.Threading.Tasks.Task<global::System.DateTimeOffset?> GetDateTimeOffsetQueryParameter(global::System.DateTimeOffset? parameter)
         {
             return CallAsync(c => c.GetDateTimeOffsetQueryParameter(parameter));
+        }
+
+        public global::System.Threading.Tasks.Task<global::System.DateTimeOffset?> GetDateTimeOffsetQueryExplicitParameter(global::System.DateTimeOffset? parameter)
+        {
+            return CallAsync(c => c.GetDateTimeOffsetQueryExplicitParameter(parameter));
         }
 
         public global::System.Threading.Tasks.Task<global::System.DateTimeOffset?> GetDateTimeOffsetUrlParameter(global::System.DateTimeOffset? parameter)
@@ -48,6 +58,11 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetDecimalQueryParameter(parameter));
         }
 
+        public global::System.Threading.Tasks.Task<decimal?> GetDecimalQueryExplicitParameter(decimal? parameter)
+        {
+            return CallAsync(c => c.GetDecimalQueryExplicitParameter(parameter));
+        }
+
         public global::System.Threading.Tasks.Task<decimal?> GetDecimalUrlParameter(decimal? parameter)
         {
             return CallAsync(c => c.GetDecimalUrlParameter(parameter));
@@ -63,6 +78,11 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetDoubleQueryParameter(parameter));
         }
 
+        public global::System.Threading.Tasks.Task<double?> GetDoubleQueryExplicitParameter(double? parameter)
+        {
+            return CallAsync(c => c.GetDoubleQueryExplicitParameter(parameter));
+        }
+
         public global::System.Threading.Tasks.Task<double?> GetDoubleUrlParameter(double? parameter)
         {
             return CallAsync(c => c.GetDoubleUrlParameter(parameter));
@@ -76,6 +96,11 @@ namespace Codeworx.Rest.UnitTests.Generated
         public global::System.Threading.Tasks.Task<float?> GetFloatQueryParameter(float? parameter)
         {
             return CallAsync(c => c.GetFloatQueryParameter(parameter));
+        }
+
+        public global::System.Threading.Tasks.Task<float?> GetFloatQueryExplicitParameter(float? parameter)
+        {
+            return CallAsync(c => c.GetFloatQueryExplicitParameter(parameter));
         }
 
         public global::System.Threading.Tasks.Task<float?> GetFloatUrlParameter(float? parameter)
@@ -98,6 +123,11 @@ namespace Codeworx.Rest.UnitTests.Generated
             return CallAsync(c => c.GetGuidListQueryParameter(parameter));
         }
 
+        public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.Guid>> GetGuidListQueryExplicitParameter(global::System.Collections.Generic.List<global::System.Guid> parameter)
+        {
+            return CallAsync(c => c.GetGuidListQueryExplicitParameter(parameter));
+        }
+
         public global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::System.Guid>> GetGuidListUrlParameter(global::System.Collections.Generic.List<global::System.Guid> parameter)
         {
             return CallAsync(c => c.GetGuidListUrlParameter(parameter));
@@ -106,6 +136,11 @@ namespace Codeworx.Rest.UnitTests.Generated
         public global::System.Threading.Tasks.Task<global::System.Guid?> GetGuidQueryParameter(global::System.Guid? parameter)
         {
             return CallAsync(c => c.GetGuidQueryParameter(parameter));
+        }
+
+        public global::System.Threading.Tasks.Task<global::System.Guid?> GetGuidQueryExplicitParameter(global::System.Guid? parameter)
+        {
+            return CallAsync(c => c.GetGuidQueryExplicitParameter(parameter));
         }
 
         public global::System.Threading.Tasks.Task<global::System.Guid?> GetGuidUrlParameter(global::System.Guid? parameter)
@@ -121,6 +156,11 @@ namespace Codeworx.Rest.UnitTests.Generated
         public global::System.Threading.Tasks.Task<int?> GetIntQueryParameter(int? parameter)
         {
             return CallAsync(c => c.GetIntQueryParameter(parameter));
+        }
+
+        public global::System.Threading.Tasks.Task<int?> GetIntQueryExplicitParameter(int? parameter)
+        {
+            return CallAsync(c => c.GetIntQueryExplicitParameter(parameter));
         }
 
         public global::System.Threading.Tasks.Task<int?> GetIntUrlParameter(int? parameter)
@@ -151,6 +191,11 @@ namespace Codeworx.Rest.UnitTests.Generated
         public global::System.Threading.Tasks.Task<string> GetStringQueryParameter(string parameter)
         {
             return CallAsync(c => c.GetStringQueryParameter(parameter));
+        }
+
+        public global::System.Threading.Tasks.Task<string> GetStringQueryExplicitParameter(string parameter)
+        {
+            return CallAsync(c => c.GetStringQueryExplicitParameter(parameter));
         }
 
         public global::System.Threading.Tasks.Task<string> GetStringUrlParameter(string parameter)

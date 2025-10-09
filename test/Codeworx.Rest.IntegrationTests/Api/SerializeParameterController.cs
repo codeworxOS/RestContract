@@ -163,5 +163,49 @@ namespace Codeworx.Rest.UnitTests.Api
             return await Task.FromResult(parameter);
         }
 
+        public Task<DateTime?> GetDateTimeQueryExplicitParameter([QueryMember] DateTime? parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<DateTimeOffset?> GetDateTimeOffsetQueryExplicitParameter([QueryMember] DateTimeOffset? parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<decimal?> GetDecimalQueryExplicitParameter([QueryMember] decimal? parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<double?> GetDoubleQueryExplicitParameter([BodyMember] double? parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<float?> GetFloatQueryExplicitParameter([QueryMember] float? parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<List<Guid>> GetGuidListQueryExplicitParameter([QueryMember] List<Guid> parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<Guid?> GetGuidQueryExplicitParameter(Guid? parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<int?> GetIntQueryExplicitParameter(int? parameter)
+        {
+            return Task.FromResult(parameter);
+        }
+
+        public Task<string> GetStringQueryExplicitParameter([QueryMember] string parameter)
+        {
+            return Task.FromResult(parameter);
+        }
     }
 }
