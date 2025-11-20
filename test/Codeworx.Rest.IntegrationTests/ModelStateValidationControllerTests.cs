@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.TestServerUtilities;
-using Microsoft.AspNetCore.WebUtilities;
 using Xunit;
 
 namespace Codeworx.Rest.UnitTests

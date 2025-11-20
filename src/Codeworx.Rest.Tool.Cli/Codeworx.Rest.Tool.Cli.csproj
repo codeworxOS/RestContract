@@ -1,22 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net8;net9</TargetFrameworks>
+		<TargetFrameworks>$(DotNetTargetFrameworks)</TargetFrameworks>
 		<LangVersion>Latest</LangVersion>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>dotnet-restcontract</ToolCommandName>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.9.1" />
-		<PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
-		<PackageReference Include="System.Text.Json" Version="9.0.0" />
-		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
-		<PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.2" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.13.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0" />
+		<PackageReference Include="CommandLineParser" />
+		<PackageReference Include="Microsoft.Build.Framework" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.Build.Locator" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
+		<PackageReference Include="System.Text.Json" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" />
+		<PackageReference Include="System.Security.Cryptography.Xml" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
 	</ItemGroup>
 
 	<ItemGroup>

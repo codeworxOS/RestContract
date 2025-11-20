@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Codeworx.Rest.UnitTests.Api.Contract;
 using Codeworx.Rest.UnitTests.Model;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Codeworx.Rest.UnitTests.Api
 {

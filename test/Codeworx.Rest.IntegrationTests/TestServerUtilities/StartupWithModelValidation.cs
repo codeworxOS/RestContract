@@ -8,13 +8,10 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NJsonSchema.Generation.TypeMappers;
-using NSwag.Generation.Processors;
 using ProtoBuf.Meta;
 
 namespace Codeworx.Rest.UnitTests.TestServerUtilities
