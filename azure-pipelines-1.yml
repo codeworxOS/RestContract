@@ -21,20 +21,15 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: Install .net 8.0 sdk
-  inputs:
-    packageType: 'sdk'
-    version: '8.x'
-- task: UseDotNet@2
-  displayName: Install .net 9.0 sdk
-  inputs:
-    packageType: 'sdk'
-    version: '9.x'
-- task: UseDotNet@2
   displayName: Install .net 10.0 sdk
   inputs:
     packageType: 'sdk'
     version: '10.x'
+- task: UseDotNet@2
+  displayName: Install .net 11.0 sdk
+  inputs:
+    packageType: 'sdk'
+    version: '11.x'
 - task: DotNetCoreCLI@2
   displayName: Run dotnet test
   inputs:
