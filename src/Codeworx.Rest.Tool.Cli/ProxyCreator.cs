@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Codeworx.Rest.Tool.Extensions;
-using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -34,8 +33,6 @@ namespace Codeworx.Rest.Tool
 
             WriteVerboseInfo($"Using project {target} as generation target.");
             WriteVerboseInfo($"MSBuildLocator executing...");
-
-            MSBuildLocator.RegisterDefaults();
 
             using (_workspace = MSBuildWorkspace.Create())
             {

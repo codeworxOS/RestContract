@@ -6,16 +6,18 @@
 		<LangVersion>Latest</LangVersion>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>dotnet-restcontract</ToolCommandName>
+		<!-- Microsoft.Build.Locator's MSBL001 check forbids shipping NuGet.Frameworks, expecting the SDK's
+         copy to be used. We must ship it: the .NET 10 SDK carries NuGet.Frameworks 7.x, which drops the
+         public NuGetFrameworkFullComparer constructor that our pinned NuGet.Protocol 6.3.3 calls, so
+         binding to the SDK copy throws MethodAccessException. Microsoft.Build* stay runtime-excluded. -->
+		<DisableMSBuildAssemblyCopyCheck>true</DisableMSBuildAssemblyCopyCheck>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" />
-		<PackageReference Include="Microsoft.Build.Framework" ExcludeAssets="runtime" />
-		<PackageReference Include="Microsoft.Build.Locator" />
+		<PackageReference Include="Microsoft.Build.Framework" />
+		<PackageReference Include="Microsoft.NET.StringTools" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
-		<PackageReference Include="System.Text.Json" />
-		<PackageReference Include="System.Security.Cryptography.Pkcs" />
-		<PackageReference Include="System.Security.Cryptography.Xml" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
 	</ItemGroup>

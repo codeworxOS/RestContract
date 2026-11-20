@@ -5,7 +5,7 @@
 		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Remove="StyleCop.Analyzers" />
+		<GlobalPackageReference Remove="StyleCop.Analyzers" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="System.Runtime.Serialization.Primitives" />

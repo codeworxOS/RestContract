@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Company>codeworx gmbh</Company>
-    <Copyright>copyright © codeworx 2022</Copyright>
+    <Copyright>copyright © codeworx 2026</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <DebugType>portable</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -13,20 +13,9 @@
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <DotNetTargetFrameworks>net8;net9;net10.0</DotNetTargetFrameworks>
+    <DotNetTargetFrameworks>net10.0;net11.0</DotNetTargetFrameworks>
     <NetStandardTargetFrameworks>netstandard2.0</NetStandardTargetFrameworks>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\.global\stylecop.json" Link="stylecop.json" />
-    <PackageReference Include="StyleCop.Analyzers">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\.global\stylecop.ruleset</CodeAnalysisRuleSet>

@@ -15,7 +15,7 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Remove="StyleCop.Analyzers" />
+		<GlobalPackageReference Remove="StyleCop.Analyzers" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.TestHost" />

@@ -16,7 +16,6 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [ResponseType(200, typeof(Stream), "application/octet-stream")]
         Task<Stream> GetOctet();
 
-
         [RestGet("plain-stream")]
         [ResponseType(200, typeof(Stream), "text/plain")]
         Task<Stream> GetPlainStream();
@@ -25,8 +24,7 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [ResponseType(200, typeof(string), "text/plain")]
         Task<string> GetPlainString();
 
-
-        [RestPut()]
+        [RestPut]
         [ResponseType(200, typeof(string), "text/plain")]
         Task<string> PutText([BodyMember("text/plain")] string body);
 

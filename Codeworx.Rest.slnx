@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/.global/">
+    <File Path=".global/stylecop.json" />
+    <File Path=".global/Stylecop.ruleset" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Codeworx.Rest.AspNetCore/Codeworx.Rest.AspNetCore.csproj" />
+    <Project Path="src/Codeworx.Rest.Client/Codeworx.Rest.Client.csproj" />
+    <Project Path="src/Codeworx.Rest.Formatters.Newtonsoft/Codeworx.Rest.Formatters.Newtonsoft.csproj" />
+    <Project Path="src/Codeworx.Rest.Formatters.Protobuf/Codeworx.Rest.Formatters.Protobuf.csproj" />
+    <Project Path="src/Codeworx.Rest.Primitives/Codeworx.Rest.Primitives.csproj" />
+    <Project Path="src/Codeworx.Rest.Tool.Cli/Codeworx.Rest.Tool.Cli.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Codeworx.Rest.IntegrationTests/Codeworx.Rest.UnitTests.csproj" />
+    <Project Path="test/Codeworx.Rest.UnitTests.Api.Contract/Codeworx.Rest.UnitTests.Api.Contract.csproj" />
+  </Folder>
+</Solution>

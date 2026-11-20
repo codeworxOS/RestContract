@@ -17,10 +17,8 @@ namespace Codeworx.Rest.UnitTests.Api.Contract
         [RestGet("date/query/explicit")]
         Task<DateTime?> GetDateTimeQueryExplicitParameter([QueryMember] DateTime? parameter);
 
-
         [RestGet("date/url/{parameter?}")]
         Task<DateTime?> GetDateTimeUrlParameter(DateTime? parameter);
-
 
         [RestPut("dateoffset/body")]
         Task<DateTimeOffset?> GetDateTimeOffsetBodyParameter([BodyMember] DateTimeOffset? parameter);
